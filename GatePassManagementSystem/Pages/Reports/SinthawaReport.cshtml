@@ -1,0 +1,365 @@
+﻿@page
+@model GatePassManagementSystem.Pages.Reports.SinthawaReportModel
+@{
+}
+
+<style>
+    .container {
+        padding: 2rem 0rem;
+    }
+
+    h4 {
+        margin: 2rem 0rem 1rem;
+    }
+
+    .table th .badge,
+    .table td .badge {
+        width: 90px;
+    }
+
+    .tabset > input[type="radio"] {
+        position: absolute;
+        left: -200vw;
+    }
+
+    .tabset .tab-panel {
+        display: none;
+    }
+
+    .tabset > input:first-child:checked ~ .tab-panels > .tab-panel:first-child,
+    .tabset > input:nth-child(3):checked ~ .tab-panels > .tab-panel:nth-child(2),
+    .tabset > input:nth-child(5):checked ~ .tab-panels > .tab-panel:nth-child(3),
+    .tabset > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
+    .tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
+    .tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
+        display: block;
+    }
+
+    /*
+     Styling
+    */
+
+    .tabset > label {
+        position: relative;
+        display: inline-block;
+        padding: 15px 15px 25px;
+        border: 1px solid transparent;
+        border-bottom: 0;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+        .tabset > label::after {
+            content: "";
+            position: absolute;
+            left: 15px;
+            bottom: 10px;
+            width: 22px;
+            height: 4px;
+            background: #8d8d8d;
+        }
+
+    input:focus-visible + label {
+        outline: 2px solid rgba(0,102,204,1);
+        border-radius: 3px;
+    }
+
+    .tabset > label:hover,
+    .tabset > input:focus + label,
+    .tabset > input:checked + label {
+        color: #06c;
+    }
+
+        .tabset > label:hover::after,
+        .tabset > input:focus + label::after,
+        .tabset > input:checked + label::after {
+            background: #06c;
+        }
+
+    .tabset > input:checked + label {
+        border-color: #ccc;
+        border-bottom: 1px solid #fff;
+        margin-bottom: -1px;
+    }
+
+    .tab-panel {
+        padding: 30px 0;
+        border-top: 1px solid #ccc;
+    }
+</style>
+
+<div class="content-wrapper">
+    <div class="page-header flex-wrap">
+
+        <div class="header-right d-flex flex-wrap mt-2 mt-sm-0">
+            <div class="d-flex align-items-center">
+                <a href="#">
+                    <p class="m-0 pr-3">Personal Gate Pass - Reports</p>
+                </a>
+                <a class="pl-3 mr-4" href="#"></a>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        function myFunction() {
+            window.location.href = "https://localhost:44341/PersonalGP/CreatePGP";
+        }
+    </script>
+
+    <div class="tabset">
+        <!-- Tab 1 -->
+        <input type="radio" name="tabset" id="tab1" aria-controls="marzen" checked>
+        <label for="tab1">Personal Gate Pass</label>
+        <!-- Tab 2 -->
+        <input type="radio" name="tabset" id="tab2" aria-controls="rauchbier">
+        <label for="tab2">Worker Gate Pass</label>
+
+
+        <div class="tab-panels">
+            <section id="marzen" class="tab-panel">
+                <div class="row">
+
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <form method="post">
+                                <div class="card-body">
+                                    <h4 class="card-title">Staff - Sinthawatta</h4>
+                                    @if (Model.PersonalGPs.Count() > 0)
+                                    {
+                                        <div class="row" style="margin-top: 30px;">
+                                            @*<div class="col-2">
+                                                    <a class="btn btn-danger mt-2 mt-sm-0 btn-icon-text">
+                                                        <i class="mdi mdi-file-pdf"></i>Download PDF
+                                                    </a>
+                                                </div>*@
+
+                                            <div class="col-2">
+                                                <a class="btn btn-success mt-2 mt-sm-0 btn-icon-text" asp-page-handler="GenerateExcel">
+                                                    <i class="mdi mdi-file-excel"></i>Download Excel - xlsx
+                                                </a>
+                                            </div>
+
+                                            <div class="col-2">
+                                                <a class="btn btn-success mt-2 mt-sm-0 btn-icon-text" asp-page-handler="GenerateExcelcsv">
+                                                    <i class="mdi mdi-file-excel"></i>Download Excel - csv
+                                                </a>
+                                            </div>
+
+                                            @*<div class="col-2">
+                                                    <a class="btn btn-primary mt-2 mt-sm-0 btn-icon-text" asp-area="" asp-page="/PersonalGP/CreatePGP">
+                                                        <i class="mdi mdi-file-word"></i>Download Word
+                                                    </a>
+                                                </div>*@
+                                        </div>
+                                    }
+
+                                    <div class="row" style="margin-top: 15px;">
+                                        @if (Model.PersonalGPs.Count() > 0)
+                                        {
+                                            <div class="table-responsive">
+                                                <table class="table table-hover table-bordered">
+                                                    <thead>
+                                                        <tr class="bg-dark">
+                                                            <th class="text-white font-weight-bold">
+                                                                <label asp-for="PersonalGPs.FirstOrDefault().PersonalGPId"></label>
+                                                            </th>
+                                                            <th class="text-white font-weight-bold">
+                                                                <label>EPF No.</label>
+                                                            </th>
+                                                            <th class="text-white font-weight-bold">
+                                                                <label>Name</label>
+                                                            </th>
+                                                            <th class="text-white font-weight-bold">
+                                                                <label>Department</label>
+                                                            </th>
+                                                            <th class="text-white font-weight-bold">
+                                                                <label asp-for="PersonalGPs.FirstOrDefault().CreateDate"></label>
+                                                            </th>
+                                                            <th class="text-white font-weight-bold">
+                                                                <label asp-for="PersonalGPs.FirstOrDefault().OutTime"></label>
+                                                            </th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var item in Model.PersonalGPs)
+                                                        {
+                                                            var departName = Model.Db.Department.Where(gp => gp.Id == item.DepId).Select(gp => gp.DeptName).FirstOrDefault();
+                                                            TempData["departName"] = departName;
+
+                                                            var epfno = Model.Db.User.Where(gp => gp.Id == item.UserId).Select(gp => gp.EPFNumber).FirstOrDefault();
+                                                            TempData["epfno"] = epfno;
+
+                                                            <tr>
+                                                                <td>@Html.DisplayFor(m => item.PersonalGPId)</td>
+                                                                <td>
+                                                                    @TempData["epfno"]
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(m => item.CreateUser)
+                                                                </td>
+                                                                <td>
+                                                                    @TempData["departName"]
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(m => item.CreateDate)
+                                                                </td>
+                                                                <td>
+                                                                    
+                                                                    @if (item.OutTime == DateTime.MinValue)
+                                                                    {
+
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        @Html.DisplayFor(m => item.OutTime)
+                                                                    }
+                                                                </td>
+
+                                                            </tr>
+                                                        }
+
+                                                    </tbody>
+
+                                                </table>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <p>No Records Available</p>
+                                        }
+                                    </div>
+
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="rauchbier" class="tab-panel">
+                <div class="row">
+
+                    <div class="col-lg-12 grid-margin stretch-card">
+                        <div class="card">
+                            <form method="post">
+                                <div class="card-body">
+                                    <h4 class="card-title">Workers - Sinthawatta</h4>
+                                    @if (Model.WorkerGPs.Count() > 0)
+                                    {
+                                        <div class="row" style="margin-top: 30px;">
+                                            @*<div class="col-2">
+                                                    <a class="btn btn-danger mt-2 mt-sm-0 btn-icon-text" asp-area="" asp-page="/PersonalGP/CreatePGP">
+                                                        <i class="mdi mdi-file-pdf"></i>Download PDF
+                                                    </a>
+                                                </div>*@
+
+                                            <div class="col-2">
+                                                <a class="btn btn-success mt-2 mt-sm-0 btn-icon-text" asp-page-handler="GenerateExcelworker">
+                                                    <i class="mdi mdi-file-excel"></i>Download Excel - xlsx
+                                                </a>
+                                            </div>
+
+                                            <div class="col-2">
+                                                <a class="btn btn-success mt-2 mt-sm-0 btn-icon-text" asp-page-handler="GenerateExcelcsvworker">
+                                                    <i class="mdi mdi-file-excel"></i>Download Excel - csv
+                                                </a>
+                                            </div>
+
+                                            @*<div class="col-2">
+                                                    <a class="btn btn-primary mt-2 mt-sm-0 btn-icon-text" asp-area="" asp-page="/PersonalGP/CreatePGP">
+                                                        <i class="mdi mdi-file-word"></i>Download Word
+                                                    </a>
+                                                </div>*@
+                                        </div>
+                                    }
+                                    @if (Model.WorkerGPs.Count() > 0)
+                                    {
+
+                                        <div class="table-responsive" style="margin-top: 15px;">
+                                            <table class="table table-hover table-bordered">
+                                                <thead>
+                                                    <tr class="bg-dark">
+                                                        <th class="text-white font-weight-bold">
+                                                            <label asp-for="WorkerGPs.FirstOrDefault().WorkerGPId"></label>
+                                                        </th>
+                                                        <th class="text-white font-weight-bold">
+                                                            <label>EPF No.</label>
+                                                        </th>
+                                                        <th class="text-white font-weight-bold">
+                                                            <label>Worker Name</label>
+                                                        </th>
+                                                        <th class="text-white font-weight-bold">
+                                                            <label>Department</label>
+                                                        </th>
+                                                        <th class="text-white font-weight-bold">
+                                                            <label asp-for="WorkerGPs.FirstOrDefault().CreateDate"></label>
+                                                        </th>
+                                                        <th class="text-white font-weight-bold">
+                                                            <label asp-for="WorkerGPs.FirstOrDefault().OutTime"></label>
+                                                        </th>
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.WorkerGPs)
+                                                    {
+
+                                                        var departName = Model.Db.Department.Where(gp => gp.Id == item.DepId).Select(gp => gp.DeptName).FirstOrDefault();
+                                                        TempData["departName"] = departName;
+
+                                                        var workerName = Model.Db.Workers.Where(gp => gp.Id == item.WrkId).Select(gp => gp.Name).FirstOrDefault();
+                                                        TempData["workerName"] = workerName;
+
+                                                        var epfnow = Model.Db.Workers.Where(gp => gp.Id == item.WrkId).Select(gp => gp.EPFNo).FirstOrDefault();
+                                                        TempData["epfnow"] = epfnow;
+
+                                                        <tr>
+                                                            <td>@Html.DisplayFor(m => item.WorkerGPId)</td>
+                                                            <td>
+                                                                @TempData["epfnow"]
+                                                            </td>
+                                                            <td>
+                                                                @TempData["workerName"]
+                                                            </td>
+                                                            <td>
+                                                                @TempData["departName"]
+                                                            </td>
+                                                            <td>
+                                                                @Html.DisplayFor(m => item.CreateDate)
+                                                            </td>
+                                                            <td>
+                                                                @if (item.OutTime == DateTime.MinValue)
+                                                                {
+
+                                                                }
+                                                                else
+                                                                {
+                                                                    @Html.DisplayFor(m => item.OutTime)
+                                                                }
+                                                            </td>
+
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <p>No Records Available</p>
+                                    }
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+
+</div>

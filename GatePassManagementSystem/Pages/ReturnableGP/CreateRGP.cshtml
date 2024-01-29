@@ -1,0 +1,282 @@
+﻿@page
+@model GatePassManagementSystem.Pages.ReturnableGP.CreateRGPModel
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<style>
+    #my-table {
+        width: 470px;
+        margin-left: 17px;
+      
+    }
+
+    td {
+        width: 50px;
+        height: 50px;
+    }
+
+    .add {
+        height: 30px;
+        width: 30px;
+        border-radius: 5px;
+        background: #00D100;
+        cursor: pointer;
+        color: #FFF;
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+        transition-property: background;
+        transition-duration: 1s;
+        transition-timing-function: linear;
+        margin-left: 20px;
+    }
+
+        .add:hover {
+            background: rgb(246, 192, 82);
+        }
+
+    #addRow {
+        vertical-align: bottom;
+        margin: 0 0 0 2px;
+    }
+
+    #addRowChild {
+        line-height: 50px;
+    }
+
+    .del {
+        height: 52px;
+        width: 52px;
+        background: rgb(178, 0, 0);
+        cursor: pointer;
+        color: #FFF;
+        text-align: center;
+        font-family: 'Open Sans', sans-serif;
+        transition-property: background;
+        transition-duration: 1s;
+        transition-timing-function: linear;
+    }
+
+
+        .del:hover {
+            background: rgb(202, 76, 73);
+        }
+</style>
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">Returnable Gate Pass</h3>
+        @*<nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> Personal Gate Pass </li>
+                </ol>
+            </nav>*@
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <form method="post">
+                    <div class="card-body">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label>Gate Pass No.</label>
+                                <input type="text" asp-for="PersonalGP.PersonalGPId" id="getGPId" class="form-control" readonly />
+                                <input type="hidden" asp-for="GPId" name="GPId" id="GPId" class="form-control" />
+                            </div>
+                        </div>
+                        <h4 class="card-title">Request a Returnable Gate Pass</h4>
+                        <div class="forms-sample col-12">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" asp-for="Fullname" id="txtName" readonly />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleSelectGender">Department</label>
+                                            @*@Html.DropDownListFor(model => model.PersonalGP.DepId, new SelectList(Model.deplist, "Id", "DeptName"), new { @class = "form-control" })*@
+                                            <input type="text" class="form-control" id="txtdeptname" asp-for="departName" readonly />
+                                        </div>
+                                        <label for="exampleInputName1">From</label>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Pamunugama
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Madupitiya
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Sinthawatta
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputName1">To</label>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Pamunugama
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Madupitiya
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Sinthawatta
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Other
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Other Location Name</label>
+                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Repair Name</label>
+                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Repair Contact No.</label>
+                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Vehicle No.</label>
+                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword4">Driver's/Helper's Name</label>
+                                        <input type="text" class="form-control" id="exampleInputRepairer" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleTextarea1">Remarks</label>
+                                        <textarea class="form-control"
+                                                  id="exampleTextarea1"
+                                                  rows="4"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Department Head Approval</label>
+                                        <input type="text" class="form-control" asp-for="DeptHead" id="DeptHead" readonly />
+                                        <div class="col-sm-12">
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    @Html.CheckBox("chkifDeptHeadUn", false)
+                                                    Check this if the department head is unavailable
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Management Approval</label>
+                                        <input type="text" class="form-control" asp-for="DeptGm" id="txtApproval" readonly />
+                                    </div>
+                                    <div class="form-group">
+                                        <label label for="exampleInputEmail3">Change management approval if not available</label>
+                                        <select asp-for="PersonalGP.ChApprvlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="workerDropdown">
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Quotation No.</label>
+                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Return Date</label>
+                                        <input type="date" class="form-control" id="exampleInputVehicle" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Return Place</label>
+                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                    </div>
+                                    <div class="row" style="height: 230px; overflow-y: scroll;">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-bordered" id="my-table">
+                                                <thead>
+                                                    <tr class="bg-dark">
+                                                        <th class="text-white font-weight-bold">Description</th>
+                                                        <th class="text-white font-weight-bold">Quantity</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody contenteditable="true">
+
+                                                    <tr id="default-row">
+                                                        <td></td>
+                                                        <td></td>
+
+                                                    </tr>
+
+                                                </tbody>
+                                            </table>
+                                            <div id="addRow" class="bg-success add" style="margin-left: 17px;">
+                                                <div id="addRowChild"><h3>+</h3></div>
+                                            </div>
+                                        </div>
+
+
+
+                                        <script>
+                                            $('#addColumnChild').click(function () {
+                                                $('#my-table tr').each(function () {
+                                                    $(this).append(`<td></td>`);
+                                                });
+                                            });
+
+                                            $('#addRowChild').click(function () {
+                                                $('#my-table tbody').append(`<tr>${$('#default-row').html()}</tr>`);
+                                            });
+                                        </script>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row">
+
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mr-2">Submit </button>
+                            <button class="btn btn-light">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+               
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+<!-- content-wrapper ends -->

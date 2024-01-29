@@ -1,0 +1,242 @@
+﻿@page
+@model GatePassManagementSystem.Pages.PersonalGP.CreateWGPModel
+@using Microsoft.AspNetCore.Http;
+@using GatePassManagementSystem.Model;
+
+<script src="//code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.8.0/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<div class="content-wrapper">
+
+    <div class="page-header">
+        <h3 class="page-title">Personal Gate Pass for Workers</h3>
+
+        @*<nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> Personal Gate Pass </li>
+                </ol>
+            </nav>*@
+    </div>
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <form method="post">
+                    <div class="card-body">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                @*<label>Gate Pass No.</label>*@
+                                <input type="text" asp-for="WorkerGP.WorkerGPId" id="getWGPId" class="form-control" readonly />
+                                <input type="hidden" asp-for="WGPId" name="WGPId" id="WGPId" class="form-control" />
+
+                            </div>
+                        </div>
+                        <h4 class="card-title" style="margin-top:20px;">Request a Gate Pass</h4>
+                        <div class="forms-sample col-12">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Name</label>
+                                        <select asp-for="WorkerGP.WrkId" asp-items="@(new SelectList(Model.workerlist, "Id", "FullNameAndEPFNo"))" class="form-control" id="workerDropdown">
+                                        </select>
+                                      
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleSelectGender">Department</label>
+                                        @*@Html.DropDownListFor(model => model.PersonalGP.DepId, new SelectList(Model.deplist, "Id", "DeptName"), new { @class = "form-control" })*@
+                                        <input type="text" class="form-control" id="txtdeptname" asp-for="departName" readonly />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputName1">Reason</label>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        @Html.CheckBox("chkLunch", new { @class = "form-check-input" }) Lunch
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        @Html.CheckBox("chkSinthawatta", new { @class = "form-check-input" }) Sinthawaththa
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        @Html.CheckBox("chkHalfd", new { @class = "form-check-input" }) Half Day
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        @Html.CheckBox("chkMadu", new { @class = "form-check-input" }) Madupitiya
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        @Html.CheckBox("chkShrt", new { @class = "form-check-input" }) Short Leave
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        @Html.CheckBox("chkOther", new { @class = "form-check-input" })  Other
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        $(document).ready(function () {
+                                            $('.form-check-input').on('change', function () {
+                                                $('.form-check-input').not(this).prop('checked', false);
+                                            });
+                                        });
+
+                                    </script>
+                                    <div class="form-group">
+                                        <label for="exampleTextarea1" asp-for="WorkerGP.Reason">Description</label>
+                                        <textarea class="form-control"
+                                                  id="txtDesc"
+                                                  rows="4"></textarea>
+                                    </div>
+
+                                </div>
+                                <div class="col">
+                                    @{ var httpContext = ViewContext.HttpContext;
+                                        int roleId = Convert.ToInt32(httpContext.Session.GetString("Roleid"));
+                                        var deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
+
+                                        if (roleId == 6)
+                                        {
+                                            @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 12 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 19 || deptId == 21 || deptId == 22 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
+                                            {
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail3">Department Head Approval</label>
+                                                    <input type="text" class="form-control" asp-for="DeptHead" id="DeptHead" readonly />
+                                                    <div class="col-sm-12">
+                                                        <div class="form-check">
+                                                            <label class="form-check-label">
+                                                                @Html.CheckBox("chkifDeptHeadUn", false)
+                                                                Check this if the department head is unavailable
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                        }
+
+                                        if (roleId == 5 || roleId == 6)
+                                        {
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail3">Management Approval</label>
+                                                @if (deptId == 7)
+                                                {
+                                                    <input type="text" class="form-control" value="Mr. Thusitha" id="txtApproval" readonly />
+                                                }
+                                                else
+                                                {
+                                                    <input type="text" class="form-control" asp-for="DeptGm" id="txtApproval" readonly />
+                                                }
+                                                @*<select asp-for="WorkerGP.ChAprlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="workerDropdown">
+                    </select>*@
+                                                @*<p id="txtBypass"><i>Bypass</i></p>*@
+                                            </div>
+                                        }
+
+                                    }
+
+                                    <div class="card" style="overflow: auto;">
+                                        <div class="card-body">
+                                            <svg id="barcode"></svg>
+                                        </div>
+                                    </div>
+                                    <img id="image" />
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-dark mr-2" onclick="generatePDF()">Print PDF</button>
+                                    </div>
+                                    <script type="text/javascript">
+
+                                        window.addEventListener("load", function (event) {
+                                            $(document).ready(function () {
+                                                JsBarcode("#barcode", document.getElementById('WGPId').value, {
+                                                    lineColor: "#000",
+                                                    width: 2,
+                                                    height: 100,
+                                                    displayValue: true
+                                                });
+                                            });
+                                        }, false);
+
+                                        window.addEventListener("load", function (event) {
+                                            var val = document.getElementById('WGPId').value;
+                                            getWGPId.value = val;
+                                        }, false);
+
+                                        function generatePDF() {
+
+                                            var svg = $("#barcode")[0];
+                                            var xml = new XMLSerializer().serializeToString(svg);
+                                            var base64 = 'data:image/svg+xml;base64,' + btoa(xml);
+
+                                            var img = new Image();
+                                            img.src = base64;
+
+                                            img.onload = function () {
+                                                var pdf = new jsPDF({
+                                                    orientation: 'p',
+                                                    unit: 'mm',
+                                                    format: 'a4',
+                                                    putOnlyUsedFonts: true
+                                                });
+
+                                                const canvas = document.createElement("canvas");
+                                                const w = parseInt(svg.getAttribute('width'));
+                                                const h = parseInt(svg.getAttribute('height'));
+
+                                                canvas.setAttribute('width', w);
+                                                canvas.setAttribute('height', h);
+                                                const context = canvas.getContext("2d");
+                                                context.drawImage(img, 0, 0, w, h);
+
+                                                pdf.text("Gate Pass", 40, 10);
+                                                pdf.text("Name : " + document.getElementById('name').value, 10, 20);
+                                                pdf.text("EPF no. : " + document.getElementById('epfno').value, 10, 30);
+                                                pdf.addImage(canvas.toDataURL(), 'png', 30, 40, w / 5, h / 5);
+                                                pdf.save('Demopdf.pdf');
+                                            }
+
+                                        }
+
+                                    </script>
+                                </div>
+                            </div>
+                            <button type="submit" value="Create" class="btn btn-primary mr-2">Submit </button>
+                            <button class="btn btn-light">Cancel</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

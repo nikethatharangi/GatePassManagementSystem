@@ -1,0 +1,986 @@
+﻿@page
+@model GatePassManagementSystem.Pages.PersonalGP.ViewPendingGPModel
+
+
+@using Microsoft.AspNetCore.Http;
+@using GatePassManagementSystem.Model;
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous">
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous">
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"
+        integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+        crossorigin="anonymous">
+</script>
+<style>
+    .container {
+        padding: 2rem 0rem;
+    }
+
+    h4 {
+        margin: 2rem 0rem 1rem;
+    }
+
+    .table th .badge,
+    .table td .badge {
+        width: 90px;
+    }
+</style>
+
+<div class="content-wrapper pb-0">
+    <div class="page-header flex-wrap">
+
+        <div class="header-right d-flex flex-wrap mt-2 mt-sm-0">
+            <div class="d-flex align-items-center">
+                <a href="#">
+                    <p class="m-0 pr-3">Personal Gate Pass Requests</p>
+                </a>
+                <a class="pl-3 mr-4" href="#"></a>
+            </div>
+            @{
+
+                var httpContext = ViewContext.HttpContext;
+                int Uid = Convert.ToInt32(httpContext.Session.GetString("UserId"));
+                int roleId = Convert.ToInt32(httpContext.Session.GetString("Roleid"));
+                var deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
+
+                
+
+
+                if (roleId == 1 || roleId == 3 || Uid == 4 || Uid == 31 || Uid == 90 || Uid == 145 || Uid == 56)
+                {
+
+                }
+                else if (Uid != 4 || Uid != 31 || Uid != 90 || Uid != 145 || Uid != 56 || roleId == 6 || roleId == 5 || roleId == 4)
+                {
+                     <a class="btn btn-primary mt-2 mt-sm-0 btn-icon-text" asp-area="" asp-page="/PersonalGP/CreatePGP">
+                         <i class="mdi mdi-plus-circle"></i>Create new gate pass
+                     </a>
+                }
+
+            }
+        </div>
+    </div>
+    @*<script>
+        function myFunction() {
+            window.location.href = "https://localhost:44341/PersonalGP/CreatePGP";
+        }
+    </script>*@
+    <div class="row">
+
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+
+                <div class="card-body">
+                    <h4 class="card-title">Requested Gate Passes</h4>
+                    <p class="card-description">
+                        <code>Pending Gate Pass List</code>
+                    </p>
+
+                    @if (Model.PersonalGPs.Count() > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr class="bg-dark">
+                                        <th class="text-white font-weight-bold">
+                                            <label asp-for="PersonalGPs.FirstOrDefault().PersonalGPId" scope="col"></label>
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+                                            <label>Department</label>
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+                                            <label>Reason</label>
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+                                            <label asp-for="PersonalGPs.FirstOrDefault().Description" scope="col"></label>
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+                                            <label asp-for="PersonalGPs.FirstOrDefault().CreateUser" scope="col"></label>
+                                        </th>
+                                        @*<th class="text-white font-weight-bold">
+                                            <label asp-for="PersonalGPs.FirstOrDefault().CreateDate" scope="col"></label>
+                                        </th>*@
+                                        @if (roleId == 4 || roleId == 3)
+                                        {
+                                            <th class="text-white font-weight-bold">
+                                                <label>HOD Approval Status</label>
+                                            </th>
+                                        }
+
+                                        <th hidden>
+                                            <label>HOD Approval Time</label>
+                                        </th>
+                                        <th hidden>
+                                            <label>DGM Approval Status</label>
+                                        </th>
+                                        <th hidden>
+                                            <label>DGM Approval Time</label>
+                                        </th>
+                                        <th hidden>
+                                            <label>Reject Reason</label>
+                                        </th>
+                                        <th class="text-white font-weight-bold" style="width:300px">
+
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+                                            <label>Reject Reason</label>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                @foreach (var item in Model.PersonalGPs)
+                                {
+                                    TempData["DeptName"] = Model.Db.Department.Where(d => d.Id == item.DepId).Select(d => d.DeptName).FirstOrDefault();
+                                    <tbody>
+                                        <tr>
+                                            <td class="gfgusername">@Html.DisplayFor(m => item.PersonalGPId)</td>
+                                            <td class="gfgusername">@TempData["DeptName"]</td>
+                                            <td>
+                                                <div style="margin-top:15px;">
+                                                    @if (item.ChkHalfd == true)
+                                                    {
+                                                        <p>Half Day</p>
+                                                    }
+                                                    else if (item.ChkLunch == true)
+                                                    {
+                                                        <p>Lunch</p>
+                                                    }
+                                                    else if (item.ChkMadu == true)
+                                                    {
+                                                        <p>Madupitiya</p>
+                                                    }
+                                                    else if (item.ChkOther == true)
+                                                    {
+                                                        <p>Other</p>
+                                                    }
+                                                    else if (item.ChkShrt == true)
+                                                    {
+                                                        <p>Short Leave</p>
+                                                    }
+                                                    else if (item.ChkSinthawatta == true)
+                                                    {
+                                                        <p>Sinthawatta</p>
+                                                    }
+                                                    else if (item.ChkCusVisit == true)
+                                                    {
+                                                        <p>Customer Visit</p>
+                                                    }
+
+                                                </div>
+                                            </td>
+                                            <td class="gfgpp">@Html.DisplayFor(m => item.Description)</td>
+                                            <td class="gfgscores">
+                                                @Html.DisplayFor(m => item.CreateUser)
+                                            </td>
+                                            @*<td class="gfgdate">
+                                                @Html.DisplayFor(m => item.CreateDate)
+                                            </td>*@
+                                            @if (roleId == 4 || roleId == 3 || roleId == 1)
+                                            {
+                                                if (item.ChkifDeptHeadUn == true)
+                                                {
+                                                    <td>
+                                                        <label class="badge badge-secondary" style="width:150px;">Approval ByPassed</label>
+                                                    </td>
+                                                }
+                                                else if (item.AShod == "A")
+                                                {
+                                                    <td style="padding-left: 50px; padding-right: 50px;">
+                                                        <label class="badge badge-success">Approved</label>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        
+                                                    </td>
+                                                }
+                                            }
+
+                                            <td hidden class="gfgashodtime">
+                                                @Html.DisplayFor(m => item.AShodtime)
+                                            </td>
+                                            <td hidden class="gfgasdgm">
+                                                @Html.DisplayFor(m => item.ASdgm)
+                                            </td>
+                                            <td hidden class="gfgasdgmtime">
+                                                @Html.DisplayFor(m => item.ASdgmtime)
+                                            </td>
+                                            <td hidden class="gfgrejreason">
+                                                @Html.DisplayFor(m => item.RejctReason)
+                                            </td>
+                                            <td>
+                                                <div role="group" aria-label="Basic example">
+                                                    @*class="btn-group"*@
+                                                    @*<button type="submit" style="margin-left:5px;" class="gfgselect btn btn-primary" data-toggle="modal" data-target="#gfgmodal">View</button>*@
+                                                    <a data-toggle="modal" data-target="#exampleModal-@item.PersonalGPId">
+                                                        <label class="btn btn-info" style="margin-left: 5px; width: 90px; height:35px; ">View</label>
+                                                    </a>
+                                                    <form method="post" asp-page-handler="Approve">
+                                                        <input type="hidden" name="Id" value="@item.Id" />
+                                                        <button type="submit" style="margin-left: 5px;" class="gfgselect btn btn-success">Approve</button>
+                                                    </form>
+
+                                                    <form method="post" asp-page-handler="Reject">
+                                                        <input type="hidden" name="Id" value="@item.Id" />
+                                                        <button type="submit" style="margin-left: 5px; width: 90px;margin-top:10px;" class="gfgselect btn btn-danger">Reject</button>
+
+                                                    </form>
+                                                </div>
+
+                                            </td>
+                                            <td>
+                                                <input type="text" asp-for="PersonalGPB.RejctReason" />
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+                                    <div class="modal fade" id="exampleModal-@item.PersonalGPId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Personal gate pass</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+
+
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+
+                                                            @{
+                                                                string Fullname = Model.Db.User.Where(gp => gp.Id == item.UserId).Select(gp => gp.FullName).FirstOrDefault();
+                                                                TempData["Fullname"] = Fullname;
+
+                                                                string deptname = Model.Db.Department.Where(gp => gp.Id == item.DepId).Select(gp => gp.DeptName).FirstOrDefault();
+                                                                TempData["deptname"] = deptname;
+                                                            }
+
+                                                            <div class="card stretch-card mb-3">
+                                                                <div class="card-body d-flex flex-wrap justify-content-between">
+                                                                    <div>
+                                                                        <h4 class="font-weight-semibold mb-1 text-black">@Html.DisplayFor(m => item.PersonalGPId)</h4>
+                                                                        <h6 class="text-muted">@Html.DisplayFor(m => item.CreateDate)</h6>
+                                                                    </div>
+                                                                    @*<label class="badge badge-danger text-align:right" style="width: 250px; text-wrap: balance">Guard room acknowledgement pending</label>*@
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <form class="forms-sample">
+                                                                        <div class="form-group">
+                                                                            <label for="exampleInputUsername1">Requested User</label>
+
+                                                                            <input type="text" class="form-control" asp-for="@TempData["Fullname"]" readonly="readonly">
+                                                                        </div>
+
+                                                                        <div class="form-group">
+                                                                            <label for="exampleInputUsername1">Department</label>
+                                                                            <input type="text" class="form-control" asp-for="@TempData["deptname"]" readonly="readonly">
+                                                                        </div>
+
+                                                                        <div class="form-group">
+                                                                            <label for="exampleInputUsername1">Reason</label>
+                                                                            <div class="form-group row">
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isHalfDayChecked = item.ChkHalfd == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios1" @(isHalfDayChecked ? "checked" : "") disabled>
+                                                                                            Half Day<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isLunchChecked = item.ChkLunch == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios2" @(isLunchChecked ? "checked" : "") disabled>
+                                                                                            Lunch<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isShortLeaveChecked = item.ChkShrt == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios3" @(isShortLeaveChecked ? "checked" : "") disabled>
+                                                                                            Short Leave<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isMadupitiyaChecked = item.ChkMadu == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios4" @(isMadupitiyaChecked ? "checked" : "") disabled>
+                                                                                            Madupitiya<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isOtherChecked = item.ChkOther == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios5" @(isOtherChecked ? "checked" : "") disabled>
+                                                                                            Other<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isSinthawattaChecked = item.ChkSinthawatta == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios6" @(isSinthawattaChecked ? "checked" : "") disabled>
+                                                                                            Sinthawatta<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="form-group">
+                                                                            <textarea class="form-control" id="exampleTextarea1" rows="4" readonly="readonly">@Html.DisplayFor(m => item.Description)</textarea>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            @{
+                                                                string DeptHead = Model.Db.Department.Where(gp => gp.Id == item.UserId).Select(gp => gp.Hod).FirstOrDefault();
+                                                                TempData["DeptHead"] = DeptHead;
+
+                                                                string DeptGm = Model.Db.Department.Where(gp => gp.Id == item.UserId).Select(gp => gp.Gm).FirstOrDefault();
+                                                                TempData["DeptGm"] = DeptGm;
+                                                            }
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <form class="forms-sample">
+                                                                        <div class="form-group" style="margin-bottom:0px!important">
+                                                                            <label for="exampleInputUsername1">HOD acknowledgement</label>
+                                                                            <input type="text" class="form-control" asp-for="@TempData["DeptHead"]" readonly="readonly">
+                                                                        </div>
+                                                                        <div class="form-check">
+                                                                            @if (item.AShod == "A" )
+                                                                            {
+                                                                                <label class="badge badge-success">Acknowledged</label>
+                                                                            }
+                                                                            else if (item.AShod == "R")
+                                                                            {
+                                                                                <label class="badge badge-danger">Rejected</label>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <label class="badge badge-warning">Not acknowledged</label>
+                                                                            }
+                                                                        </div>
+
+                                                                        <div class="form-group" style="margin-bottom:0px!important; margin-top:20px!important">
+                                                                            <label for="exampleInputUsername1">Management Approval</label>
+                                                                            <input type="text" class="form-control" asp-for="@TempData["DeptGm"]" readonly="readonly">
+                                                                        </div>
+                                                                        <div class="form-check">
+                                                                            @if (item.ASdgm == "A")
+                                                                            {
+                                                                                <label class="badge badge-success mt-2">Approved</label>
+                                                                            }
+                                                                            else if (item.ASdgm == "R")
+                                                                            {
+                                                                                <label class="badge badge-danger mt-2">Rejected</label>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <label class="badge badge-warning mt-2">Not Approved</label>
+                                                                            }
+                                                                        </div>
+
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </table>
+
+                        </div>
+
+
+                    }
+                    else
+                    {
+                        <p>No Gatepasses available to approve</p>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+
+        <!--<script>
+            $(function () {
+                // ON SELECTING ROW
+                $(".gfgselect").click(function () {
+                    //FINDING ELEMENTS OF ROWS AND STORING THEM IN VARIABLES
+                    var a = $(this).parents("tr").find(".gfgusername").text();
+                    var c = $(this).parents("tr").find(".gfgpp").text();
+                    var d = $(this).parents("tr").find(".gfgscores").text();
+                    var e = $(this).parents("tr").find(".gfgashod").text();
+                    var f = $(this).parents("tr").find(".gfgashodtime").text();
+                    var g = $(this).parents("tr").find(".gfgasdgm").text();
+                    var h = $(this).parents("tr").find(".gfgasdgmtime").text();
+                    var p = "";
+                    // CREATING DATA TO SHOW ON MODEL
+                    p +=
+                        "<p id='a' name='GFGusername' >Name: "
+                        + a + " </p>";
+                    p +=
+                        "<p id='c' name='GFGpp'>Reason: "
+                        + c + "</p>";
+                    p +=
+                        "<p id='d' name='GFGscores' >User: "
+                        + d + " </p>";
+                    p +=
+                        "<p id='e' name='gfgashod'>Approval HOD: "
+                        + e + "</p>";
+                    p +=
+                        "<p id='e' name='gfgashod'>Approval HOD Time: "
+                        + f + "</p>";
+                    p +=
+                        "<p id='f' name='gfgasdgm' >Approval DGM: "
+                        + g + " </p>";
+                    p +=
+                        "<p id='f' name='gfgasdgm' >Approval DGM Time: "
+                        + h + " </p>";
+                    //CLEARING THE PREFILLED DATA
+                    $("#divGFG").empty();
+                    //WRITING THE DATA ON MODEL
+                    $("#divGFG").append(p);
+                });
+            });
+        </script>-->
+        @*CREATING BOOTSTRAP MODEL*@
+        <!--<div class="modal fade"
+             id="gfgmodal"
+             tabindex="-1"
+             role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">-->
+        @*MODEL TITLE*@
+        <!--<h2 class="modal-title"
+                id="gfgmodallabel">
+                Requested Gate Pass
+            </h2>
+            <button type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close">
+                <span aria-hidden="true">
+                    ×
+                </span>
+            </button>
+        </div>-->
+        @*MODEL BODY*@
+        <!--<div class="modal-body">
+            <div class="GFGclass"
+                 id="divGFG"></div>
+            <div class="modal-footer">-->
+        @*The close button in the bottom of the modal*@
+        @*@foreach (var item in Model.PersonalGPs)
+            {
+                <input type="hidden" name="Id" value="@item.Id" />
+            }
+
+            <form method="post" asp-page-handler="Approve">
+                <button type="submit" class="gfgselect btn btn-success">Approve</button>
+            </form>
+
+            <form method="post" asp-page-handler="Reject">
+                <button type="submit" class="gfgselect btn btn-danger">Reject</button>
+                <input type="text" asp-for="PersonalGPB.RejctReason" />
+            </form>*@
+
+        <!--<button type="button"
+                                    class="btn btn-secondary"
+                                    data-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+
+                <div class="card-body">
+                    <h4 class="card-title">Requested Gate Passes</h4>
+                    <p class="card-description">
+                        <code>Pending Worker Gate Pass List</code>
+                    </p>
+
+                    @if (Model.WorkerGPs.Count() > 0)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover table-bordered">
+                                <thead>
+                                    <tr class="bg-dark">
+                                        <th class="text-white font-weight-bold">
+                                            <label asp-for="WorkerGPs.FirstOrDefault().WorkerGPId" scope="col"></label>
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+                                            <label>Department</label>
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+                                            <label>Reason</label>
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+                                            <label>Description</label>
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+                                            <label>Worker Name</label>
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+                                            <label asp-for="WorkerGPs.FirstOrDefault().CreateDate" scope="col"></label>
+                                        </th>
+                                        <th hidden>
+                                            <label>HOD Approval Status</label>
+                                        </th>
+                                        <th hidden>
+                                            <label>HOD Approval Time</label>
+                                        </th>
+                                        <th hidden>
+                                            <label>DGM Approval Status</label>
+                                        </th>
+                                        <th hidden>
+                                            <label>DGM Approval Time</label>
+                                        </th>
+                                        <th hidden>
+                                            <label>Reject Reason</label>
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+
+                                        </th>
+                                        <th class="text-white font-weight-bold">
+                                            <label>Reject Reason</label>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                @foreach (var itemw in Model.WorkerGPs) 
+                                {
+                                    var FullnameWorker = Model.Db.Workers.Where(gp => gp.Id == itemw.WrkId).Select(gp => gp.Name).FirstOrDefault();
+                                    TempData["FullnameWorker"] = FullnameWorker;
+
+                                    <tbody>
+                                        <tr>
+                                            <td class="gfgusername">@Html.DisplayFor(m => itemw.WorkerGPId)</td>
+                                            <td class="gfgusername">@TempData["DeptName"]</td>
+                                            <td>
+
+                                                @if (itemw.ChkHalfd == true)
+                                                {
+                                                    <p>Half Day</p>
+                                                }
+                                                else if (itemw.ChkLunch == true)
+                                                {
+                                                    <p>Lunch</p>
+                                                }
+                                                else if (itemw.ChkMadu == true)
+                                                {
+                                                    <p>Madupitiya</p>
+                                                }
+                                                else if (itemw.ChkOther == true)
+                                                {
+                                                    <p>Other</p>
+                                                }
+                                                else if (itemw.ChkShrt == true)
+                                                {
+                                                    <p>Short Leave</p>
+                                                }
+                                                else if (itemw.ChkSinthawatta == true)
+                                                {
+                                                    <p>Sinthawatta</p>
+                                                }
+
+                                            </td>
+                                            <td class="gfgpp">@Html.DisplayFor(m => itemw.Reason)</td>
+                                            <td class="gfgscores">
+                                                @TempData["FullnameWorker"]
+                                            </td>
+                                            <td class="gfgdate">
+                                                @Html.DisplayFor(m => itemw.CreateDate)
+                                            </td>
+                                            <td hidden class="gfgashod">
+                                                @Html.DisplayFor(m => itemw.AShod)
+                                            </td>
+                                            <td hidden class="gfgashodtime">
+                                                @Html.DisplayFor(m => itemw.AShodtime)
+                                            </td>
+                                            <td hidden class="gfgasdgm">
+                                                @Html.DisplayFor(m => itemw.ASdgm)
+                                            </td>
+                                            <td hidden class="gfgasdgmtime">
+                                                @Html.DisplayFor(m => itemw.ASdgmtime)
+                                            </td>
+                                            <td hidden class="gfgrejreason">
+                                                @Html.DisplayFor(m => itemw.RejctReason)
+                                            </td>
+                                            <td>
+                                                <div class="row">
+                                                    @*<button type="submit" style="margin-left:5px;" class="gfgselect btn btn-primary" data-toggle="modal" data-target="#gfgmodal">View</button>*@
+                                                    <a data-toggle="modal" data-target="#exampleModal-@itemw.WorkerGPId">
+                                                        <label class="badge badge-info" style="margin-left: 5px; width: 75px; cursor: pointer">View</label>
+                                                    </a>
+                                                    <form method="post" asp-page-handler="ApproveWGP">
+                                                        <input type="hidden" name="Id" value="@itemw.Id" />
+                                                        <button type="submit" style="margin-left:5px;" class="gfgselect btn btn-success">Approve</button>
+                                                    </form>
+
+                                                    <form method="post" asp-page-handler="RejectWGP">
+                                                        <input type="hidden" name="Id" value="@itemw.Id" />
+                                                        <button type="submit" style="margin-left:5px;" class="gfgselect btn btn-danger">Reject</button>
+
+                                                    </form>
+                                                </div>
+
+                                            </td>
+                                            <td>
+                                                <input type="text" asp-for="PersonalGPB.RejctReason" />
+                                            </td>
+
+                                        </tr>
+
+                                    </tbody>
+                                    <div class="modal fade" id="exampleModal-@itemw.WorkerGPId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Personal gate pass</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+
+
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+
+                                                            @{
+                                                                string Fullname = Model.Db.Workers.Where(gp => gp.Id == itemw.WrkId).Select(gp => gp.Name).FirstOrDefault();
+                                                                TempData["Fullname"] = Fullname;
+
+                                                                string deptname = Model.Db.Department.Where(gp => gp.Id == itemw.DepId).Select(gp => gp.DeptName).FirstOrDefault();
+                                                                TempData["deptname"] = deptname;
+                                                            }
+
+                                                            <div class="card stretch-card mb-3">
+                                                                <div class="card-body d-flex flex-wrap justify-content-between">
+                                                                    <div>
+                                                                        <h4 class="font-weight-semibold mb-1 text-black">@Html.DisplayFor(m => itemw.WorkerGPId)</h4>
+                                                                        <h6 class="text-muted">@Html.DisplayFor(m => itemw.CreateDate)</h6>
+                                                                    </div>
+                                                                    @*<label class="badge badge-danger text-align:right" style="width: 250px; text-wrap: balance">Guard room acknowledgement pending</label>*@
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <form class="forms-sample">
+                                                                        <div class="form-group">
+                                                                            <label for="exampleInputUsername1">Requested User</label>
+
+                                                                            <input type="text" class="form-control" asp-for="@TempData["Fullname"]" readonly="readonly">
+                                                                        </div>
+
+                                                                        <div class="form-group">
+                                                                            <label for="exampleInputUsername1">Department</label>
+                                                                            <input type="text" class="form-control" asp-for="@TempData["deptname"]" readonly="readonly">
+                                                                        </div>
+
+                                                                        <div class="form-group">
+                                                                            <label for="exampleInputUsername1">Reason</label>
+                                                                            <div class="form-group row">
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isHalfDayChecked = itemw.ChkHalfd == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios1" @(isHalfDayChecked ? "checked" : "") disabled>
+                                                                                            Half Day<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isLunchChecked = itemw.ChkLunch == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios2" @(isLunchChecked ? "checked" : "") disabled>
+                                                                                            Lunch<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isShortLeaveChecked = itemw.ChkShrt == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios3" @(isShortLeaveChecked ? "checked" : "") disabled>
+                                                                                            Short Leave<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isMadupitiyaChecked = itemw.ChkMadu == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios4" @(isMadupitiyaChecked ? "checked" : "") disabled>
+                                                                                            Madupitiya<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isOtherChecked = itemw.ChkOther == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios5" @(isOtherChecked ? "checked" : "") disabled>
+                                                                                            Other<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isSinthawattaChecked = itemw.ChkSinthawatta == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios6" @(isSinthawattaChecked ? "checked" : "") disabled>
+                                                                                            Sinthawatta<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="form-group">
+                                                                            <textarea class="form-control" id="exampleTextarea1" rows="4" readonly="readonly">@Html.DisplayFor(m => itemw.Reason)</textarea>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            @{
+                                                                string DeptHead = Model.Db.Department.Where(gp => gp.Id == itemw.WrkId).Select(gp => gp.Hod).FirstOrDefault();
+                                                                TempData["DeptHead"] = DeptHead;
+
+                                                                string DeptGm = Model.Db.Department.Where(gp => gp.Id == itemw.WrkId).Select(gp => gp.Gm).FirstOrDefault();
+                                                                TempData["DeptGm"] = DeptGm;
+                                                            }
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <form class="forms-sample">
+                                                                        <div class="form-group" style="margin-bottom:0px!important">
+                                                                            <label for="exampleInputUsername1">HOD acknowledgement</label>
+                                                                            <input type="text" class="form-control" asp-for="@TempData["DeptHead"]" readonly="readonly">
+                                                                        </div>
+                                                                        <div class="form-check">
+                                                                            @if (itemw.AShod == "A")
+                                                                            {
+                                                                                <label class="badge badge-success">Acknowledged</label>
+                                                                            }
+                                                                            else if (itemw.AShod == "R")
+                                                                            {
+                                                                                <label class="badge badge-danger">Rejected</label>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <label class="badge badge-warning">Not acknowledged</label>
+                                                                            }
+                                                                        </div>
+
+                                                                        <div class="form-group" style="margin-bottom:0px!important; margin-top:20px!important">
+                                                                            <label for="exampleInputUsername1">Management Approval</label>
+                                                                            <input type="text" class="form-control" asp-for="@TempData["DeptGm"]" readonly="readonly">
+                                                                        </div>
+                                                                        <div class="form-check">
+                                                                            @if (itemw.ASdgm == "A")
+                                                                            {
+                                                                                <label class="badge badge-success mt-2">Approved</label>
+                                                                            }
+                                                                            else if (itemw.ASdgm == "R")
+                                                                            {
+                                                                                <label class="badge badge-danger mt-2">Rejected</label>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <label class="badge badge-warning mt-2">Not Approved</label>
+                                                                            }
+                                                                        </div>
+
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    @*<button type="button" class="btn btn-primary">Save changes</button>*@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </table>
+
+                        </div>
+
+
+                    }
+                    else
+                    {
+                        <p>No Gatepasses available to approve</p>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+
+        <!--<script>
+            $(function () {
+                // ON SELECTING ROW
+                $(".gfgselect").click(function () {
+                    //FINDING ELEMENTS OF ROWS AND STORING THEM IN VARIABLES
+                    var a = $(this).parents("tr").find(".gfgusername").text();
+                    var c = $(this).parents("tr").find(".gfgpp").text();
+                    var d = $(this).parents("tr").find(".gfgscores").text();
+                    var e = $(this).parents("tr").find(".gfgashod").text();
+                    var f = $(this).parents("tr").find(".gfgashodtime").text();
+                    var g = $(this).parents("tr").find(".gfgasdgm").text();
+                    var h = $(this).parents("tr").find(".gfgasdgmtime").text();
+                    var p = "";
+                    // CREATING DATA TO SHOW ON MODEL
+                    p +=
+                        "<p id='a' name='GFGusername' >Name: "
+                        + a + " </p>";
+                    p +=
+                        "<p id='c' name='GFGpp'>Reason: "
+                        + c + "</p>";
+                    p +=
+                        "<p id='d' name='GFGscores' >User: "
+                        + d + " </p>";
+                    p +=
+                        "<p id='e' name='gfgashod'>Approval HOD: "
+                        + e + "</p>";
+                    p +=
+                        "<p id='e' name='gfgashod'>Approval HOD Time: "
+                        + f + "</p>";
+                    p +=
+                        "<p id='f' name='gfgasdgm' >Approval DGM: "
+                        + g + " </p>";
+                    p +=
+                        "<p id='f' name='gfgasdgm' >Approval DGM Time: "
+                        + h + " </p>";
+                    //CLEARING THE PREFILLED DATA
+                    $("#divGFG").empty();
+                    //WRITING THE DATA ON MODEL
+                    $("#divGFG").append(p);
+                });
+            });
+        </script>-->
+        @*CREATING BOOTSTRAP MODEL*@
+        <!--<div class="modal fade"
+             id="gfgmodal"
+             tabindex="-1"
+             role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">-->
+        @*MODEL TITLE*@
+        <!--<h2 class="modal-title"
+                id="gfgmodallabel">
+                Requested Gate Pass
+            </h2>
+            <button type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close">
+                <span aria-hidden="true">
+                    ×
+                </span>
+            </button>
+        </div>-->
+        @*MODEL BODY*@
+        <!--<div class="modal-body">
+            <div class="GFGclass"
+                 id="divGFG"></div>
+            <div class="modal-footer">-->
+        @*The close button in the bottom of the modal*@
+        @*@foreach (var item in Model.WorkerGPs)
+            {
+                <input type="hidden" name="Id" value="@item.Id" />
+            }
+
+            <form method="post" asp-page-handler="Approve">
+                <button type="submit" class="gfgselect btn btn-success">Approve</button>
+            </form>
+
+            <form method="post" asp-page-handler="Reject">
+                <button type="submit" class="gfgselect btn btn-danger">Reject</button>
+                <input type="text" asp-for="PersonalGPB.RejctReason" />
+            </form>*@
+
+        <!--<button type="button"
+                                    class="btn btn-secondary"
+                                    data-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+
+    </div>
+</div>

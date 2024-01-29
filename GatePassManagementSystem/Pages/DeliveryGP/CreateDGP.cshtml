@@ -1,0 +1,151 @@
+﻿@page
+@model GatePassManagementSystem.Pages.DeliveryGP.CreateDGPModel
+
+<div class="content-wrapper">
+    <div class="page-header">
+        <h3 class="page-title">Delivery/Sample Gate Pass</h3>
+        @*<nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Forms</a></li>
+                    <li class="breadcrumb-item active" aria-current="page"> Personal Gate Pass </li>
+                </ol>
+            </nav>*@
+    </div>
+    
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <form method="post">
+                    <div class="card-body">
+                        <div class="col-lg-3 col-sm-12">
+                            <div class="form-group">
+                                <label>Gate Pass No.</label>
+                                <input type="text" asp-for="PersonalGP.PersonalGPId" id="getGPId" class="form-control" readonly />
+                                <input type="hidden" asp-for="GPId" name="GPId" id="GPId" class="form-control" />
+                            </div>
+                        </div>
+                        <h4 class="card-title">Request a Returnable Gate Pass</h4>
+                        <div class="forms-sample col-12">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" asp-for="Fullname" id="txtName" readonly />
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="exampleSelectGender">Department</label>
+                                            @*@Html.DropDownListFor(model => model.PersonalGP.DepId, new SelectList(Model.deplist, "Id", "DeptName"), new { @class = "form-control" })*@
+                                            <input type="text" class="form-control" id="txtdeptname" asp-for="departName" readonly />
+                                        </div>
+                                        <label for="exampleInputName1">From</label>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Pamunugama
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Madupitiya
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Sinthawatta
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputName1">To</label>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Pamunugama
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Madupitiya
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" /> Sinthawatta
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Vehicle No.</label>
+                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword4">Driver's/Helper's Name</label>
+                                        <input type="text" class="form-control" id="exampleInputRepairer" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleTextarea1">Others</label>
+                                        <textarea class="form-control"
+                                                  id="exampleTextarea1"
+                                                  rows="4"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Department Head Approval</label>
+                                        <input type="text" class="form-control" asp-for="DeptHead" id="DeptHead" readonly />
+
+                                        <div class="col-sm-12">
+                                            <div class="form-check">
+                                                <label class="form-check-label">
+                                                    @Html.CheckBox("chkifDeptHeadUn", false)
+                                                    Check this if the department head is unavailable
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Management Approval</label>
+                                        <input type="text" class="form-control" asp-for="DeptGm" id="txtApproval" readonly />
+                                    </div>
+                                    <div class="form-group">
+                                        <label label for="exampleInputEmail3">Change management approval if not available</label>
+                                        <select asp-for="PersonalGP.ChApprvlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="workerDropdown">
+                                        </select>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="row">
+
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mr-2">Submit </button>
+                            <button class="btn btn-light">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+    <!-- content-wrapper ends -->
