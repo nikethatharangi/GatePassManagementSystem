@@ -35,6 +35,7 @@ namespace GatePassManagementSystem.Model
         public int RoleId { get; set; }
         public UserRole UserRole { get; set; }
 
+        public string FullNameAndEPFNo => $"{FullName} - {EPFNumber}";
         public ICollection<PersonalGP> PersonalGP { get; set; }
     }
 }

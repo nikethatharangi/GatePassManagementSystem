@@ -25,7 +25,8 @@ namespace GatePassManagementSystem.Pages
 
         public void OnGet()
         {
-            RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            Response.Redirect("CreatePGP");
+            //RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         }
     }
 }

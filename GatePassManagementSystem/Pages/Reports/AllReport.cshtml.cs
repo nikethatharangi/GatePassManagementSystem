@@ -30,7 +30,8 @@ namespace GatePassManagementSystem.Pages.Reports
         public IEnumerable<Model.PersonalGP> PersonalGPs { get; set; }
         public IEnumerable<Model.WorkerGP> WorkerGPs { get; set; }
         public Model.Workers Workers { get; set; }
-
+        public DateTime fromd { get; set; }
+        public DateTime tod { get; set; }
         [BindProperty]
         public DateTime? FromDate { get; set; }
 
@@ -44,9 +45,10 @@ namespace GatePassManagementSystem.Pages.Reports
                 DateTime utcNow = DateTime.UtcNow;
                 TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
                 DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
+                DateTime liveDate = new DateTime(2024, 2, 7, 8, 1, 1);
 
-                PersonalGPs = _db.PersonalGP.AsEnumerable().Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month).ToList();
-                WorkerGPs = _db.WorkerGP.AsEnumerable().Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month).ToList();
+                PersonalGPs = _db.PersonalGP.AsEnumerable().Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate >= liveDate).ToList();
+                WorkerGPs = _db.WorkerGP.AsEnumerable().Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate >= liveDate).ToList();
             }
             catch (Exception ex)
             {
@@ -62,6 +64,9 @@ namespace GatePassManagementSystem.Pages.Reports
                 DateTime utcNow = DateTime.UtcNow;
                 TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
                 DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
+
+                HttpContext.Session.SetString("fromd", Request.Form["FromDate"]);
+                HttpContext.Session.SetString("tod", Request.Form["ToDate"]);
 
                 if (DateTime.TryParse(Request.Form["FromDate"], out DateTime fromDate))
                 {
@@ -80,6 +85,7 @@ namespace GatePassManagementSystem.Pages.Reports
                 WorkerGPs = _db.WorkerGP.AsEnumerable()
                     .Where(gp => gp.CreateDate >= FromDate && gp.CreateDate <= ToDate)
                     .ToList();
+
             }
             catch (Exception ex)
             {
@@ -88,7 +94,6 @@ namespace GatePassManagementSystem.Pages.Reports
             return Page();
             //return RedirectToPage("AllReport");
         }
-
 
         //public async Task<IActionResult> OnPost(string chkCusVisit, string chkLunch, string chkSinthawatta, string chkHalfd, string chkMadu, string chkShrt, string chkOther)
         //{
@@ -134,8 +139,11 @@ namespace GatePassManagementSystem.Pages.Reports
             TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
             DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
 
+            fromd = Convert.ToDateTime(HttpContext.Session.GetString("fromd"));
+            tod = Convert.ToDateTime(HttpContext.Session.GetString("tod"));
+
             PersonalGPs = _db.PersonalGP
-                .Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month).ToList();
+               .Where(gp => gp.CreateDate >= fromd && gp.CreateDate <= tod).ToList();
 
             var personalGPsList = PersonalGPs.ToList();
 
@@ -171,6 +179,7 @@ namespace GatePassManagementSystem.Pages.Reports
                     string epfno = _db.User.Where(gp => gp.Id == personalGP.UserId).Select(gp => gp.EPFNumber).FirstOrDefault();
                     string a = _db.PersonalGP.Where(gp => gp.Id == personalGP.Id).Select(gp => gp.AShod).FirstOrDefault();
                     string m = _db.PersonalGP.Where(gp => gp.Id == personalGP.Id).Select(gp => gp.ASdgm).FirstOrDefault();
+                    bool b = _db.PersonalGP.Where(gp => gp.Id == personalGP.Id).Select(gp => gp.ChkifDeptHeadUn).FirstOrDefault();
 
                     bool chklunch = _db.PersonalGP.Where(gp => gp.PersonalGPId == personalGP.PersonalGPId).Select(gp => gp.ChkLunch).FirstOrDefault();
                     bool chkSinthw = _db.PersonalGP.Where(gp => gp.PersonalGPId == personalGP.PersonalGPId).Select(gp => gp.ChkSinthawatta).FirstOrDefault();
@@ -217,9 +226,13 @@ namespace GatePassManagementSystem.Pages.Reports
                     worksheet.Cell(row, 6).Value = personalGP.Description;
                     worksheet.Cell(row, 7).Value = personalGP.CreateDate;
 
-                    if(a != null)
+                    if(a != null && b == false)
                     {
                         worksheet.Cell(row, 8).Value = "Approved";
+                    }
+                    else if (a != null && b == true)
+                    {
+                        worksheet.Cell(row, 8).Value = "Approval ByPassed";
                     }
                     else
                     {
@@ -249,16 +262,17 @@ namespace GatePassManagementSystem.Pages.Reports
 
         }
 
-
         public IActionResult OnGetGenerateExcelcsv()
         {
             DateTime utcNow = DateTime.UtcNow;
             TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
             DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
 
+            fromd = Convert.ToDateTime(HttpContext.Session.GetString("fromd"));
+            tod = Convert.ToDateTime(HttpContext.Session.GetString("tod"));
+
             PersonalGPs = _db.PersonalGP
-                .Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month)
-                .ToList();
+               .Where(gp => gp.CreateDate >= fromd && gp.CreateDate <= tod).ToList();
 
             var personalGPsList = PersonalGPs.ToList();
 
@@ -294,6 +308,7 @@ namespace GatePassManagementSystem.Pages.Reports
                     string epfno = _db.User.Where(gp => gp.Id == personalGP.UserId).Select(gp => gp.EPFNumber).FirstOrDefault();
                     string a = _db.PersonalGP.Where(gp => gp.Id == personalGP.Id).Select(gp => gp.AShod).FirstOrDefault();
                     string m = _db.PersonalGP.Where(gp => gp.Id == personalGP.Id).Select(gp => gp.ASdgm).FirstOrDefault();
+                    bool b = _db.PersonalGP.Where(gp => gp.Id == personalGP.Id).Select(gp => gp.ChkifDeptHeadUn).FirstOrDefault();
 
                     bool chklunch = _db.PersonalGP.Where(gp => gp.PersonalGPId == personalGP.PersonalGPId).Select(gp => gp.ChkLunch).FirstOrDefault();
                     bool chkSinthw = _db.PersonalGP.Where(gp => gp.PersonalGPId == personalGP.PersonalGPId).Select(gp => gp.ChkSinthawatta).FirstOrDefault();
@@ -341,9 +356,13 @@ namespace GatePassManagementSystem.Pages.Reports
                     worksheet.Cell(row, 6).Value = personalGP.Description;
                     worksheet.Cell(row, 7).Value = personalGP.CreateDate;
 
-                    if (a != null)
+                    if (a != null && b == false)
                     {
                         worksheet.Cell(row, 8).Value = "Approved";
+                    }
+                    else if (a != null && b == true)
+                    {
+                        worksheet.Cell(row, 8).Value = "Approval ByPassed";
                     }
                     else
                     {
@@ -379,9 +398,13 @@ namespace GatePassManagementSystem.Pages.Reports
             TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
             DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
 
-            WorkerGPs = _db.WorkerGP
-                .Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month).ToList();
+            fromd = Convert.ToDateTime(HttpContext.Session.GetString("fromd"));
+            tod = Convert.ToDateTime(HttpContext.Session.GetString("tod"));
 
+            WorkerGPs = _db.WorkerGP
+               .Where(gp => gp.CreateDate >= fromd && gp.CreateDate <= tod).ToList();
+
+           
             var workerGPsList = WorkerGPs.ToList();
 
             return GenerateExcelworker(workerGPsList);
@@ -416,6 +439,7 @@ namespace GatePassManagementSystem.Pages.Reports
                     string workerName = _db.Workers.Where(gp => gp.Id == workerGP.WrkId).Select(gp => gp.Name).FirstOrDefault();
                     string a = _db.WorkerGP.Where(gp => gp.Id == workerGP.Id).Select(gp => gp.AShod).FirstOrDefault();
                     string m = _db.WorkerGP.Where(gp => gp.Id == workerGP.Id).Select(gp => gp.ASdgm).FirstOrDefault();
+                    bool b = _db.WorkerGP.Where(gp => gp.Id == workerGP.Id).Select(gp => gp.ChkifDeptHeadUn).FirstOrDefault();
 
                     bool chklunch = _db.WorkerGP.Where(gp => gp.WorkerGPId == workerGP.WorkerGPId).Select(gp => gp.ChkLunch).FirstOrDefault();
                     bool chkSinthw = _db.WorkerGP.Where(gp => gp.WorkerGPId == workerGP.WorkerGPId).Select(gp => gp.ChkSinthawatta).FirstOrDefault();
@@ -423,7 +447,6 @@ namespace GatePassManagementSystem.Pages.Reports
                     bool chkshort = _db.WorkerGP.Where(gp => gp.WorkerGPId == workerGP.WorkerGPId).Select(gp => gp.ChkShrt).FirstOrDefault();
                     bool chkhalf = _db.WorkerGP.Where(gp => gp.WorkerGPId == workerGP.WorkerGPId).Select(gp => gp.ChkHalfd).FirstOrDefault();
                     bool chkothr = _db.WorkerGP.Where(gp => gp.WorkerGPId == workerGP.WorkerGPId).Select(gp => gp.ChkOther).FirstOrDefault();
-                   
 
                     worksheet.Cell(row, 1).Value = workerGP.WorkerGPId;
                     worksheet.Cell(row, 2).Value = epfno;
@@ -457,9 +480,13 @@ namespace GatePassManagementSystem.Pages.Reports
 
                     worksheet.Cell(row, 6).Value = workerGP.CreateDate;
 
-                    if (a != null)
+                    if (a != null && b == false)
                     {
                         worksheet.Cell(row, 7).Value = "Approved";
+                    }
+                    else if (a != null && b == true)
+                    {
+                        worksheet.Cell(row, 7).Value = "Approval ByPassed";
                     }
                     else
                     {
@@ -496,9 +523,11 @@ namespace GatePassManagementSystem.Pages.Reports
             TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
             DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
 
+            fromd = Convert.ToDateTime(HttpContext.Session.GetString("fromd"));
+            tod = Convert.ToDateTime(HttpContext.Session.GetString("tod"));
+
             WorkerGPs = _db.WorkerGP
-                .Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month)
-                .ToList();
+               .Where(gp => gp.CreateDate >= fromd && gp.CreateDate <= tod).ToList();
 
             var workerGPsList = WorkerGPs.ToList();
 
@@ -534,6 +563,7 @@ namespace GatePassManagementSystem.Pages.Reports
                     string workerName = _db.Workers.Where(gp => gp.Id == workerGP.WrkId).Select(gp => gp.Name).FirstOrDefault();
                     string a = _db.WorkerGP.Where(gp => gp.Id == workerGP.Id).Select(gp => gp.AShod).FirstOrDefault();
                     string m = _db.WorkerGP.Where(gp => gp.Id == workerGP.Id).Select(gp => gp.ASdgm).FirstOrDefault();
+                    bool b = _db.WorkerGP.Where(gp => gp.Id == workerGP.Id).Select(gp => gp.ChkifDeptHeadUn).FirstOrDefault();
 
                     bool chklunch = _db.WorkerGP.Where(gp => gp.WorkerGPId == workerGP.WorkerGPId).Select(gp => gp.ChkLunch).FirstOrDefault();
                     bool chkSinthw = _db.WorkerGP.Where(gp => gp.WorkerGPId == workerGP.WorkerGPId).Select(gp => gp.ChkSinthawatta).FirstOrDefault();
@@ -575,9 +605,13 @@ namespace GatePassManagementSystem.Pages.Reports
 
                     worksheet.Cell(row, 6).Value = workerGP.CreateDate;
 
-                    if (a != null)
+                    if (a != null && b == false)
                     {
                         worksheet.Cell(row, 7).Value = "Approved";
+                    }
+                    else if (a != null && b == true)
+                    {
+                        worksheet.Cell(row, 7).Value = "Approval ByPassed";
                     }
                     else
                     {

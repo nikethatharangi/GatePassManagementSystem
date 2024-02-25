@@ -56,14 +56,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
             
                 DeptHead = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Hod).FirstOrDefault();
-                if (deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 19 || deptId == 21 || deptId == 22)
-                {
-                    DeptGm = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Dgm).FirstOrDefault();
-                }
-                else
-                {
-                    DeptGm = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();
-                }
+                DeptGm = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();
                 departName = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.DeptName).FirstOrDefault();
             }
             catch (Exception ex)
@@ -76,40 +69,67 @@ namespace GatePassManagementSystem.Pages.PersonalGP
         {
             try
             {
-                deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
+                var dropdownDataAprCh = new List<ApprovalChange>
+                {
+                    new ApprovalChange { deptId = 10, FullName = "Mr. Sugath(MD)" },
+                    new ApprovalChange { deptId = 6, FullName = "Mr. Dharmapriya" },
+                    new ApprovalChange { deptId = 10, FullName = "Mr. Thusitha" },
+                    new ApprovalChange { deptId = 8, FullName = "Mr. Ruwan" },
+                    new ApprovalChange { deptId = 15, FullName = "Mr. Rohan" },
+                    new ApprovalChange { deptId = 26, FullName = "Mr. Damith" },
 
-                var dropdownDataAprCh = _db.ApprovalChange.FromSqlRaw<ApprovalChange>("SELECT * FROM ApprovalChange").ToList();
+                };
 
-                //mr. dharmapriya
-                if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 24 || deptId == 13)
-                {
-                    dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 6, FullName = "Mr. Dharmapriya" });
-                }
-                else if (deptId == 8 || deptId == 9 || deptId == 25) //Mr. ruwan
-                {
-                    dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 8, FullName = "Mr. Ruwan" });
-                }
-                else if (deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 19 || deptId == 21 || deptId == 22 || deptId == 26)  // mr.damith
-                {
-                    dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 26, FullName = "Mr. Damith" });
-                }
-                else if (deptId == 15 || deptId == 20 || deptId == 23) // mr. rohan
-                {
-                    dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 15, FullName = "Mr. Rohan" });
-                }
-                else if (deptId == 10) // md
-                {
-                    dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 10, FullName = "Mr. Sugath" });
-                }
+                dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 0, FullName = "Select" });
 
                 return dropdownDataAprCh;
             }
             catch (Exception ex)
             {
-                cm.Logwrite("Error in CreateWGPModel GetDropdownDataWorkerEPF method :" + ex.Message);
+                cm.Logwrite("Error in GatePassListMgtPendingModel GetDropdownDataApprovalchange method :" + ex.Message);
                 return new List<ApprovalChange>();
             }
         }
+
+
+        //public List<ApprovalChange> GetDropdownDataApprovalchange()
+        //{
+        //    try
+        //    {
+        //        deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
+
+        //        var dropdownDataAprCh = _db.ApprovalChange.FromSqlRaw<ApprovalChange>("SELECT * FROM ApprovalChange").ToList();
+
+        //        //mr. dharmapriya
+        //        if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 24 || deptId == 13)
+        //        {
+        //            dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 6, FullName = "Mr. Dharmapriya" });
+        //        }
+        //        else if (deptId == 8 || deptId == 9 || deptId == 25) //Mr. ruwan
+        //        {
+        //            dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 8, FullName = "Mr. Ruwan" });
+        //        }
+        //        else if (deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 19 || deptId == 21 || deptId == 22 || deptId == 26)  // mr.damith
+        //        {
+        //            dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 26, FullName = "Mr. Damith" });
+        //        }
+        //        else if (deptId == 15 || deptId == 20 || deptId == 23) // mr. rohan
+        //        {
+        //            dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 15, FullName = "Mr. Rohan" });
+        //        }
+        //        else if (deptId == 10) // md
+        //        {
+        //            dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 10, FullName = "Mr. Sugath" });
+        //        }
+
+        //        return dropdownDataAprCh;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        cm.Logwrite("Error in CreateWGPModel GetDropdownDataWorkerEPF method :" + ex.Message);
+        //        return new List<ApprovalChange>();
+        //    }
+        //}
 
         public List<Workers> GetDropdownDataWorker()
         {
@@ -118,7 +138,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
 
                 // Fetch both Id, Name, and EPFNo
-                var dropdownDataWorker = _db.Workers.Where(w => w.DeptId == deptId)
+                var dropdownDataWorker = _db.Workers.Where(w => w.DeptId == deptId || w.DeptId == 12)
                     .Select(w => new Workers { Id = w.Id, Name = w.Name, EPFNo = w.EPFNo })
                     .ToList();
 
@@ -252,7 +272,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
             }
         }
 
-        public async Task<IActionResult> OnPost(string chkifDeptHeadUn, string chkLunch, string chkSinthawatta, string chkHalfd, string chkMadu, string chkShrt, string chkOther)
+        public async Task<IActionResult> OnPost(string chkPam, string chkifDeptHeadUn, string chkLunch, string chkSinthawatta, string chkHalfd, string chkMadu, string chkShrt, string chkOther)
         {
             try
             {
@@ -274,28 +294,47 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                         _notify.Error("You Cannot Create GatePasses", 5);
                         //deptlist = GetDropdownDataDept();
                         workerlist = GetDropdownDataWorker();
+                        Aprvlist = GetDropdownDataApprovalchange();
                         //workerepflist = GetDropdownDataWorkerEPF();
                         GetId();
                         return RedirectToPage("CreateWGP");
                     }
-                    else if(WorkerGP.WrkId == 0)
+                    else if (WorkerGP.WrkId == 0)
                     {
                         _notify.Error("Please select Worker", 5);
                         workerlist = GetDropdownDataWorker();
+                        Aprvlist = GetDropdownDataApprovalchange();
                         GetId();
                         return RedirectToPage("CreateWGP");
                     }
-                    else if (chkLunch == "false" && chkSinthawatta == "false" && chkHalfd == "false" && chkMadu == "false" && chkShrt == "false" && chkOther == "false")
+                    else if (chkOther == "true" && WorkerGP.Reason == null)
+                    {
+                        _notify.Error("Please give the Reason in the Description field", 5);
+                        GetId();
+                        Aprvlist = GetDropdownDataApprovalchange();
+                        return RedirectToPage("CreateWGP");
+                    }
+                    else if (chkLunch == "false" && chkSinthawatta == "false" && chkHalfd == "false" && chkMadu == "false" && chkShrt == "false" && chkOther == "false" && chkPam == "false")
                     {
                         _notify.Error("Please Select Reason", 5);
                         GetId();
                         //deptlist = GetDropdownDataDept();
                         workerlist = GetDropdownDataWorker();
+                        Aprvlist = GetDropdownDataApprovalchange();
                         //workerepflist = GetDropdownDataWorkerEPF();
                         return RedirectToPage("CreateWGP");
                     }
                     else
                     {
+                        if(chkPam == "true")
+                        {
+                            WorkerGP.ChkPamunugama = true;
+                        }
+                        else 
+                        {
+                            WorkerGP.ChkPamunugama = false;
+                        }
+
                         if (chkLunch == "true")
                         {
                             WorkerGP.ChkLunch = true;

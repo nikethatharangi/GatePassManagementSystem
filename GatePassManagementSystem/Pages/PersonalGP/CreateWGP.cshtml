@@ -102,7 +102,17 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-check">
+                                                    <label class="form-check-label">
+                                                        @Html.CheckBox("chkPam", new { @class = "form-check-input" })  Pamunugama
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+
                                     <script>
                                         $(document).ready(function () {
                                             $('.form-check-input').on('change', function () {
@@ -111,9 +121,10 @@
                                         });
 
                                     </script>
+
                                     <div class="form-group">
-                                        <label for="exampleTextarea1" asp-for="WorkerGP.Reason">Description</label>
-                                        <textarea class="form-control"
+                                        <label for="exampleTextarea1" >Description</label>
+                                        <textarea class="form-control" asp-for="WorkerGP.Reason"
                                                   id="txtDesc"
                                                   rows="4"></textarea>
                                     </div>
@@ -126,7 +137,7 @@
 
                                         if (roleId == 6)
                                         {
-                                            @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 12 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 19 || deptId == 21 || deptId == 22 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
+                                            @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
                                             {
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail3">Department Head Approval</label>
@@ -163,6 +174,12 @@
                                         }
 
                                     }
+
+                                    <div class="form-group">
+                                        <label label for="exampleInputEmail3">Change management approval if not available</label>
+                                        <select asp-for="WorkerGP.ChAprlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="workerDropdown">
+                                        </select>
+                                    </div>
 
                                     <div class="card" style="overflow: auto;">
                                         <div class="card-body">

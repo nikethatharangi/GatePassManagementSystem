@@ -85,13 +85,27 @@
                 <li class="pt-2 pb-1">
 
                 </li>
-                @if (Uid == 4 || Uid == 31 || Uid ==  172 || roleId == 3 || roleId == 1)
+                @if (Uid == 4 || Uid == 31 || Uid == 172 || Uid == 145 || Uid == 90 || roleId == 3 || roleId == 1)
                 {
                     <li class="nav-item" @*onMouseOver="this.style.backgroundColor='#dc3545'" onMouseOut="this.style.backgroundColor='#FFFFFF'"*@>
                         <a class="nav-link" asp-area="" asp-page="/Index">
                             <i class="mdi mdi-view-dashboard fa-lg"></i>
                             <span class="menu-title" style="margin-left: 10px;">Dashboard</span>
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                            <i class="mdi mdi-library-books fa-lg"></i>
+                            <span class="menu-title" style="margin-left: 10px;">Request Gate Pass</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic">
+                            <ul class="nav flex-column sub-menu">
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/PersonalGP/GMCreateGP">Personal Gate Pass</a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#ui-basic-1" aria-expanded="false" aria-controls="ui-basic">
@@ -117,6 +131,9 @@
                             <ul class="nav flex-column sub-menu">
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-page="/Reports/AllReport">All Reasons Report</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Reports/LunchReport">Lunch Overdue Report</a>
                                 </li>
                             </ul>
                         </div>
@@ -202,7 +219,7 @@
                         </li>
                     }
 
-                    @if (roleId == 5 || dept == "IT")
+                    @if (roleId == 5 || dept == "IT" || dept == "HR")
                     {
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="collapse" href="#ui-basic-3" aria-expanded="false" aria-controls="ui-basic">
@@ -215,32 +232,33 @@
                                     <li class="nav-item">
                                         <a class="nav-link" asp-area="" asp-page="/Reports/AllReport">All Reasons Report</a>
                                     </li>
-                                    @if (dept == "IT")
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-page="/Reports/LunchReport">Lunch Overdue Report</a>
+                                    </li>
+                                    @if (dept == "IT" || dept == "HR")
                                     {
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-page="/Reports/LunchReport">Lunch Overdue Report</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-page="/Reports/HalfDReport">HalfDay Report</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-page="/Reports/ShortLReport">Short Leave Report</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-page="/Reports/OtherRsReport">Other Reason Report</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-page="/Reports/LchReport">Lunch Report</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-page="/Reports/MadupitiyaReports">Madupitiya Report</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-page="/Reports/SinthawaReport">Sinthawatta Report</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-area="" asp-page="/Reports/CustomerVisitReport">Customer Visit Report</a>
-                                        </li>
+
+                                        @*<li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Reports/HalfDReport">HalfDay Report</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Reports/ShortLReport">Short Leave Report</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Reports/OtherRsReport">Other Reason Report</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Reports/LchReport">Lunch Report</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Reports/MadupitiyaReports">Madupitiya Report</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Reports/SinthawaReport">Sinthawatta Report</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/Reports/CustomerVisitReport">Customer Visit Report</a>
+                                </li>*@
                                     }
 
                                 </ul>

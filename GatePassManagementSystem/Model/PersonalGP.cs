@@ -42,6 +42,8 @@ namespace GatePassManagementSystem.Model
         public bool ChkShrt { get; set; }
         public bool ChkCusVisit { get; set; }
         public bool ChkOther { get; set; }
+        public bool ChkPamunugama { get; set; }
+        public bool ChkOfficialwork { get; set; }
         public DateTime OutTime { get; set; }
         public DateTime InTime { get; set; }
         public DateTime CreateDate { get; set; }
@@ -55,7 +57,7 @@ namespace GatePassManagementSystem.Model
         public string CreateUser { get; set; }
 
         public int ChApprvlId { get; set; }
-        //public int ChangeApprovalId { get; set; }
+        
 
     }
 }

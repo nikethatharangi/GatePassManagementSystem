@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using GatePassManagementSystem.Model;
@@ -35,7 +37,9 @@ namespace GatePassManagementSystem.Pages.PersonalGP
         public string deptName { get; set; }
         public string DeptGm { get; set; }
         public int deptId { get; set; }
-
+        public string GPNumber { get; set; }
+        public int ChngAprl { get; set; }
+        public string Createuser { get; set; }
         public bool chkifDeptHeadUn { get; set; }
 
         //[BindProperty]
@@ -69,17 +73,10 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 }
 
                 TempData["hod"] = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Hod).FirstOrDefault();
+                TempData["gm"] = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();
 
-                if (deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 19 || deptId == 21 || deptId == 22)
-                {
-                    TempData["gm"] = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Dgm).FirstOrDefault();
-                }
-                else
-                {
-                    TempData["gm"] = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();
-                }
 
-                if (deptId == 8 || deptId == 9)
+                if (deptId == 8 || deptId == 9 || deptId == 15 || deptId == 20 || deptId == 19 || deptId == 22 || deptId == 12)
                 {
                     PersonalGPs = await _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).ToListAsync();
                 }
@@ -89,7 +86,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 }
                 else
                 {
-                    PersonalGPs = await _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod != null && gp.ASdgm == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).ToListAsync();
+                    PersonalGPs = await _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.ASdgm == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).ToListAsync();
                 }
             }
             catch (Exception ex)
@@ -125,6 +122,99 @@ namespace GatePassManagementSystem.Pages.PersonalGP
         }
 
 
+        public IActionResult OnPostApproveChange(int id)
+        {
+            try
+            {
+                Model.PersonalGP updatedpgp = _db.PersonalGP.FirstOrDefault(c => c.Id == id);
+                if (updatedpgp != null)
+                {
+                    updatedpgp.ChApprvlId = PersonalGPB.ChApprvlId;
+                    _db.SaveChanges();
+                    EmailSendToManagApprover(id);
+                }
+                else
+                {
+                    cm.Logwrite("Error in OnPostApproveChangeAsync method: if()");
+                }
+            }
+            catch (Exception ex)
+            {
+                cm.Logwrite("Error in OnPostApproveChangeAsync method: " + ex.Message);
+            }
+
+            return RedirectToPage("GatePassListMgtPending");
+        }
+
+
+        public ActionResult EmailSendToManagApprover(int id)
+        {
+            int uid = _db.PersonalGP.Where(u => u.Id == id).Select(u => u.UserId).FirstOrDefault();
+            int deptid = _db.PersonalGP.Where(u => u.Id == id).Select(u => u.DepId).FirstOrDefault();
+
+            ChngAprl = _db.PersonalGP.Where(u => u.Id == id).Select(u => u.ChApprvlId).FirstOrDefault();
+            GPNumber = _db.PersonalGP.Where(u => u.Id == id).Select(u => u.PersonalGPId).FirstOrDefault();
+            Createuser = _db.PersonalGP.Where(u => u.Id == id).Select(u => u.CreateUser).FirstOrDefault();
+
+
+            System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
+            client.Host = "220.247.247.28"; //Set your smtp host address  
+            client.Port = 25; //Set your smtp port address  
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.Credentials = new NetworkCredential("gatepass@westernpapersl.com", "Gat@#951$"); //account name and password  
+                                                                                                    //client.EnableSsl = true; // Set SSL = true 
+            MailMessage message = new MailMessage();
+            //client.UseDefaultCredentials = false;
+
+            message.From = new MailAddress("gatepass@westernpapersl.com"); // Sender address  
+            message.Subject = "WPI GATE PASS SYSTEM";
+
+            message.IsBodyHtml = true; // HTML email  
+
+            //Cc list
+            //message.CC.Add("yohan@westernpapersl.com");
+
+            if (ChngAprl == 10) //mr.Sugath
+            {
+                //To list
+                message.To.Add("sugath@weternpapersl.com");
+                message.Body = "Dear Mr.Sugath," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
+            }
+            else if (ChngAprl == 6) //mr. dharampriya
+            {
+                //To list
+                message.To.Add("dharmapriya@westernpapersl.com");
+                message.Body = "Dear Mr.Dharmapriya," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
+            }
+            //else if (ChngAprl == 7) // mr. thusitha
+            //{
+            //    //To list
+            //    message.To.Add("niketha@westernpapersl.com");
+            //    message.Body = "Dear Mr.Thusitha," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
+            //}
+            else if (ChngAprl == 8) //mr. ruwan
+            {
+                //To list
+                message.To.Add("ruwan@westernpapersl.com");
+                message.Body = "Dear Mr.Ruwan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
+            }
+            else if (ChngAprl == 15) //mr. rohan
+            {
+                //To list
+                message.To.Add("chaminda@wesrernpapersl.com");
+                message.Body = "Dear Mr.Rohan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
+            }
+            else if (ChngAprl == 26) //mr.damith
+            {
+                //To list
+                message.To.Add("damith@westernpapersl.com");
+                message.Body = "Dear Mr.Damith," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
+            }
+
+            client.Send(message);
+
+            return RedirectToPage("CreatePGP");
+        }
 
         //public List<ApprovalChange> GetDropdownDataApprovalchange()
         //{
@@ -404,30 +494,31 @@ namespace GatePassManagementSystem.Pages.PersonalGP
         //}
 
         //////////////////////////////////////////////////////////////////// stable function
-        public IActionResult OnPostApproveChange(int id)
-        {
-            try
-            {
-                Model.PersonalGP updatedpgp = _db.PersonalGP.FirstOrDefault(c => c.Id == id);
-                if (updatedpgp != null)
-                {
-                    
-                    updatedpgp.ChApprvlId = PersonalGPB.ChApprvlId;
-                    _db.SaveChanges();
-                   
-                }
-                else
-                {
-                    cm.Logwrite("Error in OnPostApproveChangeAsync method: if()");
-                }
-            }
-            catch (Exception ex)
-            {
-                cm.Logwrite("Error in OnPostApproveChangeAsync method: " + ex.Message);
-            }
+        //public IActionResult OnPostApproveChange(int id)
+        //{
+        //    try
+        //    {
+        //        Model.PersonalGP updatedpgp = _db.PersonalGP.FirstOrDefault(c => c.Id == id);
+        //        if (updatedpgp != null)
+        //        {
+        //            updatedpgp.ChApprvlId = PersonalGPB.ChApprvlId;
+        //            _db.SaveChanges();
+        //        }
+        //        else
+        //        {
+        //            cm.Logwrite("Error in OnPostApproveChangeAsync method: if()");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        cm.Logwrite("Error in OnPostApproveChangeAsync method: " + ex.Message);
+        //    }
 
-            return RedirectToPage("GatePassListMgtPending");
-        }
+        //    return RedirectToPage("GatePassListMgtPending");
+        //}
+
+
+        /////
 
     }
 }

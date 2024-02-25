@@ -39,8 +39,8 @@
         }
 
         /*
-     Styling
-    */
+         Styling
+        */
 
         .tabset > label {
             position: relative;
@@ -179,8 +179,8 @@
                                                 </div>
 
 
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover table-bordered">
+                                                <div class="table-responsive" style="height: 450px; overflow-y: scroll;">
+                                                    <table class="table table-hover table-bordered" style="height:300px;overflow-y:scroll;">
                                                         <thead>
                                                             <tr class="bg-dark">
                                                                 <th class="text-white font-weight-bold">
@@ -218,7 +218,7 @@
                                                                 </th>
                                                             </tr>
                                                         </thead>
-                                                        <tbody>
+                                                        <tbody >
                                                             @foreach (var item in Model.PersonalGPs)
                                                             {
                                                                 var departName = Model.Db.Department.Where(gp => gp.Id == item.DepId).Select(gp => gp.DeptName).FirstOrDefault();
@@ -238,73 +238,84 @@
                                                                     <td>
                                                                         @TempData["departName"]
                                                                     </td>
-                                                                    <td>
-                                                                        <div style="margin-top:15px;">
+                                                                    
+                                                                        
                                                                             @if (item.ChkHalfd == true)
                                                                             {
-                                                                                <p>Half Day</p>
+                                                                                <td>Half Day</td>
                                                                             }
                                                                             else if (item.ChkLunch == true)
                                                                             {
-                                                                                <p>Lunch</p>
+                                                                                <td>Lunch</td>
                                                                             }
                                                                             else if (item.ChkMadu == true)
                                                                             {
-                                                                                <p>Madupitiya</p>
+                                                                                <td>Madupitiya</td>
                                                                             }
                                                                             else if (item.ChkOther == true)
                                                                             {
-                                                                                <p>Other</p>
+                                                                                <td>Other</td>
                                                                             }
                                                                             else if (item.ChkShrt == true)
                                                                             {
-                                                                                <p>Short Leave</p>
+                                                                                <td>Short Leave</td>
                                                                             }
                                                                             else if (item.ChkSinthawatta == true)
                                                                             {
-                                                                                <p>Sinthawatta</p>
+                                                                                <td>Sinthawatta</td>
                                                                             }
                                                                             else if (item.ChkCusVisit == true)
                                                                             {
-                                                                                <p>Customer Visit</p>
+                                                                                <td>Customer Visit</td>
+                                                                            }
+                                                                            else if (item.ChkOfficialwork == true)
+                                                                            {
+                                                                                <td>Official Work</td>
+                                                                            }
+                                                                            else if (item.ChkPamunugama == true)
+                                                                            {
+                                                                                <td>Pamunugama</td>
                                                                             }
 
-                                                                        </div>
-                                                                    </td>
+                                                                    
                                                                     <td>
                                                                         @Html.DisplayFor(m => item.Description)
                                                                     </td>
                                                                     <td>
                                                                         @Html.DisplayFor(m => item.CreateDate)
                                                                     </td>
-                                                                    <td>
+                                                                    
                                                                         @{
                                                                             string a = Model.Db.PersonalGP.Where(gp => gp.Id == item.Id).Select(gp => gp.AShod).FirstOrDefault();
-                                                                            if (a != null)
+                                                                            bool b = Model.Db.PersonalGP.Where(gp => gp.Id == item.Id).Select(gp => gp.ChkifDeptHeadUn).FirstOrDefault();
+                                                                            if (a != null && b == true)
                                                                             {
-                                                                                <p>Approved</p>
+                                                                                <td>Approval Bypassed</td>
+                                                                            }
+                                                                            else if (a != null && b == false)
+                                                                            {
+                                                                                <td>Approved</td>
                                                                             }
                                                                             else
                                                                             {
-                                                                                <p></p>
+                                                                                <td></td>
                                                                             }
                                                                         }
 
-                                                                    </td>
-                                                                    <td>
+                                                                    
                                                                         @{
                                                                             string m = Model.Db.PersonalGP.Where(gp => gp.Id == item.Id).Select(gp => gp.ASdgm).FirstOrDefault();
                                                                             if (m != null)
                                                                             {
-                                                                                <p>Approved</p>
+                                                                                <td>Approved</td>
                                                                             }
                                                                             else
                                                                             {
-                                                                                <p></p>
+                                                                                <td></td>
                                                                             }
                                                                         }
 
-                                                                    </td>
+                                                                    
                                                                     <td>
 
                                                                         @if (item.OutTime == DateTime.MinValue)
@@ -391,7 +402,7 @@
                                     <button type="submit" class="btn btn-primary mr-2">Filter </button>
                                     @if (Model.WorkerGPs.Count() > 0)
                                     {
-                                        <div class="row" style="margin-top: 30px;">
+                                        <div class="row" style="margin-top: 30px;" >
                                             @*<div class="col-2">
                     <a class="btn btn-danger mt-2 mt-sm-0 btn-icon-text" asp-area="" asp-page="/PersonalGP/CreatePGP">
                         <i class="mdi mdi-file-pdf"></i>Download PDF
@@ -420,7 +431,7 @@
                                     @if (Model.WorkerGPs.Count() > 0)
                                     {
 
-                                        <div class="table-responsive" style="margin-top: 15px;">
+                                        <div class="table-responsive" style="height: 450px; overflow-y: scroll;">
                                             <table class="table table-hover table-bordered">
                                                 <thead>
                                                     <tr class="bg-dark">

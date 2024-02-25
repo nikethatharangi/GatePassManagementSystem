@@ -20,6 +20,6 @@ namespace GatePassManagementSystem.Model
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<Workers> Workers { get; set; }
         public DbSet<ApprovalChange> ApprovalChange { get; set; }
-        public DbSet<ApprovalByPass> ApprovalByPass { get; set; }
+        //public DbSet<ApprovalByPass> ApprovalByPass { get; set; }
     }
 }

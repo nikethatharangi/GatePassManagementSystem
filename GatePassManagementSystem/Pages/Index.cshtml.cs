@@ -68,7 +68,7 @@ namespace GatePassManagementSystem.Pages
 
                     if(Uid == 4) //Mr. Dharampriya
                     {
-                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm != null && gp.AShod != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.AShod == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int Totalgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         double percentage = ((double)Completedgp / (double)Totalgp) * 100;
                         percentage = (double)System.Math.Round(percentage, 2);
@@ -84,24 +84,25 @@ namespace GatePassManagementSystem.Pages
                             mondayDate = today.Date.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday - 7);
                         }
 
-                        
-                        int ItDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && (gp.DepId == 2 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int ComDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && (gp.DepId == deptId && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int ExpDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && (gp.DepId == 3 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int GrnDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && (gp.DepId == 4 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int FinDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && (gp.DepId == 1 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int storDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && (gp.DepId == 24 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int FintaxDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && (gp.DepId == 5 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int westDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && (gp.DepId == 28 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int costDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && (gp.DepId == 11 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        //int pnbDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.DepId == 7 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        //int pnbDharw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.DepId == 7 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int turDhar = _db.PersonalGP.Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date && gp.AShod != null && gp.ASdgm == null && (gp.DepId == 27 && gp.ChApprvlId == 0)).Count();
-                        int tapcDhar = _db.PersonalGP.Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date && gp.AShod != null && gp.ASdgm == null && (gp.DepId == 28 && gp.ChApprvlId == 0)).Count();
+                        //int ItDharnik = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.DepId == 2 && gp.ChApprvlId == 0 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int ItDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 2 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int ComDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == deptId && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int ExpDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 3 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int GrnDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 4 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int FinDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 1 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int storDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 24 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int FintaxDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 5 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int storDharw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && (gp.DepId == 24 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int costDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 11 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int purchDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 13 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        //int pnbDhar = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && gp.DepId == 7 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        //int pnbDharw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.DepId == 7 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int turDhar = _db.PersonalGP.Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date && gp.AShod == "A" && gp.ASdgm == null && (gp.DepId == 27 && gp.ChApprvlId == 0)).Count();
+                        int tapcDhar = _db.PersonalGP.Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date && gp.AShod == "A" && gp.ASdgm == null && (gp.DepId == 28 && gp.ChApprvlId == 0)).Count();
                         //ViewData["Pending"] = _db.PersonalGP.Where(gp => gp.AShod == null && (gp.DepId == deptId || gp.DepId == 1 || gp.DepId == 2 || gp.DepId == 3 || gp.DepId == 4 || gp.DepId == 5 ) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        ViewData["PendingDharm"] = costDhar + chgArplw + chgArpl + ItDhar + ComDhar + ExpDhar + GrnDhar + FinDhar + FintaxDhar + turDhar + tapcDhar + storDhar + westDhar;
+                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["PendingDharm"] = purchDhar + storDharw + costDhar + chgArplw + chgArpl + ItDhar + ComDhar + ExpDhar + GrnDhar + FinDhar + FintaxDhar + turDhar + tapcDhar + storDhar;
 
                         ViewData["OutITcount"] = _db.PersonalGP.Where(gp => gp.DepId == 2 && gp.OutTime > refDate && gp.InTime > gp.OutTime && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         ViewData["LeaveITcount"] = _db.PersonalGP.Where(gp => gp.DepId == 2 && gp.OutTime > refDate && gp.InTime > gp.OutTime && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
@@ -224,7 +225,7 @@ namespace GatePassManagementSystem.Pages
                     }
                     else if(Uid == 31) //Mr. Ruwan
                     {
-                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm != null && gp.AShod != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.AShod == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int Totalgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         double percentage = ((double)Completedgp / (double)Totalgp) * 100;
                         percentage = (double)System.Math.Round(percentage, 2);
@@ -243,8 +244,8 @@ namespace GatePassManagementSystem.Pages
                         int RuwMark = _db.PersonalGP.Where(gp => gp.ASdgm == null  && gp.UserId != Uid && (gp.DepId == 8 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         int RuwCus = _db.PersonalGP.Where(gp => gp.ASdgm == null  && gp.UserId != Uid && (gp.DepId == 9 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         int RuwInvo = _db.PersonalGP.Where(gp => gp.ASdgm == null  && gp.UserId != Uid && (gp.DepId == 25 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         //ViewData["Pending"] = _db.PersonalGP.Where(gp => gp.AShod == null && (gp.DepId == deptId || gp.DepId == 1 || gp.DepId == 2 || gp.DepId == 3 || gp.DepId == 4 || gp.DepId == 5 ) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         ViewData["PendingRuw"] = RuwCus + RuwMark + RuwInvo + chgArpl + chgArplw;
 
@@ -264,12 +265,15 @@ namespace GatePassManagementSystem.Pages
                         int sinmark = _db.PersonalGP.Where(gp => gp.DepId == 8 && gp.ChkSinthawatta == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int madumark = _db.PersonalGP.Where(gp => gp.DepId == 8 && gp.ChkMadu == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int othermark = _db.PersonalGP.Where(gp => gp.DepId == 8 && gp.ChkOther == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int CusVisitmark = _db.PersonalGP.Where(gp => gp.DepId == 8 && gp.ChkCusVisit == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        ViewData["Lunchmark"] = lunchmark;
                         ViewData["Lunchmark"] = lunchmark;
                         ViewData["ShortLeavemark"] = shortlmark;
                         ViewData["HalfDaymark"] = halfmark;
                         ViewData["Sinthawamark"] = sinmark;
                         ViewData["Madupitiyamark"] = madumark;
                         ViewData["Othermark"] = othermark;
+                        ViewData["CusVisitmark"] = CusVisitmark;
 
                         int lunchCus = _db.PersonalGP.Where(gp => gp.DepId == 9 && gp.ChkLunch == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int shortlCus = _db.PersonalGP.Where(gp => gp.DepId == 9 && gp.ChkShrt == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
@@ -301,7 +305,7 @@ namespace GatePassManagementSystem.Pages
                     }
                     else if (Uid == 172) //Mr. Thusitha
                     {
-                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm != null && gp.AShod != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.AShod == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int Totalgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         double percentage = ((double)Completedgp / (double)Totalgp) * 100;
                         percentage = (double)System.Math.Round(percentage, 2);
@@ -317,10 +321,10 @@ namespace GatePassManagementSystem.Pages
                             mondayDate = today.Date.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday - 7);
                         }
 
-                        int ThusPnb = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.UserId != Uid && gp.DepId == 7 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int ThusPnb = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.UserId != Uid && (gp.DepId == 7 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         //int ThusPnbw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.DepId == 7 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         //ViewData["Pending"] = _db.PersonalGP.Where(gp => gp.AShod == null && (gp.DepId == deptId || gp.DepId == 1 || gp.DepId == 2 || gp.DepId == 3 || gp.DepId == 4 || gp.DepId == 5 ) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         ViewData["PendingThus"] = ThusPnb + chgArplw + chgArpl;// + ThusPnbw ;
 
@@ -377,7 +381,7 @@ namespace GatePassManagementSystem.Pages
                     }
                     else if (Uid == 145) // Mr. Damith
                     {
-                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod != null && gp.AShod != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.AShod == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int Totalgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         double percentage = ((double)Completedgp / (double)Totalgp) * 100;
                         percentage = (double)System.Math.Round(percentage, 2);
@@ -393,26 +397,28 @@ namespace GatePassManagementSystem.Pages
                             mondayDate = today.Date.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday - 7);
                         }
 
-                        int CoreCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null  && gp.UserId != Uid && gp.DepId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int PricCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null  && gp.UserId != Uid && gp.DepId == 16 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int CanCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.DepId == 17 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int PackCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.DepId == 18 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int MainCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.DepId == 19 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int IaCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.DepId == 21 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int RDCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.DepId == 22 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int CoreCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A"  && gp.UserId != Uid && (gp.DepId == 14 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int PricCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A"  && gp.UserId != Uid && (gp.DepId == 16 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int CanCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 17 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int PackCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 18 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        //int MainCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int IaCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 21 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int RDCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int CoatCha = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == deptId && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
 
-                        int CoreChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.DepId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int PricChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.DepId == 16 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int CanChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.DepId == 17 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int PackChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.DepId == 18 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int MainChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.DepId == 19 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int IaChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.DepId == 21 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int RDChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.DepId == 22 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-
+                        int CoreChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && (gp.DepId == 14 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int PricChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && (gp.DepId == 16 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int CanChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && (gp.DepId == 17 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int PackChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && (gp.DepId == 18 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        //int MainChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && (gp.DepId == 19 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int IaChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && (gp.DepId == 21 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int RDChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && (gp.DepId == 22 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int CoatChaw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && (gp.DepId == deptId && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                 
                         //ViewData["Pending"] = _db.PersonalGP.Where(gp => gp.AShod == null && (gp.DepId == deptId || gp.DepId == 1 || gp.DepId == 2 || gp.DepId == 3 || gp.DepId == 4 || gp.DepId == 5 ) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        ViewData["PendingChan"] = chgArpl+ chgArplw+ CoreCha + PricCha + CanCha + PackCha + MainCha + IaCha + RDCha + CoreChaw + PricChaw + CanChaw + PackChaw + MainChaw + IaChaw + RDChaw;
+                        ViewData["PendingChan"] = chgArpl+ chgArplw + CoatChaw + CoatCha + CoreCha + PricCha + CanCha + PackCha + IaCha + RDCha + CoreChaw + PricChaw + CanChaw + PackChaw + IaChaw + RDChaw;
 
                         ViewData["OutCorecount"] = _db.PersonalGP.Where(gp => gp.DepId == deptId && gp.OutTime > refDate && gp.InTime > gp.OutTime && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         ViewData["LeaveCorecount"] = _db.PersonalGP.Where(gp => gp.DepId == deptId && gp.OutTime > refDate && gp.InTime > gp.OutTime && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
@@ -503,7 +509,7 @@ namespace GatePassManagementSystem.Pages
                     }
                     else if (Uid == 90) //Mr.Rohan
                     {
-                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm != null && gp.AShod != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.AShod == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int Totalgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         double percentage = ((double)Completedgp / (double)Totalgp) * 100;
                         percentage = (double)System.Math.Round(percentage, 2);
@@ -519,14 +525,14 @@ namespace GatePassManagementSystem.Pages
                             mondayDate = today.Date.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday - 7);
                         }
 
-                        int RohQms = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == null && gp.UserId != Uid && gp.DepId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int RohTrans = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == null && gp.UserId != Uid && gp.DepId == 20 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int RohStor = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == null && gp.UserId != Uid && gp.DepId == 23 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int RohQms = _db.PersonalGP.Where(gp => gp.ASdgm == null  && gp.UserId != Uid && (gp.DepId == deptId && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int RohTrans = _db.PersonalGP.Where(gp => gp.ASdgm == null  && gp.UserId != Uid && (gp.DepId == 20 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int RohStor = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && (gp.DepId == 23 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
 
-                        int RohTransw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == null && gp.DepId == 20 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int RohStorw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == null && gp.DepId == 23 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int RohTransw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == null && (gp.DepId == 20 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int RohStorw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == null && (gp.DepId == 23 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         //ViewData["Pending"] = _db.PersonalGP.Where(gp => gp.AShod == null && (gp.DepId == deptId || gp.DepId == 1 || gp.DepId == 2 || gp.DepId == 3 || gp.DepId == 4 || gp.DepId == 5 ) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         ViewData["PendingRoha"] = RohQms + RohTrans + RohStor + RohTransw + RohStorw + chgArplw + chgArpl;
 
@@ -571,18 +577,18 @@ namespace GatePassManagementSystem.Pages
                         ViewData["MadupitiyaTran"] = maduTran;
                         ViewData["OtherTran"] = otherTran;
 
-                        int lunchStors = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkLunch == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                        int shortlStors = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkShrt == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                        int halfStors = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkHalfd == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                        int sinStors = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkSinthawatta == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                        int maduStors = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkMadu == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                        int otherStors = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkOther == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                        ViewData["LunchStors"] = lunchStors;
-                        ViewData["ShortLeaveStors"] = shortlStors;
-                        ViewData["HalfDayStors"] = halfStors;
-                        ViewData["SinthawaStors"] = sinStors;
-                        ViewData["MadupitiyaStors"] = maduStors;
-                        ViewData["OtherStors"] = otherStors;
+                        int lunchStorssin = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkLunch == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int shortlStorssin = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkShrt == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int halfStorssin = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkHalfd == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int sinStorssin = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkSinthawatta == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int maduStorssin = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkMadu == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int otherStorssin = _db.PersonalGP.Where(gp => gp.DepId == 23 && gp.ChkOther == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        ViewData["LunchStorssin"] = lunchStorssin;
+                        ViewData["ShortLeaveStorssin"] = shortlStorssin;
+                        ViewData["HalfDayStorssin"] = halfStorssin;
+                        ViewData["SinthawaStorssin"] = sinStorssin;
+                        ViewData["MadupitiyaStorssin"] = maduStorssin;
+                        ViewData["OtherStorssin"] = otherStorssin;
 
                         int lunchmon = _db.PersonalGP.Where(gp => gp.ChkLunch == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
                         int shortlmon = _db.PersonalGP.Where(gp => gp.ChkShrt == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
@@ -599,9 +605,205 @@ namespace GatePassManagementSystem.Pages
                         ViewData["Othermon"] = othermon;
                         ViewData["cusvisimon"] = cusvisimon;
                     }
+                    else if (Uid == 96) //Mr. Wijekoon
+                    {
+                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.AShod == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int Totalgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        double percentage = ((double)Completedgp / (double)Totalgp) * 100;
+                        percentage = (double)System.Math.Round(percentage, 2);
+
+                        //ViewData["Pecentage"] = percentage;
+
+                        DateTime mondayDate = today.Date.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+
+                        // Check if the calculated date is before the minimum valid DateTime (January 1, 0001)
+                        if (mondayDate.Year <= 1)
+                        {
+                            // Adjust the calculation to get the Monday date of the previous week
+                            mondayDate = today.Date.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday - 7);
+                        }
+
+                        int MaintWij = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.UserId != Uid && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        //ViewData["Pending"] = _db.PersonalGP.Where(gp => gp.AShod == null && (gp.DepId == deptId || gp.DepId == 1 || gp.DepId == 2 || gp.DepId == 3 || gp.DepId == 4 || gp.DepId == 5 ) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["PendMaintWij"] = MaintWij;
+
+                        ViewData["OutMaincount"] = _db.PersonalGP.Where(gp =>  gp.OutTime > refDate && gp.InTime > gp.OutTime && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["LeaveMaincount"] = _db.PersonalGP.Where(gp => gp.OutTime > refDate && gp.InTime > gp.OutTime && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["SinMaincount"] = _db.PersonalGP.Where(gp => gp.OutTime > refDate && gp.SinIntime > gp.OutTime && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["LunchMaincount"] = _db.PersonalGP.Where(gp => gp.OutTime > refDate && gp.ChkLunch == true && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+
+                        int lunchMain = _db.PersonalGP.Where(gp => gp.ChkLunch == true && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int shortlMain = _db.PersonalGP.Where(gp => gp.ChkShrt == true && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int halfMain = _db.PersonalGP.Where(gp => gp.ChkHalfd == true && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int sinMain = _db.PersonalGP.Where(gp => gp.ChkSinthawatta == true && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int maduMain = _db.PersonalGP.Where(gp => gp.ChkMadu == true && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int otherMain = _db.PersonalGP.Where(gp => gp.ChkOther == true && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int PamMain = _db.PersonalGP.Where(gp => gp.ChkPamunugama == true && (gp.DepId == 19 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        
+                        ViewData["lunchMain"] = lunchMain;
+                        ViewData["shortlMain"] = shortlMain;
+                        ViewData["halfMain"] = halfMain;
+                        ViewData["sinMain"] = sinMain;
+                        ViewData["maduMain"] = maduMain;
+                        ViewData["otherMain"] = otherMain;
+                        ViewData["PamMain"] = PamMain;
+
+                        int lunchmon = _db.PersonalGP.Where(gp => gp.ChkLunch == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int shortlmon = _db.PersonalGP.Where(gp => gp.ChkShrt == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int halfmon = _db.PersonalGP.Where(gp => gp.ChkHalfd == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int sinmon = _db.PersonalGP.Where(gp => gp.ChkSinthawatta == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int madumon = _db.PersonalGP.Where(gp => gp.ChkMadu == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int othermon = _db.PersonalGP.Where(gp => gp.ChkOther == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int cusvisimon = _db.PersonalGP.Where(gp => gp.ChkCusVisit == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        ViewData["Lunchmon"] = lunchmon;
+                        ViewData["ShortLeavemon"] = shortlmon;
+                        ViewData["HalfDaymon"] = halfmon;
+                        ViewData["Sinthawamon"] = sinmon;
+                        ViewData["Madupitiyamon"] = madumon;
+                        ViewData["Othermon"] = othermon;
+                        ViewData["cusvisimon"] = cusvisimon;
+                    }
+                    else if (Uid == 109) //Mrs. Kumudu
+                    {
+                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.AShod == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int Totalgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        double percentage = ((double)Completedgp / (double)Totalgp) * 100;
+                        percentage = (double)System.Math.Round(percentage, 2);
+
+                        //ViewData["Pecentage"] = percentage;
+
+                        DateTime mondayDate = today.Date.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+
+                        // Check if the calculated date is before the minimum valid DateTime (January 1, 0001)
+                        if (mondayDate.Year <= 1)
+                        {
+                            // Adjust the calculation to get the Monday date of the previous week
+                            mondayDate = today.Date.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday - 7);
+                        }
+
+                        int RDKumu = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.UserId != Uid && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int PackKumu = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.UserId != Uid && (gp.DepId == 18 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        //ViewData["Pending"] = _db.PersonalGP.Where(gp => gp.AShod == null && (gp.DepId == deptId || gp.DepId == 1 || gp.DepId == 2 || gp.DepId == 3 || gp.DepId == 4 || gp.DepId == 5 ) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["PendKumu"] = RDKumu + PackKumu;
+
+                        ViewData["OutRDcount"] = _db.PersonalGP.Where(gp => gp.OutTime > refDate && gp.InTime > gp.OutTime && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["LeaveRDcount"] = _db.PersonalGP.Where(gp => gp.OutTime > refDate && gp.InTime > gp.OutTime && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["SinRDcount"] = _db.PersonalGP.Where(gp => gp.OutTime > refDate && gp.SinIntime > gp.OutTime && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["LunchRDcount"] = _db.PersonalGP.Where(gp => gp.OutTime > refDate && gp.ChkLunch == true && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+
+                        int lunchRD = _db.PersonalGP.Where(gp => gp.ChkLunch == true && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int shortlRD = _db.PersonalGP.Where(gp => gp.ChkShrt == true && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int halfRD = _db.PersonalGP.Where(gp => gp.ChkHalfd == true && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int sinRD = _db.PersonalGP.Where(gp => gp.ChkSinthawatta == true && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int maduRD = _db.PersonalGP.Where(gp => gp.ChkMadu == true && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int otherRD = _db.PersonalGP.Where(gp => gp.ChkOther == true && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int PamRD = _db.PersonalGP.Where(gp => gp.ChkPamunugama == true && (gp.DepId == 22 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+
+                        ViewData["lunchRD"] = lunchRD;
+                        ViewData["shortlRD"] = shortlRD;
+                        ViewData["halfRD"] = halfRD;
+                        ViewData["sinRD"] = sinRD;
+                        ViewData["maduRD"] = maduRD;
+                        ViewData["otherRD"] = otherRD;
+                        ViewData["PamRD"] = PamRD;
+
+                        ViewData["OutPackcount"] = _db.PersonalGP.Where(gp => gp.DepId == 18 && gp.OutTime > refDate && gp.InTime > gp.OutTime && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["LeavePackcount"] = _db.PersonalGP.Where(gp => gp.DepId == 18 && gp.OutTime > refDate && gp.InTime > gp.OutTime && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["SinPackcount"] = _db.PersonalGP.Where(gp => gp.DepId == 18 && gp.OutTime > refDate && gp.SinIntime > gp.OutTime && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["LunchPackcount"] = _db.PersonalGP.Where(gp => gp.DepId == 18 && gp.OutTime > refDate && gp.ChkLunch == true && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+
+                        int lunchPack = _db.PersonalGP.Where(gp => gp.ChkLunch == true && (gp.DepId == 18 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int shortlPack = _db.PersonalGP.Where(gp => gp.ChkShrt == true && (gp.DepId == 18 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int halfPack = _db.PersonalGP.Where(gp => gp.ChkHalfd == true && (gp.DepId == 18 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int sinPack = _db.PersonalGP.Where(gp => gp.ChkSinthawatta == true && (gp.DepId == 18 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int maduPack = _db.PersonalGP.Where(gp => gp.ChkMadu == true && (gp.DepId == 18 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int otherPack = _db.PersonalGP.Where(gp => gp.ChkOther == true && (gp.DepId == 18 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int PamPack = _db.PersonalGP.Where(gp => gp.ChkPamunugama == true && (gp.DepId == 18 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+
+                        ViewData["lunchPack"] = lunchPack;
+                        ViewData["shortlPack"] = shortlPack;
+                        ViewData["halfPack"] = halfPack;
+                        ViewData["sinPack"] = sinPack;
+                        ViewData["maduPack"] = maduPack;
+                        ViewData["otherPack"] = otherPack;
+                        ViewData["PamPack"] = PamPack;
+
+                        int lunchmon = _db.PersonalGP.Where(gp => gp.ChkLunch == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int shortlmon = _db.PersonalGP.Where(gp => gp.ChkShrt == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int halfmon = _db.PersonalGP.Where(gp => gp.ChkHalfd == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int sinmon = _db.PersonalGP.Where(gp => gp.ChkSinthawatta == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int madumon = _db.PersonalGP.Where(gp => gp.ChkMadu == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int othermon = _db.PersonalGP.Where(gp => gp.ChkOther == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int cusvisimon = _db.PersonalGP.Where(gp => gp.ChkCusVisit == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        ViewData["Lunchmon"] = lunchmon;
+                        ViewData["ShortLeavemon"] = shortlmon;
+                        ViewData["HalfDaymon"] = halfmon;
+                        ViewData["Sinthawamon"] = sinmon;
+                        ViewData["Madupitiyamon"] = madumon;
+                        ViewData["Othermon"] = othermon;
+                        ViewData["cusvisimon"] = cusvisimon;
+                    }
+                    else if (Uid == 68) //Mr. Geethanga
+                    {
+                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.AShod == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int Totalgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        double percentage = ((double)Completedgp / (double)Totalgp) * 100;
+                        percentage = (double)System.Math.Round(percentage, 2);
+
+                        //ViewData["Pecentage"] = percentage;
+
+                        DateTime mondayDate = today.Date.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday);
+
+                        // Check if the calculated date is before the minimum valid DateTime (January 1, 0001)
+                        if (mondayDate.Year <= 1)
+                        {
+                            // Adjust the calculation to get the Monday date of the previous week
+                            mondayDate = today.Date.AddDays(-(int)today.DayOfWeek + (int)DayOfWeek.Monday - 7);
+                        }
+
+                        int penHRgee = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.UserId != Uid && (gp.DepId == 12 && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        //ViewData["Pending"] = _db.PersonalGP.Where(gp => gp.AShod == null && (gp.DepId == deptId || gp.DepId == 1 || gp.DepId == 2 || gp.DepId == 3 || gp.DepId == 4 || gp.DepId == 5 ) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["penHRgee"] = penHRgee;
+
+                        ViewData["OutHRcount"] = _db.PersonalGP.Where(gp => gp.OutTime > refDate && gp.InTime > gp.OutTime && gp.DepId == 12  && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["LeaveHRcount"] = _db.PersonalGP.Where(gp => gp.OutTime > refDate && gp.InTime > gp.OutTime && gp.DepId == 12 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["SinHRcount"] = _db.PersonalGP.Where(gp => gp.OutTime > refDate && gp.SinIntime > gp.OutTime && gp.DepId == 12 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["LunchHRcount"] = _db.PersonalGP.Where(gp => gp.OutTime > refDate && gp.ChkLunch == true && gp.DepId == 12 && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+
+                        int lunchHR = _db.PersonalGP.Where(gp => gp.ChkLunch == true && (gp.DepId == 12 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int shortlHR = _db.PersonalGP.Where(gp => gp.ChkShrt == true && (gp.DepId == 12 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int halfHR = _db.PersonalGP.Where(gp => gp.ChkHalfd == true && (gp.DepId == 12 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int sinHR = _db.PersonalGP.Where(gp => gp.ChkSinthawatta == true && (gp.DepId == 12 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int maduHR = _db.PersonalGP.Where(gp => gp.ChkMadu == true && (gp.DepId == 12 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int otherHR = _db.PersonalGP.Where(gp => gp.ChkOther == true && (gp.DepId == 12 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int PamHR = _db.PersonalGP.Where(gp => gp.ChkPamunugama == true && (gp.DepId == 12 && gp.ChApprvlId == 0) && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+
+                        ViewData["lunchHR"] = lunchHR;
+                        ViewData["shortlHR"] = shortlHR;
+                        ViewData["halfHR"] = halfHR;
+                        ViewData["sinHR"] = sinHR;
+                        ViewData["maduHR"] = maduHR;
+                        ViewData["otherHR"] = otherHR;
+                        ViewData["PamHR"] = PamHR;
+
+                        int lunchmon = _db.PersonalGP.Where(gp => gp.ChkLunch == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int shortlmon = _db.PersonalGP.Where(gp => gp.ChkShrt == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int halfmon = _db.PersonalGP.Where(gp => gp.ChkHalfd == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int sinmon = _db.PersonalGP.Where(gp => gp.ChkSinthawatta == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int madumon = _db.PersonalGP.Where(gp => gp.ChkMadu == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int othermon = _db.PersonalGP.Where(gp => gp.ChkOther == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        int cusvisimon = _db.PersonalGP.Where(gp => gp.ChkCusVisit == true && gp.CreateDate.Month == DateTime.Now.Month).Count();
+                        ViewData["Lunchmon"] = lunchmon;
+                        ViewData["ShortLeavemon"] = shortlmon;
+                        ViewData["HalfDaymon"] = halfmon;
+                        ViewData["Sinthawamon"] = sinmon;
+                        ViewData["Madupitiyamon"] = madumon;
+                        ViewData["Othermon"] = othermon;
+                        ViewData["cusvisimon"] = cusvisimon;
+                    }
                     else if (Userrole == "6")
                     {
-                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm != null && gp.AShod != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.AShod == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int Totalgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         double percentage = ((double)Completedgp / (double)Totalgp) * 100;
                         percentage = (double)System.Math.Round(percentage, 2);
@@ -614,35 +816,34 @@ namespace GatePassManagementSystem.Pages
                         {
                             ViewData["Pecentage"] = percentage;
                         }
-
                         
-                        if(deptId == 8 || deptId == 9)
+                        if(deptId == 8 || deptId == 9 || deptId == 15 || deptId == 20 || deptId == 19 || deptId == 22 || deptId == 19 || deptId == 12)
                         {
                             ViewData["DgmAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                            ViewData["GuardAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm != null && gp.ASguard == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                            ViewData["Completedgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASgm != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                            ViewData["MangAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                            ViewData["GuardAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.ASguard == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                            ViewData["Completedgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.ASguard == "A" && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                            ViewData["MangAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A").Count();
                         }
                         else if(deptId == 10)
                         {
                             ViewData["mdAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASmd == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                             ViewData["GuardAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASmd != null && gp.ASguard == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                             ViewData["Completedgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASmd != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                            ViewData["MangAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASmd == "A" && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                            ViewData["MangAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASmd == "A").Count();
                         }
                         else
                         {
                             ViewData["HeadAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                            ViewData["DgmAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod != null && gp.ASdgm == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                            ViewData["GuardAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod != null && gp.ASdgm != null && gp.ASguard == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                            ViewData["Completedgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod != null && gp.ASgm != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                            ViewData["MangAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                            ViewData["HodAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                            ViewData["DgmAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.ASdgm == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                            ViewData["GuardAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.ASdgm == "A" && gp.ASguard == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                            ViewData["Completedgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.ASdgm == "A" && gp.ASguard == "A" && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                            ViewData["MangAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.AShod == "A").Count();
+                            ViewData["HodAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A").Count();
                         }
                         
-                        ViewData["Totalgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        ViewData["Totalgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid).Count();
                         
-                        ViewData["Rejgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "R" || gp.ASdgm == "R" || gp.ASgm == "R" || gp.ASmd == "R" && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        ViewData["Rejgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && (gp.AShod == "R" || gp.ASdgm == "R" || gp.ASgm == "R" || gp.ASmd == "R")).Count();
                         int lunch = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ChkLunch == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int shortl = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ChkShrt == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int half = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ChkHalfd == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
@@ -669,7 +870,7 @@ namespace GatePassManagementSystem.Pages
                         //int currentAcknowledgeCount = (int)(ViewData["Acknowledge"] ?? 0);
                         //ViewData["Acknowledge"] = currentAcknowledgeCount + personalGpCount + workerGpCount;
 
-                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod != null && gp.ASdgm != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.ASdgm == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int Totalgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         double percentage = ((double)Completedgp / (double)Totalgp) * 100;
                         percentage = (double)System.Math.Round(percentage, 2);
@@ -706,13 +907,13 @@ namespace GatePassManagementSystem.Pages
 
 
                         ViewData["HeadAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        ViewData["DgmAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod != null && gp.ASdgm == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        ViewData["GuardAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod != null  && gp.ASdgm != null && gp.ASguard == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        ViewData["Completedgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod != null && gp.ASdgm != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                        ViewData["Totalgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                        ViewData["HodAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                        ViewData["MangAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.ASdgm == "A" && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
-                        ViewData["Rejgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && (gp.AShod == "R" || gp.AShod == "R") && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        ViewData["DgmAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.ASdgm == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["GuardAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A"  && gp.ASdgm == "A" && gp.ASguard == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        ViewData["Completedgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.ASdgm == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        ViewData["Totalgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid).Count();
+                        ViewData["HodAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A").Count();
+                        ViewData["MangAppgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.ASdgm == "A").Count();
+                        ViewData["Rejgp"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && (gp.AShod == "R" || gp.ASdgm == "R")).Count();
                         int lunch = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ChkLunch == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int shortl = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ChkShrt == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int half = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ChkHalfd == true && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
@@ -760,7 +961,6 @@ namespace GatePassManagementSystem.Pages
                         //{
                         //    DateTime currentDay = weekStart.AddDays(i);
 
-
                         //    ViewData[$"Lunch{i}"] = GetReasonCountForDay(currentDay, gp => gp.ChkLunch == true);
                         //    ViewData[$"ShortLeave{i}"] = GetReasonCountForDay(currentDay, gp => gp.ChkShrt == true);
                         //    ViewData[$"HalfDay{i}"] = GetReasonCountForDay(currentDay, gp => gp.ChkHalfd == true);
@@ -768,8 +968,6 @@ namespace GatePassManagementSystem.Pages
                         //    ViewData[$"Madupitiya{i}"] = GetReasonCountForDay(currentDay, gp => gp.ChkMadu == true);
                         //    ViewData[$"Other{i}"] = GetReasonCountForDay(currentDay, gp => gp.ChkOther == true);
                         //}
-
-
 
                         //ViewData["Approved"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == "A" && gp.ASdgm == "A").Count();
                         //ViewData["Pending"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.AShod == null).Count();
@@ -784,7 +982,7 @@ namespace GatePassManagementSystem.Pages
                     }
                     else if (Userrole == "4")
                     {
-                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm != null && gp.AShod != null && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
+                        int Completedgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.AShod == "A" && gp.ASguard != null && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         int Totalgp = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Month == today.Month && gp.CreateDate.Year == today.Year).Count();
                         double percentage = ((double)Completedgp / (double)Totalgp) * 100;
                         percentage = (double)System.Math.Round(percentage, 2);
@@ -874,8 +1072,8 @@ namespace GatePassManagementSystem.Pages
                     }
                     else if (Userrole == "1")
                     {
-                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
-                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod != null && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int chgArpl = _db.PersonalGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.UserId != Uid && gp.ChApprvlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
+                        int chgArplw = _db.WorkerGP.Where(gp => gp.ASdgm == null && gp.AShod == "A" && gp.ChAprlId == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         int Admimd = _db.PersonalGP.Where(gp => gp.ASmd == null && gp.UserId != Uid && (gp.DepId == deptId && gp.ChApprvlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                         ViewData["Pendingmd"] = chgArpl + chgArplw + Admimd;
 

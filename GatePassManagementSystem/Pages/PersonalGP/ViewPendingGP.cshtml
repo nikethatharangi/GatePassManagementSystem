@@ -132,9 +132,7 @@
                                         <th class="text-white font-weight-bold" style="width:300px">
 
                                         </th>
-                                        <th class="text-white font-weight-bold">
-                                            <label>Reject Reason</label>
-                                        </th>
+                                       
                                     </tr>
                                 </thead>
                                 @foreach (var item in Model.PersonalGPs)
@@ -173,6 +171,14 @@
                                                     else if (item.ChkCusVisit == true)
                                                     {
                                                         <p>Customer Visit</p>
+                                                    }
+                                                    else if (item.ChkOfficialwork == true)
+                                                    {
+                                                        <p>Official Work</p>
+                                                    }
+                                                    else if (item.ChkPamunugama == true)
+                                                    {
+                                                        <p>Pamunugama</p>
                                                     }
 
                                                 </div>
@@ -232,15 +238,14 @@
 
                                                     <form method="post" asp-page-handler="Reject">
                                                         <input type="hidden" name="Id" value="@item.Id" />
-                                                        <button type="submit" style="margin-left: 5px; width: 90px;margin-top:10px;" class="gfgselect btn btn-danger">Reject</button>
 
+                                                        <button type="submit" style="margin-left: 5px; width: 90px;margin-top:10px;" class="gfgselect btn btn-danger">Reject</button>
+                                                        <input type="text" asp-for="PersonalGPB.RejctReason" style="margin-top: 10px;" />
                                                     </form>
                                                 </div>
 
                                             </td>
-                                            <td>
-                                                <input type="text" asp-for="PersonalGPB.RejctReason" />
-                                            </td>
+                                           
 
                                         </tr>
 
@@ -353,6 +358,36 @@
                                                                                         </label>
                                                                                     </div>
                                                                                 </div>
+
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isOfficialChecked = item.ChkOfficialwork == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios7" @(isOfficialChecked ? "checked" : "") disabled>
+                                                                                            Official Work<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isCustChecked = item.ChkCusVisit == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios8" @(isCustChecked ? "checked" : "") disabled>
+                                                                                            Customer Visit<i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-sm-3">
+                                                                                    <div class="form-check">
+                                                                                        <label class="form-check-label">
+                                                                                            @{ bool isPamunuChecked = item.ChkPamunugama == true; }
+                                                                                            <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios9" @(isPamunuChecked ? "checked" : "") disabled>
+                                                                                            Pamunugama <i class="input-helper"></i>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
 
@@ -366,34 +401,35 @@
 
                                                         <div class="col-md-6">
                                                             @{
-                                                                string DeptHead = Model.Db.Department.Where(gp => gp.Id == item.UserId).Select(gp => gp.Hod).FirstOrDefault();
+                                                                string DeptHead = Model.Db.Department.Where(gp => gp.Id == item.DepId).Select(gp => gp.Hod).FirstOrDefault();
                                                                 TempData["DeptHead"] = DeptHead;
 
-                                                                string DeptGm = Model.Db.Department.Where(gp => gp.Id == item.UserId).Select(gp => gp.Gm).FirstOrDefault();
+                                                                string DeptGm = Model.Db.Department.Where(gp => gp.Id == item.DepId).Select(gp => gp.Gm).FirstOrDefault();
                                                                 TempData["DeptGm"] = DeptGm;
                                                             }
                                                             <div class="card">
                                                                 <div class="card-body">
                                                                     <form class="forms-sample">
-                                                                        <div class="form-group" style="margin-bottom:0px!important">
-                                                                            <label for="exampleInputUsername1">HOD acknowledgement</label>
-                                                                            <input type="text" class="form-control" asp-for="@TempData["DeptHead"]" readonly="readonly">
-                                                                        </div>
-                                                                        <div class="form-check">
-                                                                            @if (item.AShod == "A" )
-                                                                            {
-                                                                                <label class="badge badge-success">Acknowledged</label>
-                                                                            }
-                                                                            else if (item.AShod == "R")
-                                                                            {
-                                                                                <label class="badge badge-danger">Rejected</label>
-                                                                            }
-                                                                            else
-                                                                            {
-                                                                                <label class="badge badge-warning">Not acknowledged</label>
-                                                                            }
-                                                                        </div>
-
+                                                                        @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
+                                                                        {   <div class="form-group" style="margin-bottom:0px!important">
+                                                                                <label for="exampleInputUsername1">HOD acknowledgement</label>
+                                                                                <input type="text" class="form-control" asp-for="@TempData["DeptHead"]" readonly="readonly">
+                                                                            </div>
+                                                                            <div class="form-check">
+                                                                                @if (item.AShod == "A")
+                                                                                {
+                                                                                    <label class="badge badge-success">Acknowledged</label>
+                                                                                }
+                                                                                else if (item.AShod == "R")
+                                                                                {
+                                                                                    <label class="badge badge-danger">Rejected</label>
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <label class="badge badge-warning">Not acknowledged</label>
+                                                                                }
+                                                                            </div>
+                                                                        }
                                                                         <div class="form-group" style="margin-bottom:0px!important; margin-top:20px!important">
                                                                             <label for="exampleInputUsername1">Management Approval</label>
                                                                             <input type="text" class="form-control" asp-for="@TempData["DeptGm"]" readonly="readonly">
@@ -593,23 +629,22 @@
                                         <th hidden>
                                             <label>Reject Reason</label>
                                         </th>
-                                        <th class="text-white font-weight-bold">
+                                        <th class="text-white font-weight-bold" style="width:300px">
 
                                         </th>
-                                        <th class="text-white font-weight-bold">
-                                            <label>Reject Reason</label>
-                                        </th>
+                                        
                                     </tr>
                                 </thead>
-                                @foreach (var itemw in Model.WorkerGPs) 
+                                @foreach (var itemw in Model.WorkerGPs)
                                 {
                                     var FullnameWorker = Model.Db.Workers.Where(gp => gp.Id == itemw.WrkId).Select(gp => gp.Name).FirstOrDefault();
                                     TempData["FullnameWorker"] = FullnameWorker;
+                                    TempData["DeptNamew"] = Model.Db.Department.Where(d => d.Id == itemw.DepId).Select(d => d.DeptName).FirstOrDefault();
 
                                     <tbody>
                                         <tr>
                                             <td class="gfgusername">@Html.DisplayFor(m => itemw.WorkerGPId)</td>
-                                            <td class="gfgusername">@TempData["DeptName"]</td>
+                                            <td class="gfgusername">@TempData["DeptNamew"]</td>
                                             <td>
 
                                                 @if (itemw.ChkHalfd == true)
@@ -661,10 +696,10 @@
                                                 @Html.DisplayFor(m => itemw.RejctReason)
                                             </td>
                                             <td>
-                                                <div class="row">
+                                                <div role="group" aria-label="Basic example">
                                                     @*<button type="submit" style="margin-left:5px;" class="gfgselect btn btn-primary" data-toggle="modal" data-target="#gfgmodal">View</button>*@
                                                     <a data-toggle="modal" data-target="#exampleModal-@itemw.WorkerGPId">
-                                                        <label class="badge badge-info" style="margin-left: 5px; width: 75px; cursor: pointer">View</label>
+                                                        <label class="btn btn-info" style="margin-left: 5px; width: 90px; height: 35px;">View</label>
                                                     </a>
                                                     <form method="post" asp-page-handler="ApproveWGP">
                                                         <input type="hidden" name="Id" value="@itemw.Id" />
@@ -673,15 +708,13 @@
 
                                                     <form method="post" asp-page-handler="RejectWGP">
                                                         <input type="hidden" name="Id" value="@itemw.Id" />
-                                                        <button type="submit" style="margin-left:5px;" class="gfgselect btn btn-danger">Reject</button>
-
+                                                        <button type="submit" style="margin-left: 5px; width: 90px;" class="gfgselect btn btn-danger">Reject</button>
+                                                        <input type="text" asp-for="WorkerGPB.RejctReason" style="margin-top: 10px;" />
                                                     </form>
                                                 </div>
 
                                             </td>
-                                            <td>
-                                                <input type="text" asp-for="PersonalGPB.RejctReason" />
-                                            </td>
+                                           
 
                                         </tr>
 

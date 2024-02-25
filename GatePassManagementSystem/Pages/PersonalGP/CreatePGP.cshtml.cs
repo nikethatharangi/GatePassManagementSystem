@@ -15,6 +15,9 @@ using MailKit.Net.Smtp;
 using MailKit;
 using MimeKit;
 using Microsoft.AspNetCore.Http;
+using MailKit.Security;
+using System.Net.Mail;
+using System.Net;
 
 namespace GatePassManagementSystem.Pages.PersonalGP
 {
@@ -49,6 +52,9 @@ namespace GatePassManagementSystem.Pages.PersonalGP
         public int role { get; set; }
         public string time { get; set; }
         public string email { get; set; }
+        public int ChngAprl { get; set; }
+        public string hodmail { get; set; }
+        public string hodName { get; set; }
 
         public void OnGet()
         {
@@ -72,15 +78,8 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 time = targetLocalTime.ToString();
 
                 DeptHead = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Hod).FirstOrDefault();
-                if(deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 19 || deptId == 21 || deptId == 22)
-                {
-                    DeptGm = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Dgm).FirstOrDefault();
-                }
-                else
-                {
-                    DeptGm = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();
-                }
-                
+                DeptGm = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();
+
                 departName = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.DeptName).FirstOrDefault();
             }
             catch (Exception ex)
@@ -160,7 +159,6 @@ namespace GatePassManagementSystem.Pages.PersonalGP
         //    }
         //}
 
-
         public void GetId()
         {
             try
@@ -228,39 +226,227 @@ namespace GatePassManagementSystem.Pages.PersonalGP
             }
         }
 
-        //public ActionResult EmailSend(Model.PersonalGP personalGP)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return Page();
-        //    }
-        //    using (var client = new SmtpClient())
-        //    {
-        //        client.Connect("smtp.gmail.com");
-        //        client.Authenticate("gatepass@westernpapersl.com", "Gat@#951$");
+        public ActionResult EmailSendToHodApprover(Model.PersonalGP personalGP)
+        {
+            currentUserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
 
-        //        var bodyBuilder = new BodyBuilder
-        //        {
-        //            HtmlBody = $"<p>{personalGP.PersonalGPId}</p><p>{personalGP.Description}</p>",
-        //            TextBody = "{PersonalGP.PersonalGPId} \r\n {PersonalGP.Description}"
-        //        };
+            string userEmail = _db.User.Where(u => u.Id == currentUserId).Select(u => u.Email).FirstOrDefault();
+            string fullname = _db.User.Where(u => u.Id == currentUserId).Select(u => u.FullName).FirstOrDefault();
 
-        //        var message = new MimeMessage
-        //        {
-        //            Body = bodyBuilder.ToMessageBody()
-        //        };
+            bool depheadUn = _db.PersonalGP.Where(u => u.Id == currentUserId).Select(u => u.ChkifDeptHeadUn).FirstOrDefault();
 
-        //        message.From.Add(new MailboxAddress("Gate Pass System Notification", "gatepass@westernpapersl.com"));
-        //        message.To.Add(new MailboxAddress("Testing01", email));//personalGP.Email
-        //        message.Subject = "Gate Pass Details";
-        //        client.Send(message);
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
 
-        //        client.Disconnect(true);
-        //    }
-        //    return RedirectToPage("CreatePGP");
-        //}
+            if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 22 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
+            {
 
-        public async Task<IActionResult> OnPost(string chkCusVisit, string chkifDeptHeadUn, string chkLunch, string chkSinthawatta, string chkHalfd, string chkMadu, string chkShrt, string chkOther)
+                if (depheadUn == true)
+                {
+
+                }
+                else
+                {
+                    //int uid = _db.User.Where(u => u.DepartId == deptId && u.RoleId == 5).Select(u => u.Id).FirstOrDefault();
+                    hodmail = _db.User.Where(u => u.DepartId == deptId && u.RoleId == 5).Select(u => u.Email).FirstOrDefault();
+                    hodName = _db.User.Where(u => u.DepartId == deptId && u.RoleId == 5).Select(u => u.FullName).FirstOrDefault();
+
+                    System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
+                    client.Host = "220.247.247.28"; //Set your smtp host address  
+                    client.Port = 25; //Set your smtp port address  
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.Credentials = new NetworkCredential("gatepass@westernpapersl.com", "Gat@#951$"); //account name and password  
+                                                                                                            //client.EnableSsl = true; // Set SSL = true 
+                    MailMessage message = new MailMessage();
+                    //client.UseDefaultCredentials = false;
+
+                    message.From = new MailAddress("gatepass@westernpapersl.com"); // Sender address  
+                    message.Subject = "WPI GATE PASS SYSTEM";
+
+                    message.IsBodyHtml = true; // HTML email  
+
+                    //message.To.Add("niketha@westernpapersl.com");
+
+                    //Cc list
+                    //message.CC.Add("yohan@westernpapersl.com");
+
+                    message.To.Add(hodmail);
+                    message.Body = "Dear " + hodName + "," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + fullname + "</b>" + "<br />" + "Thank you.";
+
+                    client.Send(message);
+                }
+
+            }
+
+            return RedirectToPage("CreatePGP");
+        }
+
+
+        public ActionResult EmailSendToMangApprover(Model.PersonalGP personalGP)
+        {
+            currentUserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
+            ChngAprl = _db.PersonalGP.Where(u => u.PersonalGPId == PersonalGP.PersonalGPId).Select(u => u.ChApprvlId).FirstOrDefault();
+
+            string userEmail = _db.User.Where(u => u.Id == currentUserId).Select(u => u.Email).FirstOrDefault();
+            string fullname = _db.User.Where(u => u.Id == currentUserId).Select(u => u.FullName).FirstOrDefault();
+
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
+            client.Host = "220.247.247.28"; //Set your smtp host address  
+            client.Port = 25; //Set your smtp port address  
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.Credentials = new NetworkCredential("gatepass@westernpapersl.com", "Gat@#951$"); //account name and password  
+                                                                                                    //client.EnableSsl = true; // Set SSL = true 
+            MailMessage message = new MailMessage();
+            //client.UseDefaultCredentials = false;
+
+            message.From = new MailAddress("gatepass@westernpapersl.com"); // Sender address  
+            message.Subject = "WPI GATE PASS SYSTEM";
+
+            message.IsBodyHtml = true; // HTML email  
+
+            //message.To.Add("niketha@westernpapersl.com");
+
+            //Cc list
+            //message.CC.Add("yohan@westernpapersl.com");
+
+            if (ChngAprl == 0)
+            {
+                if (deptId == 8 || deptId == 9) //mr. Ruwan
+                {
+                    //To list
+                    message.To.Add("ruwan@westernpapersl.com");
+                    message.Body = "Dear Mr.Ruwan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+                    client.Send(message);
+                }
+                else if (deptId == 10) //mr. Sugath
+                {
+                    //To list
+                    message.To.Add("sugath@weternpapersl.com");
+                    message.Body = "Dear Mr.Sugath," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+                }
+                else if (deptId == 12) //mr. Geethanga
+                {
+                    //To list
+                    message.To.Add("managerhr@westernpapersl.com");
+                    message.Body = "Dear Mr.Geethanga," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+                }
+                else if (deptId == 19) //mr. Wijekoon
+                {
+                    //To list
+                    message.To.Add("em@westernpapersl.com");
+                    message.Body = "Dear Mr.Wijekoon," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+                }
+                else if (deptId == 22) // mrs. kumudu
+                {
+                    //To list
+                    message.To.Add("managerr&d@westernpapersl.com");
+                    message.Body = "Dear Mr.Kumudu," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+                }
+                else if (deptId == 15 || deptId == 20) // mr. Rohan
+                {
+                    //To list
+                    message.To.Add("chaminda@wesrernpapersl.com");
+                    message.Body = "Dear Mr.Rohan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+                }
+
+            }
+            else if (ChngAprl == 10) //mr.Sugath
+            {
+                //To list
+                message.To.Add("sugath@weternpapersl.com");
+                message.Body = "Dear Mr.Sugath," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+            }
+            else if (ChngAprl == 6) //mr. dharampriya
+            {
+                //To list
+                message.To.Add("dharmapriya@westernpapersl.com");
+                message.Body = "Dear Mr.Dharmapriya," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+            }
+            //else if (ChngAprl == 7) // mr. thusitha
+            //{
+            //    //To list
+            //    message.To.Add("niketha@westernpapersl.com");
+            //    message.Body = "Dear Mr.Thusitha," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+            //}
+            else if (ChngAprl == 8) //mr. ruwan
+            {
+                //To list
+                message.To.Add("ruwan@westernpapersl.com");
+                message.Body = "Dear Mr.Ruwan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+            }
+            else if (ChngAprl == 15) //mr. rohan
+            {
+                //To list
+                message.To.Add("chaminda@wesrernpapersl.com");
+                message.Body = "Dear Mr.Rohan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+            }
+            else if (ChngAprl == 26) //mr.damith
+            {
+                //To list
+                message.To.Add("damith@westernpapersl.com");
+                message.Body = "Dear Mr.Damith," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+            }
+
+            return RedirectToPage("CreatePGP");
+        }
+
+
+        public ActionResult EmailSend(Model.PersonalGP personalGP)
+        {
+            currentUserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            string userEmail = _db.User.Where(u => u.Id == currentUserId).Select(u => u.Email).FirstOrDefault();
+            string fullname = _db.User.Where(u => u.Id == currentUserId).Select(u => u.FullName).FirstOrDefault();
+
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+            if(userEmail == "None")
+            {
+
+            }
+            else
+            {
+                System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient();
+                client.Host = "220.247.247.28"; //Set your smtp host address  
+                client.Port = 25; //Set your smtp port address  
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.Credentials = new NetworkCredential("gatepass@westernpapersl.com", "Gat@#951$"); //account name and password  
+                                                                                                          //client.EnableSsl = true; // Set SSL = true 
+                                                                                                          //client.UseDefaultCredentials = false;
+                MailMessage message = new MailMessage();
+
+                //To list
+                message.To.Add(userEmail);
+                //message.To.Add("niketha@westernpapersl.com");
+
+                //Cc list
+                //message.CC.Add("yohan@westernpapersl.com");
+
+                message.From = new MailAddress("gatepass@westernpapersl.com"); // Sender address  
+                message.Subject = "WPI GATE PASS SYSTEM";
+
+                message.IsBodyHtml = true; // HTML email  
+
+                message.Body = "Hello " + fullname + "," + "<br /><h4>You have successfully created a Gate Pass !!</h4><br />" + "Your gate pass ID :" + "<b>" + PersonalGP.PersonalGPId + "</b>" + "<br />" + "Thank you.";
+
+                client.Send(message);
+
+            }
+
+            return RedirectToPage("CreatePGP");
+        }
+
+        public async Task<IActionResult> OnPost(string chkPam, string chkOfficial, string chkCusVisit, string chkifDeptHeadUn, string chkLunch, string chkSinthawatta, string chkHalfd, string chkMadu, string chkShrt, string chkOther)
         {
             try
             {
@@ -285,7 +471,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                         GetId();
                         return RedirectToPage("CreatePGP");
                     }
-                    else if (chkLunch == "false" && chkSinthawatta == "false" && chkHalfd == "false" && chkMadu == "false" && chkShrt == "false" && chkOther == "false" && chkCusVisit == "false")
+                    else if (chkLunch == "false" && chkSinthawatta == "false" && chkHalfd == "false" && chkMadu == "false" && chkShrt == "false" && chkOther == "false" && chkCusVisit == "false" && chkPam == "false" && chkOfficial == "false")
                     {
                         _notify.Error("Please Select Reason", 5);
                         GetId();
@@ -301,6 +487,23 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                     }
                     else
                     {
+                        if(chkOfficial == "true")
+                        {
+                            PersonalGP.ChkOfficialwork = true;
+                        }
+                        else
+                        {
+                            PersonalGP.ChkOfficialwork = false;
+                        }
+
+                        if(chkPam == "true")
+                        {
+                            PersonalGP.ChkPamunugama = true;
+                        }
+                        else
+                        {
+                            PersonalGP.ChkPamunugama = false;
+                        }
                         
                         if (chkLunch == "true")
                         {
@@ -370,7 +573,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                         PersonalGP.CreateUser = HttpContext.Session.GetString("FullName");
                         PersonalGP.UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
 
-                        if (role == 5 || role == 4 || ((chkifDeptHeadUn == "true" && role == 6) || ((deptId == 10 || deptId == 8 || deptId == 9) && role == 6)))
+                        if (role == 5 || role == 4 || ((chkifDeptHeadUn == "true" && role == 6) || ((deptId == 10 || deptId == 8 || deptId == 9 || deptId == 15 || deptId == 20 || deptId == 19 || deptId == 22 || deptId == 12) && role == 6)))
                         {
                             PersonalGP.AShod = "A";
                             if (chkifDeptHeadUn == "true")
@@ -391,8 +594,14 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                         await _db.PersonalGP.AddAsync(PersonalGP);
                         await _db.SaveChangesAsync();
 
-                        _notify.Success("Gate Pass  Successfully Created", 3);
+                        _notify.Success("Gate Pass Successfully Created", 3);
+
+                        EmailSendToMangApprover(PersonalGP);
+                        EmailSendToHodApprover(PersonalGP);
+                        EmailSend(PersonalGP);
+                        
                         return RedirectToPage("CreatePGP");
+                        
                     }
                 }
             }

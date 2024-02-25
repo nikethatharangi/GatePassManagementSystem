@@ -62,7 +62,7 @@
                                             <th class="text-white font-weight-bold">Date Requestd</th>
                                             <th class="text-white font-weight-bold">Reason</th>
                                             <th class="text-white font-weight-bold">Description</th>
-                                            @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 12 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 19 || deptId == 21 || deptId == 22 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
+                                            @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
                                             {
                                                 <th class="text-white font-weight-bold">HOD Approval</th>
                                             }
@@ -107,67 +107,79 @@
                                                     {
                                                         <p>Sinthawatta</p>
                                                     }
+                                                    else if (item.ChkOfficialwork == true)
+                                                    {
+                                                        <p>Official Work</p>
+                                                    }
+                                                    else if (item.ChkPamunugama == true)
+                                                    {
+                                                        <p>Pamunugama</p>
+                                                    }
                                                 </td>
                                                 <td>@Html.DisplayFor(m => item.Description)</td>
-                                                @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 12 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 19 || deptId == 21 || deptId == 22 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
+                                                @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
                                                 {
-                                            <td>
-                                                <label>@TempData["hod"]</label> <br />
-                                                
-                                                @if (item.AShod == "A")
-                                                {
-                                                    <label class="badge badge-success mt-2">Acknowledged</label>
-                                                }
-                                                else if (item.AShod == "R")
-                                                {
-                                                    <label class="badge badge-danger mt-2">Rejected</label>
-                                                }
-                                                else
-                                                {
-                                                    <label class="badge badge-warning mt-2">Not acknowledged</label>
-                                                }
-                                            </td>
-                                                }
-                                            <td>
-                                                @if (item.ChApprvlId == 0)
-                                                {
-                                                    <label>@TempData["gm"]</label> <br />
-                                                }
-                                                else
-                                                {
-                                                    <label>@chgGm</label> <br />
-                                                }
-                                                @if (deptId == 10)
-                                                {
-                                                    @if (item.ASmd == "A")
-                                                    {
-                                                        <label class="badge badge-success mt-2">Approved</label>
-                                                    }
-                                                    else if (item.ASmd == "R")
-                                                    {
-                                                        <label class="badge badge-danger mt-2">Rejected</label>
-                                                    }
-                                                    else
-                                                    {
-                                                        <label class="badge badge-warning mt-2">Not Approved</label>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    @if (item.ASdgm == "A")
-                                                    {
-                                                        <label class="badge badge-success mt-2">Approved</label>
-                                                    }
-                                                    else if (item.ASdgm == "R")
-                                                    {
-                                                        <label class="badge badge-danger mt-2">Rejected</label>
-                                                    }
-                                                    else
-                                                    {
-                                                        <label class="badge badge-warning mt-2">Not Approved</label>
-                                                    }
-                                                }
-                                            </td>
+                                                    <td>
+                                                        <label>@TempData["hod"]</label> <br />
+
+                                                        @if (item.AShod == "A" && item.ChkifDeptHeadUn == false)
+                                                        {
+                                                            <label class="badge badge-success mt-2">Acknowledged</label>
+                                                        }
+                                                        else if (item.AShod == "A" && item.ChkifDeptHeadUn == true)
+                                                        {
+                                                            <label class="badge badge-secondary mt-2">Approval ByPass</label>
+                                                        }
+                                                        else if (item.AShod == "R")
+                                                        {
+                                                            <label class="badge badge-danger mt-2">Rejected</label>
+                                                        }
+                                                        else
+                                                        {
+                                                            <label class="badge badge-warning mt-2">Not acknowledged</label>
+                                                        }
+                                                    </td>
+                                                 }
+                                                    <td>
+                                                        @if (item.ChApprvlId == 0)
+                                                        {
+                                                            <label>@TempData["gm"]</label> <br />
+                                                        }
+                                                        else
+                                                        {
+                                                            <label>@chgGm</label> <br />
+                                                        }
+                                                        @if (deptId == 10)
+                                                        {
+                                                            @if (item.ASmd == "A")
+                                                            {
+                                                                <label class="badge badge-success mt-2">Approved</label>
+                                                            }
+                                                            else if (item.ASmd == "R")
+                                                            {
+                                                                <label class="badge badge-danger mt-2">Rejected</label>
+                                                            }
+                                                            else
+                                                            {
+                                                                <label class="badge badge-warning mt-2">Not Approved</label>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            @if (item.ASdgm == "A")
+                                                            {
+                                                                <label class="badge badge-success mt-2">Approved</label>
+                                                            }
+                                                            else if (item.ASdgm == "R")
+                                                            {
+                                                                <label class="badge badge-danger mt-2">Rejected</label>
+                                                            }
+                                                            else
+                                                            {
+                                                                <label class="badge badge-warning mt-2">Not Approved</label>
+                                                            }
+                                                        }
+                                                    </td>
                                                 <td>
                                                     Guard Room <br />
                                                     @if (item.ASguard == "A")
@@ -242,20 +254,29 @@
                                                                                 <div class="form-group">
                                                                                     <label for="exampleInputUsername1">Reason</label>
                                                                                     <div class="form-group row">
+                                                                                        @{ bool isHalfDayChecked = item.ChkHalfd == true;
+                                                                                            bool isLunchChecked = item.ChkLunch == true;
+                                                                                            bool isShortLeaveChecked = item.ChkShrt == true;
+                                                                                            bool isMadupitiyaChecked = item.ChkMadu == true;
+                                                                                            bool isOtherChecked = item.ChkOther == true;
+                                                                                            bool isSinthawattaChecked = item.ChkSinthawatta == true;
+                                                                                            bool isOfficialChecked = item.ChkOfficialwork == true;
+                                                                                            bool isCustChecked = item.ChkCusVisit == true;
+                                                                                            bool isPamunuChecked = item.ChkPamunugama == true; }
+
                                                                                         <div class="col-sm-3">
                                                                                             <div class="form-check">
                                                                                                 <label class="form-check-label">
-                                                                                                    @{ bool isHalfDayChecked = item.ChkHalfd == true; }
-                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios1" @(isHalfDayChecked ? "checked" : "") disabled>
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios1" id="membershipRadios1" @(isHalfDayChecked ? "checked" : "") disabled>
                                                                                                     Half Day<i class="input-helper"></i>
                                                                                                 </label>
                                                                                             </div>
                                                                                         </div>
+
                                                                                         <div class="col-sm-3">
                                                                                             <div class="form-check">
                                                                                                 <label class="form-check-label">
-                                                                                                    @{ bool isLunchChecked = item.ChkLunch == true; }
-                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios2" @(isLunchChecked ? "checked" : "") disabled>
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios2" id="membershipRadios2" @(isLunchChecked ? "checked" : "") disabled>
                                                                                                     Lunch<i class="input-helper"></i>
                                                                                                 </label>
                                                                                             </div>
@@ -264,8 +285,7 @@
                                                                                         <div class="col-sm-3">
                                                                                             <div class="form-check">
                                                                                                 <label class="form-check-label">
-                                                                                                    @{ bool isShortLeaveChecked = item.ChkShrt == true; }
-                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios3" @(isShortLeaveChecked ? "checked" : "") disabled>
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios3" id="membershipRadios3" @(isShortLeaveChecked ? "checked" : "") disabled>
                                                                                                     Short Leave<i class="input-helper"></i>
                                                                                                 </label>
                                                                                             </div>
@@ -274,8 +294,7 @@
                                                                                         <div class="col-sm-3">
                                                                                             <div class="form-check">
                                                                                                 <label class="form-check-label">
-                                                                                                    @{ bool isMadupitiyaChecked = item.ChkMadu == true; }
-                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios4" @(isMadupitiyaChecked ? "checked" : "") disabled>
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios4" id="membershipRadios4" @(isMadupitiyaChecked ? "checked" : "") disabled>
                                                                                                     Madupitiya<i class="input-helper"></i>
                                                                                                 </label>
                                                                                             </div>
@@ -284,8 +303,7 @@
                                                                                         <div class="col-sm-3">
                                                                                             <div class="form-check">
                                                                                                 <label class="form-check-label">
-                                                                                                    @{ bool isOtherChecked = item.ChkOther == true; }
-                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios5" @(isOtherChecked ? "checked" : "") disabled>
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios5" id="membershipRadios5" @(isOtherChecked ? "checked" : "") disabled>
                                                                                                     Other<i class="input-helper"></i>
                                                                                                 </label>
                                                                                             </div>
@@ -294,17 +312,42 @@
                                                                                         <div class="col-sm-3">
                                                                                             <div class="form-check">
                                                                                                 <label class="form-check-label">
-                                                                                                    @{ bool isSinthawattaChecked = item.ChkSinthawatta == true; }
-                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios" id="membershipRadios6" @(isSinthawattaChecked ? "checked" : "") disabled>
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios6" id="membershipRadios6" @(isSinthawattaChecked ? "checked" : "") disabled>
                                                                                                     Sinthawatta<i class="input-helper"></i>
                                                                                                 </label>
                                                                                             </div>
                                                                                         </div>
-                                                                                    </div> 
+
+                                                                                        <div class="col-sm-3">
+                                                                                            <div class="form-check">
+                                                                                                <label class="form-check-label">
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios7" id="membershipRadios7" @(isOfficialChecked ? "checked" : "") disabled>
+                                                                                                    Official Work<i class="input-helper"></i>
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-sm-3">
+                                                                                            <div class="form-check">
+                                                                                                <label class="form-check-label">
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios8" id="membershipRadios8" @(isCustChecked ? "checked" : "") disabled>
+                                                                                                    Customer Visit<i class="input-helper"></i>
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-sm-3">
+                                                                                            <div class="form-check">
+                                                                                                <label class="form-check-label">
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios9" id="membershipRadios9" @(isPamunuChecked ? "checked" : "") disabled>
+                                                                                                    Pamunugama <i class="input-helper"></i>
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
                                                                                     <div class="form-group row">
 
                                                                                     </div>
-
                                                                                 </div>
 
                                                                                 <div class="form-group">

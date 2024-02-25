@@ -40,6 +40,7 @@ namespace GatePassManagementSystem.Model
         public bool ChkMadu { get; set; }
         public bool ChkShrt { get; set; }
         public bool ChkOther { get; set; }
+        public bool ChkPamunugama { get; set; }
         public DateTime OutTime { get; set; }
         public DateTime InTime { get; set; }
         public DateTime CreateDate { get; set; }

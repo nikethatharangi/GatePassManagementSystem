@@ -91,169 +91,181 @@
                                                 <label>Status</label>
                                             </th>
                                             <th class="text-white font-weight-bold text-center">Change management approval</th>
+                                            <th class="text-white font-weight-bold">
+                                                <label>Reject Reason</label>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var item in Model.PersonalGPs)
-                                        {
-                                        <tr>
-                                            <td>@Html.DisplayFor(m => item.PersonalGPId)</td>
-                                            <td>
+                                         {
+                                            <tr>
+                                                <td>@Html.DisplayFor(m => item.PersonalGPId)</td>
+                                                <td>
 
-                                                @if (item.ChkHalfd == true)
-                                                {
-                                                    <p>Half Day</p>
-                                                }
-                                                else if (item.ChkLunch == true)
-                                                {
-                                                    <p>Lunch</p>
-                                                }
-                                                else if (item.ChkMadu == true)
-                                                {
-                                                    <p>Madupitiya</p>
-                                                }
-                                                else if (item.ChkOther == true)
-                                                {
-                                                    <p>Other</p>
-                                                }
-                                                else if (item.ChkShrt == true)
-                                                {
-                                                    <p>Short Leave</p>
-                                                }
-                                                else if (item.ChkSinthawatta == true)
-                                                {
-                                                    <p>Sinthawatta</p>
-                                                }
-                                                else if (item.ChkCusVisit == true)
-                                                {
-                                                    <p>Customer Visit</p>
-                                                }
+                                                    @if (item.ChkHalfd == true)
+                                                    {
+                                                        <p>Half Day</p>
+                                                    }
+                                                    else if (item.ChkLunch == true)
+                                                    {
+                                                        <p>Lunch</p>
+                                                    }
+                                                    else if (item.ChkMadu == true)
+                                                    {
+                                                        <p>Madupitiya</p>
+                                                    }
+                                                    else if (item.ChkOther == true)
+                                                    {
+                                                        <p>Other</p>
+                                                    }
+                                                    else if (item.ChkShrt == true)
+                                                    {
+                                                        <p>Short Leave</p>
+                                                    }
+                                                    else if (item.ChkSinthawatta == true)
+                                                    {
+                                                        <p>Sinthawatta</p>
+                                                    }
+                                                    else if (item.ChkCusVisit == true)
+                                                    {
+                                                        <p>Customer Visit</p>
+                                                    }
+                                                    else if (item.ChkOfficialwork == true)
+                                                    {
+                                                        <p>Official Work</p>
+                                                    }
+                                                    else if (item.ChkPamunugama == true)
+                                                    {
+                                                        <p>Pamunugama</p>
+                                                    }
 
-                                            </td>
-                                            <td>@Html.DisplayFor(m => item.Description)</td>
-                                            <td>
-                                                @Html.DisplayFor(m => item.CreateUser)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(m => item.CreateDate)
-                                            </td>
+                                                </td>
+                                                <td>@Html.DisplayFor(m => item.Description)</td>
+                                                <td>
+                                                    @Html.DisplayFor(m => item.CreateUser)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(m => item.CreateDate)
+                                                </td>
 
-                                            @if (Model.Userrole == "4")
-                                            {
-                                                if (item.ASgm == "A")
+                                                @if (Model.Userrole == "4")
                                                 {
-                                                    <td>
-                                                        <label class="badge badge-success">Approved</label>
-                                                    </td>
+                                                    if (item.ASgm == "A")
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-success">Approved</label>
+                                                        </td>
+                                                    }
+                                                    else if (item.ASgm == "R")
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-danger">Rejected</label>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-warning">Pending</label>
+                                                        </td>
+                                                    }
                                                 }
-                                                else if (item.ASgm == "R")
+                                                else if (Model.Userrole == "5")
                                                 {
-                                                    <td>
-                                                        <label class="badge badge-danger">Rejected</label>
-                                                    </td>
+                                                    if (item.ASdgm == "A")
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-success">Approved</label>
+                                                        </td>
+                                                    }
+                                                    else if (item.ASgm == "R" || item.ASdgm == "R")
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-danger">Rejected</label>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-warning">Pending</label>
+                                                        </td>
+                                                    }
                                                 }
-                                                else
+                                                else if (Model.Userrole == "6" && (deptId == 8 || deptId == 9 || deptId == 15 || deptId == 20 || deptId == 12 || deptId == 22 || deptId == 19))
                                                 {
-                                                    <td>
-                                                        <label class="badge badge-warning">Pending</label>
-                                                    </td>
+                                                    if (item.ASdgm == "A")
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-success">Approved</label>
+                                                        </td>
+                                                    }
+                                                    else if (item.ASdgm == "R")
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-danger">Rejected</label>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-warning">Pending</label>
+                                                        </td>
+                                                    }
                                                 }
-                                            }
-                                            else if (Model.Userrole == "5")
-                                            {
-                                                if (item.ASdgm == "A")
+                                                else if (Model.Userrole == "6" && deptId == 10)
                                                 {
-                                                    <td>
-                                                        <label class="badge badge-success">Approved</label>
-                                                    </td>
+                                                    if (item.ASmd == "A" || (item.ChApprvlId != 0 && item.ASdgm != null))
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-success">Approved</label>
+                                                        </td>
+                                                    }
+                                                    else if (item.ASmd == "R")
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-danger">Rejected</label>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-warning">Pending</label>
+                                                        </td>
+                                                    }
                                                 }
-                                                else if (item.ASgm == "R" || item.ASdgm == "R")
+                                                else if (Model.Userrole == "6")
                                                 {
-                                                    <td>
-                                                        <label class="badge badge-danger">Rejected</label>
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    <td>
-                                                        <label class="badge badge-warning">Pending</label>
-                                                    </td>
-                                                }
-                                            }
-                                            else if (Model.Userrole == "6" && (deptId == 8 || deptId == 9 || deptId == 15 || deptId == 20))
-                                            {
-                                                if (item.ASdgm == "A")
-                                                {
-                                                    <td>
-                                                        <label class="badge badge-success">Approved</label>
-                                                    </td>
-                                                }
-                                                else if (item.ASdgm == "R")
-                                                {
-                                                    <td>
-                                                        <label class="badge badge-danger">Rejected</label>
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    <td>
-                                                        <label class="badge badge-warning">Pending</label>
-                                                    </td>
-                                                }
-                                            }
-                                            else if (Model.Userrole == "6" && deptId == 10)
-                                            {
-                                                if (item.ASmd == "A" || (item.ChApprvlId != 0 && item.ASdgm != null))
-                                                {
-                                                    <td>
-                                                        <label class="badge badge-success">Approved</label>
-                                                    </td>
-                                                }
-                                                else if (item.ASmd == "R")
-                                                {
-                                                    <td>
-                                                        <label class="badge badge-danger">Rejected</label>
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    <td>
-                                                        <label class="badge badge-warning">Pending</label>
-                                                    </td>
-                                                }
-                                            }
-                                            else if (Model.Userrole == "6")
-                                            {
 
-                                                if (item.AShod == "A" && item.ASdgm == "A")
-                                                {
-                                                    <td>
-                                                        <label class="badge badge-success">Approved</label>
-                                                    </td>
+                                                    if (item.AShod == "A" && item.ASdgm == "A")
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-success">Approved</label>
+                                                        </td>
+                                                    }
+                                                    else if (item.AShod == "R" || item.ASdgm == "R")
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-danger">Rejected</label>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-warning">Pending</label>
+                                                        </td>
+                                                    }
                                                 }
-                                                else if (item.AShod == "R" || item.ASdgm == "R")
-                                                {
-                                                    <td>
-                                                        <label class="badge badge-danger">Rejected</label>
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    <td>
-                                                        <label class="badge badge-warning">Pending</label>
-                                                    </td>
-                                                }
-                                            }
-                                            <td>
-                                                <select asp-for="PersonalGPB.ChApprvlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="staffDropdown">
-                                                </select>
-                                                <div>
-                                                    <input type="hidden" name="Id" value="@item.Id" />
-                                                    <button type="submit" class="btn btn-primary" style="margin-top:5px;">Save</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        }
+                                                <td>
+                                                    <select asp-for="PersonalGPB.ChApprvlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="staffDropdown">
+                                                    </select>
+                                                    <div>
+                                                        <input type="hidden" name="Id" value="@item.Id" />
+                                                        <button type="submit" class="btn btn-primary" style="margin-top:5px;">Save</button>
+                                                    </div>
+                                                </td>
+                                                <td>@Html.DisplayFor(m => item.RejctReason)</td>
+                                            </tr>
+                                         }
 
                                     </tbody>
 
@@ -304,13 +316,16 @@
                                             <th class="text-white font-weight-bold">
                                                 <label>Status</label>
                                             </th>
-                                            <th class="text-white font-weight-bold text-center">Change management approval</th>
+                                            <th class="text-white font-weight-bold">Change management approval</th>
+                                            <th class="text-white font-weight-bold">Reject Reason</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var itemw in Model.WorkerGPs)
                                         {
                                             var FullnameWorker = Model.Db.Workers.Where(gp => gp.Id == itemw.WrkId).Select(gp => gp.Name).FirstOrDefault();
+                                            var deptUn = Model.Db.WorkerGP.Where(gp => gp.Id == itemw.WrkId).Select(gp => gp.ChkifDeptHeadUn).FirstOrDefault();
+                                            
                                             TempData["FullnameWorker"] = FullnameWorker;
                                             <tr>
                                                 <td>@Html.DisplayFor(m => itemw.WorkerGPId)</td>
@@ -351,16 +366,17 @@
                                                 </td>
 
                                                 @{
-                                                    if (itemw.AShod == "A" && itemw.ChAprlId == 0 || itemw.ChAprlId != 0 && itemw.ASdgm == "A") //&& item.ASdgm == "A")
-                                                    {
-                                                        <td>
-                                                            <label class="badge badge-success">Approved</label>
-                                                        </td>
-                                                    }
-                                                    else if (itemw.AShod == "R" || itemw.ASdgm == "R")
+
+                                                    if (itemw.ASdgm == "R" || itemw.AShod == "R")
                                                     {
                                                         <td>
                                                             <label class="badge badge-danger">Rejected</label>
+                                                        </td>
+                                                    }
+                                                    else if (itemw.ASdgm == "A" || itemw.AShod == "A" && itemw.ChAprlId == 0) //&& item.ASdgm == "A") || itemw.ChAprlId != 0 && itemw.ASdgm == "A"
+                                                    {
+                                                        <td>
+                                                            <label class="badge badge-success">Approved</label>
                                                         </td>
                                                     }
                                                     else
@@ -369,6 +385,7 @@
                                                             <label class="badge badge-warning">Pending</label>
                                                         </td>
                                                     }
+
                                                 }
                                                 <td>
                                                     <select asp-for="WorkerGPB.ChAprlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="workerDropdown">
@@ -378,6 +395,7 @@
                                                         <button type="submit" class="btn btn-primary" style="margin-top:5px;">Save</button>
                                                     </div>
                                                 </td>
+                                                <td>@Html.DisplayFor(m => itemw.RejctReason)</td>
                                             </tr>
                                          }
 

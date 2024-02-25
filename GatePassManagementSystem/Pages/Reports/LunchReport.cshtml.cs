@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ClosedXML.Excel;
 using GatePassManagementSystem.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -26,7 +27,14 @@ namespace GatePassManagementSystem.Pages.Reports
         public IEnumerable<Model.PersonalGP> PersonalGPs { get; set; }
         public IEnumerable<Model.WorkerGP> WorkerGPs { get; set; }
         public Model.Workers Workers { get; set; }
+        public DateTime fromd { get; set; }
+        public DateTime tod { get; set; }
 
+        [BindProperty]
+        public DateTime? FromDate { get; set; }
+
+        [BindProperty]
+        public DateTime? ToDate { get; set; }
 
         public void OnGet()
         {
@@ -36,8 +44,14 @@ namespace GatePassManagementSystem.Pages.Reports
                 TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
                 DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
 
-                PersonalGPs = _db.PersonalGP.AsEnumerable().Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.ChkLunch == true && ((gp.InTime - gp.OutTime).Minutes > 60) || (gp.SinIntime - gp.SinOuttime).Minutes > 60).ToList();
-                WorkerGPs = _db.WorkerGP.AsEnumerable().Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.ChkLunch == true && ((gp.InTime - gp.OutTime).Minutes > 60) || (gp.SinIntime - gp.SinOuttime).Minutes > 60).ToList();
+                fromd = Convert.ToDateTime(HttpContext.Session.GetString("fromd"));
+                tod = Convert.ToDateTime(HttpContext.Session.GetString("tod"));
+
+                PersonalGPs = _db.PersonalGP.FromSqlRaw("SELECT * FROM PersonalGP WHERE 65 < DATEDIFF(MINUTE, OutTime, InTime) AND ChkLunch = 1 AND CreateDate >= '2024-02-07'").ToList();
+                //PersonalGPs =  _db.Database.ExecuteSqlRawAsync("SELECT * FROM PersonalGP WHERE 60 < DATEDIFF(MINUTE, OutTime, InTime) AND CreateDate >= {1} AND CreateDate =< {0}", targetLocalTime, PersonalGPB.RejctReason);
+                //PersonalGPs = _db.PersonalGP.Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.ChkLunch == true && ((gp.InTime - gp.OutTime).Minutes > 60)).ToList();
+                //PersonalGPs = _db.PersonalGP.Where(gp => gp.CreateDate.Year == targetLocalTime.Year && ((gp.InTime - gp.OutTime).TotalMinutes > 60)).ToList(); //&& ((gp.InTime - gp.OutTime).Minutes > 60) || (gp.SinIntime - gp.SinOuttime).Minutes > 60
+                WorkerGPs = _db.WorkerGP.FromSqlRaw("SELECT * FROM WorkerGP WHERE 65 < DATEDIFF(MINUTE, OutTime, InTime) AND ChkLunch = 1 AND CreateDate >= '2024-02-07'").ToList(); //&& ((gp.InTime - gp.OutTime).Minutes > 60) || (gp.SinIntime - gp.SinOuttime).Minutes > 60
             }
             catch (Exception ex)
             {
@@ -45,15 +59,63 @@ namespace GatePassManagementSystem.Pages.Reports
             }
         }
 
+        public IActionResult OnPost()
+        {
+            try
+            {
+                DateTime utcNow = DateTime.UtcNow;
+                TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
+                DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
+
+                if (DateTime.TryParse(Request.Form["FromDate"], out DateTime fromDate))
+                {
+                    FromDate = fromDate;
+                }
+                else
+                {
+                    return BadRequest("FromDate is not a valid date.");
+                }
+
+                if (DateTime.TryParse(Request.Form["ToDate"], out DateTime toDate))
+                {
+                    ToDate = toDate;
+                }
+                else
+                {
+                    return BadRequest("ToDate is not a valid date.");
+                }
+
+                if (FromDate == null || ToDate == null)
+                {
+                    return BadRequest("FromDate or ToDate is null.");
+                }
+
+                PersonalGPs = _db.PersonalGP.FromSqlRaw("SELECT * FROM PersonalGP WHERE 65 < DATEDIFF(MINUTE, OutTime, InTime) AND ChkLunch = 1 AND CreateDate > {0} AND CreateDate <= {1}", FromDate, ToDate).ToList();
+                WorkerGPs = _db.WorkerGP
+                    .FromSqlRaw("SELECT * FROM WorkerGP WHERE 60 < DATEDIFF(MINUTE, OutTime, InTime) AND ChkLunch = 1 AND CreateDate > {0} AND CreateDate <= {1}", FromDate, ToDate).ToList();
+
+            }
+            catch (Exception ex)
+            {
+                cm.Logwrite("Error in AllReportModel OnPost method :" + ex.Message);
+               
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+            return Page();
+        }
+
+
+
         public IActionResult OnGetGenerateExcel()
         {
             DateTime utcNow = DateTime.UtcNow;
             TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
             DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
 
-            PersonalGPs = _db.PersonalGP
-                .Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.ChkLunch == true && ((gp.InTime - gp.OutTime).Minutes > 60) || (gp.SinIntime - gp.SinOuttime).Minutes > 60)
-                .ToList();
+            fromd = Convert.ToDateTime(HttpContext.Session.GetString("fromd"));
+            tod = Convert.ToDateTime(HttpContext.Session.GetString("tod"));
+
+            PersonalGPs = _db.PersonalGP.FromSqlRaw("SELECT * FROM PersonalGP WHERE 60 < DATEDIFF(MINUTE, OutTime, InTime) AND ChkLunch = 1 AND CreateDate >= {1} AND CreateDate =< {0}", fromd, tod).ToList();
 
             var personalGPsList = PersonalGPs.ToList();
 

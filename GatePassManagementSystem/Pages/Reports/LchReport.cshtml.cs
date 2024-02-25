@@ -35,8 +35,8 @@ namespace GatePassManagementSystem.Pages.Reports
                 TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
                 DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
 
-                PersonalGPs = _db.PersonalGP.AsEnumerable().Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.ChkLunch == true).ToList();
-                WorkerGPs = _db.WorkerGP.AsEnumerable().Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.ChkLunch == true).ToList();
+                PersonalGPs = _db.PersonalGP.Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.ChkLunch == true).ToList();
+                WorkerGPs = _db.WorkerGP.Where(gp => gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.ChkLunch == true).ToList();
             }
             catch (Exception ex)
             {

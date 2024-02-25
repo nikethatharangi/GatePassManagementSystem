@@ -67,7 +67,7 @@
                         </p>
                         @if (Model.PersonalGPs.Count() > 0)
                         {
-                            <div class="table-responsive">
+                            <div class="table-responsive" style="height: 450px; overflow-y: scroll;">
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                         <tr class="bg-dark">
@@ -88,6 +88,9 @@
                                             </th>
                                             <th class="text-white font-weight-bold">
                                                 <label>Status</label>
+                                            </th>
+                                            <th class="text-white font-weight-bold">
+                                                <label>Reject Reason</label>
                                             </th>
                                         </tr>
                                     </thead>
@@ -125,6 +128,14 @@
                                                     else if (item.ChkCusVisit == true)
                                                     {
                                                         <p>Customer Visit</p>
+                                                    }
+                                                    else if (item.ChkOfficialwork == true)
+                                                    {
+                                                        <p>Official Work</p>
+                                                    }
+                                                    else if (item.ChkPamunugama == true)
+                                                    {
+                                                        <p>Pamunugama</p>
                                                     }
 
                                                 </td>
@@ -178,7 +189,7 @@
                                                         </td>
                                                     }
                                                 }
-                                                else if (Model.Userrole == "6" && (deptId == 8 || deptId == 9 || deptId == 15 || deptId == 20))
+                                                else if (Model.Userrole == "6" && (deptId == 8 || deptId == 9 || deptId == 15 || deptId == 20 || deptId == 12 || deptId == 22 || deptId == 19))
                                                 {
                                                     if (item.ASdgm == "A")
                                                     {
@@ -243,6 +254,7 @@
                                                     }
                                                 }
 
+                                                <td>@Html.DisplayFor(m => item.RejctReason)</td>
                                             </tr>
                                         }
 
@@ -266,14 +278,13 @@
             <div class="card">
                 <form method="post">
                     <div class="card-body">
-                        <h4 class="card-title">Requested Gate Passes</h4>
+                        <h4 class="card-title">Requested Gate Passes - Workers</h4>
                         <p class="card-description">
                             <code>Old Gate Pass List</code>
                         </p>
                         @if (Model.WorkerGPs.Count() > 0)
-                        {
-
-                            <div class="table-responsive">
+                        { 
+                            <div class="table-responsive" style="height: 450px; overflow-y: scroll;">
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                         <tr class="bg-dark">
@@ -292,6 +303,9 @@
                                             <th class="text-white font-weight-bold">
                                                 <label>Status</label>
                                             </th>
+                                            <th class="text-white font-weight-bold">
+                                                <label>Reject Reason</label>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -299,37 +313,38 @@
                                         {
                                             var FullnameWorker = Model.Db.Workers.Where(gp => gp.Id == item.WrkId).Select(gp => gp.Name).FirstOrDefault();
                                             TempData["FullnameWorker"] = FullnameWorker;
-                                            <tr>
-                                                <td>@Html.DisplayFor(m => item.WorkerGPId)</td>
-                                                <td>@Html.DisplayFor(m => item.Reason)</td>
-                                                <td>
-                                                    @TempData["FullnameWorker"]
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => item.CreateDate)
-                                                </td>
+                                        <tr>
+                                            <td>@Html.DisplayFor(m => item.WorkerGPId)</td>
+                                            <td>@Html.DisplayFor(m => item.Reason)</td>
+                                            <td>
+                                                @TempData["FullnameWorker"]
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.CreateDate)
+                                            </td>
 
-                                                @{
-                                                    if (item.AShod == "A" )
-                                                    {
-                                                        <td>
-                                                            <label class="badge badge-success">Approved</label>
-                                                        </td>
-                                                    }
-                                                    else if (item.AShod == "R" || item.ASdgm == "R")
-                                                    {
-                                                        <td>
-                                                            <label class="badge badge-danger">Rejected</label>
-                                                        </td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td>
-                                                            <label class="badge badge-warning">Pending</label>
-                                                        </td>
-                                                    }
+                                            @{
+                                                if (item.ASdgm == "R" || item.AShod == "R")
+                                                {
+                                                    <td>
+                                                        <label class="badge badge-danger">Rejected</label>
+                                                    </td>
                                                 }
-                                            </tr>
+                                                else if (item.ASdgm == "A" || item.AShod == "A" && item.ChAprlId == 0) //&& item.ASdgm == "A") || itemw.ChAprlId != 0 && itemw.ASdgm == "A"
+                                                {
+                                                    <td>
+                                                        <label class="badge badge-success">Approved</label>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <label class="badge badge-warning">Pending</label>
+                                                    </td>
+                                                }
+                                            }
+                                            <td>@Html.DisplayFor(m => item.RejctReason)</td>
+                                        </tr>
                                         }
 
                                     </tbody>
