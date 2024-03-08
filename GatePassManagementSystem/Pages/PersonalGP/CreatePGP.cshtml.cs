@@ -122,7 +122,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 {
                     new ApprovalChange { deptId = 10, FullName = "Mr. Sugath(MD)" },
                     new ApprovalChange { deptId = 6, FullName = "Mr. Dharmapriya" },
-                    new ApprovalChange { deptId = 10, FullName = "Mr. Thusitha" },
+                    new ApprovalChange { deptId = 7, FullName = "Mr. Thusitha" },
                     new ApprovalChange { deptId = 8, FullName = "Mr. Ruwan" },
                     new ApprovalChange { deptId = 15, FullName = "Mr. Rohan" },
                     new ApprovalChange { deptId = 26, FullName = "Mr. Damith" },
@@ -230,6 +230,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
         {
             currentUserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
             deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
+            role = Convert.ToInt32(HttpContext.Session.GetString("Roleid"));
 
             string userEmail = _db.User.Where(u => u.Id == currentUserId).Select(u => u.Email).FirstOrDefault();
             string fullname = _db.User.Where(u => u.Id == currentUserId).Select(u => u.FullName).FirstOrDefault();
@@ -244,7 +245,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
             if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 22 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
             {
 
-                if (depheadUn == true)
+                if (depheadUn == true || role == 5 || role == 4)
                 {
 
                 }
@@ -371,12 +372,12 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 message.To.Add("dharmapriya@westernpapersl.com");
                 message.Body = "Dear Mr.Dharmapriya," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
             }
-            //else if (ChngAprl == 7) // mr. thusitha
-            //{
-            //    //To list
-            //    message.To.Add("niketha@westernpapersl.com");
-            //    message.Body = "Dear Mr.Thusitha," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
-            //}
+            else if (ChngAprl == 7) // mr. thusitha
+            {
+                //To list
+                message.To.Add("ceo@westernpapersl.com");
+                message.Body = "Dear Mr.Thusitha," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+            }
             else if (ChngAprl == 8) //mr. ruwan
             {
                 //To list

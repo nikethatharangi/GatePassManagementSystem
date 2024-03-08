@@ -2,15 +2,28 @@
 @model GatePassManagementSystem.Pages.NonreturnableGP.CreateNGPModel
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script src="//code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.8.0/dist/JsBarcode.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
 <style>
     #my-table {
-        width: 470px;
+        width: 850px;
         margin-left: 17px;
     }
 
     td {
-        width: 50px;
-        height: 50px;
+        /*width: 50px;*/
+        height: 40px;
+    }
+
+    .remove-button {
+        border: none;
+        
     }
 
     .add {
@@ -38,13 +51,17 @@
     }
 
     #addRowChild {
-        line-height: 50px;
+        line-height: 40px;
     }
 
     .del {
-        height: 52px;
-        width: 52px;
-        background: rgb(178, 0, 0);
+        height: 30px;
+        width: 30px;
+        border-radius: 5px;
+        background: #00D100;
+        border: none;
+        font-weight: bold;
+        font-size: 20px;
         cursor: pointer;
         color: #FFF;
         text-align: center;
@@ -52,12 +69,12 @@
         transition-property: background;
         transition-duration: 1s;
         transition-timing-function: linear;
+        margin-left: 20px;
     }
 
         .del:hover {
             background: rgb(202, 76, 73);
         }
-        
 </style>
 <div class="content-wrapper">
     <div class="page-header">
@@ -72,13 +89,82 @@
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
-                <form method="post">
+                <form method="post" id="yourFormId">
                     <div class="card-body">
-                        <div class="col-lg-3 col-sm-12">
-                            <div class="form-group">
-                                <label>Gate Pass No.</label>
-                                <input type="text" asp-for="PersonalGP.PersonalGPId" id="getGPId" class="form-control" readonly />
-                                <input type="hidden" asp-for="GPId" name="GPId" id="GPId" class="form-control" />
+                        <div class="row">
+                            <div class="col-lg-3 col-sm-3">
+                                <div class="form-group">
+                                    <label>Gate Pass No.</label>
+                                    <input type="text" asp-for="NonReturnableGP.NonReturnableGPId" id="getGPId" class="form-control" readonly />
+                                    <input type="hidden" asp-for="GPId" name="GPId" id="GPId" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-sm-3"></div>
+
+                            <div class="col-lg-4 col-sm-3">
+                                <div class="card" style="overflow: auto;">
+                                    <div class="card-body" style="height:120px;">
+                                        <svg id="barcode"></svg>
+                                    </div>
+                                </div>
+
+                                <img id="image" style="height:10px;" />
+                                <script type="text/javascript">
+                                    window.addEventListener("load", function (event) {
+                                        $(document).ready(function () {
+                                            JsBarcode("#barcode", document.getElementById('GPId').value, {
+                                                lineColor: "#000",
+                                                width: 2,
+                                                height: 45,
+                                                displayValue: true
+                                            });
+                                        });
+                                    }, false);
+
+                                    window.addEventListener("load", function (event) {
+                                        var val = document.getElementById('GPId').value;
+                                        getGPId.value = val;
+                                        getGPId2.value = val;
+                                    }, false);
+
+                                    function downloadBarcode(e) {
+                                        const canvas = document.createElement("canvas");
+                                        const svg = document.getElementById("barcode");
+                                        const base64doc = btoa(unescape(encodeURIComponent(svg.outerHTML)));
+                                        const w = parseInt(svg.getAttribute('width'));
+                                        const h = parseInt(svg.getAttribute('height'));
+                                        const img_to_download = document.createElement('img');
+                                        img_to_download.src = 'data:image/svg+xml;base64,' + base64doc;
+                                        console.log(w, h);
+                                        img_to_download.onload = function () {
+                                            console.log('img loaded');
+                                            canvas.setAttribute('width', w);
+                                            canvas.setAttribute('height', h);
+                                            const context = canvas.getContext("2d");
+                                            //context.clearRect(0, 0, w, h);
+                                            context.drawImage(img_to_download, 0, 0, w, h);
+                                            const dataURL = canvas.toDataURL('image/png');
+                                            if (window.navigator.msSaveBlob) {
+                                                window.navigator.msSaveBlob(canvas.msToBlob(), "download.png");
+                                                e.preventDefault();
+                                            } else {
+                                                const a = document.createElement('a');
+                                                const my_evt = new MouseEvent('click');
+                                                a.download = 'download.png';
+                                                a.href = dataURL;
+                                                a.dispatchEvent(my_evt);
+                                            }
+                                            //canvas.parentNode.removeChild(canvas);
+                                        }
+                                    }
+
+                                </script>
+                            </div>
+                            <div>
+                                <div class="form-group">
+                                    @*<button type="button" class="btn btn-dark mr-2" onclick="generatePDF()">Download</button>*@
+                                    <input type="button" class="btn btn-success" onclick="downloadBarcode()" value="Download">
+                                </div>
                             </div>
                         </div>
                         <h4 class="card-title">Request a Returnable Gate Pass</h4>
@@ -101,21 +187,21 @@
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Pamunugama
+                                                        @Html.CheckBox("chkPamunuFrom", new { @class = "form-check-input" }) Pamunugama
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Madupitiya
+                                                        @Html.CheckBox("chkMaduFrom", new { @class = "form-check-input" }) Madupitiya
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Sinthawatta
+                                                        @Html.CheckBox("chkSinthaFrom", new { @class = "form-check-input" }) Sinthawatta
                                                     </label>
                                                 </div>
                                             </div>
@@ -127,53 +213,32 @@
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Pamunugama
+                                                        @Html.CheckBox("chkPamunuTo", new { @class = "form-check-input" }) Pamunugama
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Madupitiya
+                                                        @Html.CheckBox("chkMaduTo", new { @class = "form-check-input" }) Madupitiya
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Sinthawatta
+                                                        @Html.CheckBox("chkSinthaTo", new { @class = "form-check-input" }) Sinthawatta
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail3">Machine Name</label>
-                                        <input type="text" class="form-control" id="exampleInputVehicle" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail3">Machine No.</label>
-                                        <input type="text" class="form-control" id="exampleInputVehicle" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleTextarea1">HOD Remarks</label>
-                                        <textarea class="form-control"
-                                                  id="exampleTextarea1"
-                                                  rows="4"></textarea>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="exampleTextarea1">Remarks</label>
-                                        <textarea class="form-control"
-                                                  id="exampleTextarea1"
-                                                  rows="4"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
                                         <label for="exampleInputEmail3">Department Head Approval</label>
                                         <input type="text" class="form-control" asp-for="DeptHead" id="DeptHead" readonly />
-                                        
+
                                         <div class="col-sm-12">
                                             <div class="form-check">
                                                 <label class="form-check-label">
@@ -189,68 +254,167 @@
                                     </div>
                                     <div class="form-group">
                                         <label label for="exampleInputEmail3">Change management approval if not available</label>
-                                        <select asp-for="PersonalGP.ChApprvlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="workerDropdown">
+                                        <select asp-for="NonReturnableGP.ChApprvlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="workerDropdown">
                                         </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail3">Vehicle No.</label>
-                                        <input type="text" class="form-control" id="exampleInputVehicle" />
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword4">Driver's/Helper's Name</label>
-                                        <input type="text" class="form-control" id="exampleInputRepairer" />
-                                    </div>
-                                    <div class="row" style="height: 230px; overflow-y: scroll;">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover table-bordered" id="my-table">
-                                                <thead>
-                                                    <tr class="bg-dark">
-                                                        <th class="text-white font-weight-bold">Description</th>
-                                                        <th class="text-white font-weight-bold">Quantity</th>
-                                                    </tr>
-                                                </thead>
-
-                                                <tbody contenteditable="true">
-
-                                                    <tr id="default-row">
-                                                        <td></td>
-                                                        <td></td>
-
-                                                    </tr>
-
-                                                </tbody>
-                                            </table>
-                                            <div id="addRow" class="bg-success add" style="margin-left: 17px;">
-                                                <div id="addRowChild"><h3>+</h3></div>
-                                            </div>
-                                        </div>
-
-                                        <script>
-                                            $('#addColumnChild').click(function () {
-                                                $('#my-table tr').each(function () {
-                                                    $(this).append(`<td></td>`);
-                                                });
-                                            });
-
-                                            $('#addRowChild').click(function () {
-                                                $('#my-table tbody').append(`<tr>${$('#default-row').html()}</tr>`);
-                                            });
-                                        </script>
                                     </div>
 
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Machine Name</label>
+                                        <input type="text" class="form-control" asp-for="NonReturnableGP.MachineName" id="machineName" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Machine No.</label>
+                                        <input type="text" class="form-control" asp-for="NonReturnableGP.MachineNo" id="machineNo" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleTextarea1">Others</label>
+                                        <textarea class="form-control" asp-for="NonReturnableGP.Other"
+                                                  id="others"
+                                                  rows="4"></textarea>
+                                    </div>
+                                    @*<div class="form-group">
+                    <label for="exampleTextarea1">HOD Remarks</label>
+                    <textarea class="form-control"
+                              id="exampleTextarea1"
+                              rows="4"></textarea>
+                </div>    *@
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail3">Vehicle No.</label>
+                                        <input type="text" class="form-control" asp-for="NonReturnableGP.VehicleNo" id="VehicleNo" />
+                                    </div>
 
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword4">Driver's/Helper's Name</label>
+                                        <input type="text" class="form-control" asp-for="NonReturnableGP.DrHelname" id="helpername" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="exampleInputEmail3"><b>Item Details</b></label>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" value="" id="getGPId2" name="subject" hidden/>
+                                        <input type="text" class="form-control" value="" name="subject" id="txtsubject" />
+                                    </div>
+                                </div>
+                                <div class="col-1"></div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" value="" name="marks" id="txtmarks" />
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="addRowChild"><input type="button" value="Add" name="marks" id="btnAddRecords" class="btn btn-success mr-2" /></div>
+                                </div>
+                            </div>
+                                <div class="row" style="height: 230px; overflow-y: scroll;">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" style="width: 850px; margin-left: 17px;" id="tableStudentRecords">
+                                            <thead>
+                                                <tr class="bg-dark">
+                                                    <th class="text-white font-weight-bold">Description</th>
+                                                    <th class="text-white font-weight-bold">Quantity</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                               
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                    <script>
+                                        //$('#addColumnChild').click(function () {
+                                        //    $('#my-table tr').each(function () {
+                                        //        $(this).append(`<td></td>`);
+                                        //    });
+                                        //});
+
+                                        //$('#addRowChild').click(function () {
+                                        //    $('#my-table tbody').append(`<tr>${$('#default-row').html()}</tr>`);
+                                        //});
+
+                                        $('#my-table').on('click', 'input[type="button"]', function () {
+                                            $(this).closest('tr').remove();
+                                        })
+
+                                        $('p input[type="button"]').click(function () {
+                                            $('#my-table').append('<tr><td><input type="text" class="fname" /></td><td><input type="button" value="Delete" /></td></tr>')
+                                        });
+
+                                    </script>
+
+                                    <script type="text/javascript">
+                                        $(document).ready(function () {
+                                            $("#btnAddRecords").click(function () {
+                                                AddStudentRecords();
+                                            });
+
+                                            $("#btnSaveData").click(function () {
+                                                SaveStudentRecords();
+                                            });
+
+                                        });
+
+                                        function AddStudentRecords() {
+                                            var StudentRecords = "<tr><td>" + $("#txtsubject").val() + "</td><td>" + $("#txtmarks").val() + "</td><td style='border: none;'><button class='btn btn-danger  remove-row remove-button'>Remove</button></td></tr>";
+                                            $("#tableStudentRecords tr:first-child").after(StudentRecords);
+                                            $("#txtsubject").val("");
+                                            $("#txtmarks").val("");
+                                        }
+                                        //btnAddRecords.value = "-";
+                                        //deleteButton.className = "bg-danger del";
+
+                                        $(document).on('click', '.remove-row', function () {
+                   
+                                            $(this).closest('tr').remove();
+                                        });
+
+                                        function SaveStudentRecords() {
+                                            var NonReturnItemDscsl = [];
+                                            $("#tableStudentRecords").find("tr:gt(0)").each(function () {
+                                                var desc = $(this).find("td:eq(0)").text();
+                                                var qua = $(this).find("td:eq(1)").text();
+                                                
+
+                                                var NonReturnItemDsc = {
+
+                                                    Description: desc,
+                                                    Quantity: qua
+                                                };
+
+                                                NonReturnItemDscsl.push(NonReturnItemDsc);
+                                            });
+
+                                            for (var i = 0; i < NonReturnItemDscsl.length; i++) {
+                                                var item = NonReturnItemDscsl[i];
+                                               
+                                                $("#yourFormId").append('<input type="hidden" name="items[' + i + '].Description" value="' + item.Description + '" />');
+                                                $("#yourFormId").append('<input type="hidden" name="items[' + i + '].Quantity" value="' + item.Quantity + '" />');
+                                            }
+
+                                            $("#yourFormId").submit();
+                                        }
+
+                                    </script>
+
+                                </div>
+                                <button type="submit" class="btn btn-primary mr-2"  id="btnSaveData" name="SaveData" style="margin-top:20px;">Submit </button>
+                                <button class="btn btn-light" style="margin-top:20px;">Cancel</button>
                             </div>
 
-                            <button type="submit" class="btn btn-primary mr-2">Submit </button>
-                            <button class="btn btn-light">Cancel</button>
                         </div>
-                    </div>
+
                 </form>
-                
+
             </div>
         </div>
 

@@ -1,0 +1,95 @@
+﻿@page
+@model GatePassManagementSystem.Pages.NonreturnableGP.testModel
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnAddRecords").click(function () {
+            AddStudentRecords();
+        });
+
+        $("#btnSaveData").click(function () {
+            SaveStudentRecords();
+        });
+
+    });
+
+    function AddStudentRecords() {
+        var StudentRecords = "<tr><td>" + $("#txtsubject").val() + "</td><td>" + $("#txtmarks").val() + "</td></tr>";
+        $("#tableStudentRecords tr:first-child").after(StudentRecords); 
+        $("#txtsubject").val("");
+        $("#txtmarks").val("");
+    }
+
+    function SaveStudentRecords() {
+        var NonReturnItemDscsl = [];
+        $("#tableStudentRecords").find("tr:gt(0)").each(function () {
+            var desc = $(this).find("td:eq(0)").text();
+            var qua = $(this).find("td:eq(1)").text();
+
+            var NonReturnItemDsc = {
+                Description: desc,
+                Quantity: qua
+            };
+
+            NonReturnItemDscsl.push(NonReturnItemDsc);
+        });
+
+        for (var i = 0; i < NonReturnItemDscsl.length; i++) {
+            var item = NonReturnItemDscsl[i];
+            $("#yourFormId").append('<input type="hidden" name="items[' + i + '].Description" value="' + item.Description + '" />');
+            $("#yourFormId").append('<input type="hidden" name="items[' + i + '].Quantity" value="' + item.Quantity + '" />');
+        }
+
+        $("#yourFormId").submit();
+    }
+
+
+</script>
+
+
+<form id="yourFormId" method="post">
+    <table>
+        <tr>
+            <td>
+                description
+            </td>
+            <td>
+                <input type="text" value="" name="subject" id="txtsubject" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                quantity
+            </td>
+            <td>
+                <input type="text" value="" name="marks" id="txtmarks" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <input type="button" value="Add" name="marks" id="btnAddRecords" />
+            </td>
+        </tr>
+    </table>
+
+    <table class="table-condensed" id="tableStudentRecords">
+        <thead>
+            <tr>
+                <th>
+                    description
+                </th>
+                <th>
+                    quantity
+                </th>
+            </tr>
+        </thead>
+    </table>
+    <input type="button" value="Save Data" name="SaveData" id="btnSaveData" />
+</form>
+
+
+
+
+

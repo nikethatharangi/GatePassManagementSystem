@@ -176,6 +176,25 @@
                         </div>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#ui-basic-2" aria-expanded="false" aria-controls="ui-basic">
+                            <i class="mdi mdi-package-variant-closed fa-lg"></i>
+                            <span class="menu-title" style="margin-left: 10px;">Request Good Gate Pass</span>
+                            <i class="menu-arrow"></i>
+                        </a>
+                        <div class="collapse" id="ui-basic-2">
+                            <ul class="nav flex-column sub-menu">
+
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/ReturnableGP/CreateRGP">Returnable Gate Pass</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/CreateNGP">Non-Returnable Gate Pass</a>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#ui-basic-1" aria-expanded="false" aria-controls="ui-basic">
                             <i class="mdi mdi-forum fa-lg"></i>
                             <span class="menu-title" style="margin-left: 10px;">Pending Gate Passes</span>
@@ -188,9 +207,21 @@
                                     <li class="nav-item">
                                         <a class="nav-link" asp-area="" asp-page="/PersonalGP/ViewPendingGP">Pending Approval</a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-page="/ReturnableGP/ViewPendingRGP">Pending Approval - Returnable</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/ViewPendingNGP">Pending Approval - NonRetrunable</a>
+                                    </li>
                                 }
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-page="/PersonalGP/ViewGP">Requested Gate Passes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/ReturnableGP/ViewRGP">Requested Gate Passes - <br />Returnable</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/ViewNGP">Requested Gate Passes - <br />NonReturnable</a>
                                 </li>
                             </ul>
                         </div>

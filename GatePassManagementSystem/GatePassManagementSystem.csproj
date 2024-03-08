@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Pages\NonreturnableGP\test.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNetCoreHero.ToastNotification" Version="1.1.0" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="ClosedXML.Report" Version="0.2.8" />
@@ -37,5 +41,17 @@
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\NonreturnableGP\test.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\NonreturnableGP\test.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\NonreturnableGP\test.cshtml" />
+  </ItemGroup>
 
 </Project>

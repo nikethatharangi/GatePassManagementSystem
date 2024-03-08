@@ -22,6 +22,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
         private readonly INotyfService _notify;
         public static List<Model.PersonalGP> PersonalGP { get; set; }
         public static List<Model.WorkerGP> WorkerGP { get; set; }
+
         [BindProperty]
         public Model.PersonalGP PersonalGPB { get; set; }
         [BindProperty]
@@ -91,13 +92,13 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 }
                 else if (Uid == 92) // Mr. Vajira
                 {
-                    PersonalGPs = await _db.PersonalGP.Where(gp => gp.AShod == null && (gp.DepId == deptId || gp.DepId == 27 && gp.ChApprvlId == 0) && gp.UserId != Uid && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).ToListAsync();
-                    WorkerGPs = await _db.WorkerGP.Where(gp => gp.AShod == null  && (gp.DepId == deptId || gp.DepId == 27 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).ToListAsync();
+                    PersonalGPs = await _db.PersonalGP.Where(gp => gp.AShod == null && (gp.DepId == deptId || gp.DepId == 27) && gp.UserId != Uid && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).ToListAsync();
+                    WorkerGPs = await _db.WorkerGP.Where(gp => gp.AShod == null  && (gp.DepId == deptId || gp.DepId == 27) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).ToListAsync();
                 }
                 else if(Uid == 96) // mr. Wijekoon
                 {
-                    PersonalGPs = await _db.PersonalGP.Where(gp => gp.ASdgm == null && (gp.DepId == deptId || gp.DepId == 19 && gp.ChApprvlId == 0) && gp.UserId != Uid && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).ToListAsync();
-                    WorkerGPs = await _db.WorkerGP.Where(gp => gp.ASdgm == null && (gp.DepId == deptId || gp.DepId == 19 && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).ToListAsync();
+                    PersonalGPs = await _db.PersonalGP.Where(gp => gp.ASdgm == null && ((gp.DepId == deptId || gp.DepId == 19) && gp.ChApprvlId == 0) && gp.UserId != Uid && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).ToListAsync();
+                    WorkerGPs = await _db.WorkerGP.Where(gp => gp.ASdgm == null && ((gp.DepId == deptId || gp.DepId == 19) && gp.ChAprlId == 0) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).ToListAsync();
                 }
                 else if (Uid == 68) // mr. Geethanga
                 {
@@ -215,12 +216,12 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                     message.To.Add("dharmapriya@westernpapersl.com");
                     message.Body = "Dear Mr.Dharmapriya," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
                 }
-                //else if (deptId == 7) //mr. Thusitha
-                //{
-                //    //To list
-                //    message.To.Add("niketha@westernpapersl.com");
-                //    message.Body = "Dear Mr.Thusitha," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
-                //}
+                else if (deptId == 7) //mr. Thusitha
+                {
+                    //To list
+                    message.To.Add("ceo@westernpapersl.com");
+                    message.Body = "Dear Mr.Thusitha," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
+                }
                 else if (deptId == 14 || deptId == 16 || deptId == 21 || deptId == 26) //mr.Damith 
                 {
                     //To list
@@ -252,12 +253,12 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 message.To.Add("dharmapriya@westernpapersl.com");
                 message.Body = "Dear Mr.Dharmapriya," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
             }
-            //else if (ChngAprl == 7) // mr. thusitha
-            //{
-            //    //To list
-            //    message.To.Add("niketha@westernpapersl.com");
-            //    message.Body = "Dear Mr.Thusitha," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
-            //}
+            else if (ChngAprl == 7) // mr. thusitha
+            {
+                //To list
+                message.To.Add("ceo@westernpapersl.com");
+                message.Body = "Dear Mr.Thusitha," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
+            }
             else if (ChngAprl == 8) //mr. ruwan
             {
                 //To list
@@ -285,6 +286,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
         public ActionResult EmailSendFirstApproved(int Id)
         {
             currentUserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            int roleId = Convert.ToInt32(HttpContext.Session.GetString("Roleid"));
             int uid = _db.PersonalGP.Where(u => u.Id == Id).Select(u => u.UserId).FirstOrDefault();
             int deptid = _db.PersonalGP.Where(u => u.Id == Id).Select(u => u.DepId).FirstOrDefault();
             string hodname = _db.Department.Where(u => u.Id == deptid).Select(u => u.Hod).FirstOrDefault();
@@ -293,7 +295,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
 
             GPNumber = _db.PersonalGP.Where(u => u.Id == Id).Select(u => u.PersonalGPId).FirstOrDefault();
 
-            if (Email == "None")
+            if (Email == "None" || roleId == 4 || roleId == 5)
             {
 
             }
@@ -346,7 +348,6 @@ namespace GatePassManagementSystem.Pages.PersonalGP
 
                 GPNumber = _db.PersonalGP.Where(u => u.Id == Id).Select(u => u.PersonalGPId).FirstOrDefault();
 
-
                 if (Email == "None")
                 {
 
@@ -389,7 +390,6 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 string fullname = _db.User.Where(u => u.Id == uid).Select(u => u.FullName).FirstOrDefault();
 
                 GPNumber = _db.PersonalGP.Where(u => u.Id == Id).Select(u => u.PersonalGPId).FirstOrDefault();
-
 
                 if (Email == "None")
                 {

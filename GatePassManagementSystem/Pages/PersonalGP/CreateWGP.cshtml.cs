@@ -73,7 +73,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 {
                     new ApprovalChange { deptId = 10, FullName = "Mr. Sugath(MD)" },
                     new ApprovalChange { deptId = 6, FullName = "Mr. Dharmapriya" },
-                    new ApprovalChange { deptId = 10, FullName = "Mr. Thusitha" },
+                    new ApprovalChange { deptId = 7, FullName = "Mr. Thusitha" },
                     new ApprovalChange { deptId = 8, FullName = "Mr. Ruwan" },
                     new ApprovalChange { deptId = 15, FullName = "Mr. Rohan" },
                     new ApprovalChange { deptId = 26, FullName = "Mr. Damith" },

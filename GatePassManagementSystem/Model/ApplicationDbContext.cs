@@ -13,6 +13,7 @@ namespace GatePassManagementSystem.Model
 
         }
 
+        
         public DbSet<PersonalGP> PersonalGP { get; set; }
         public DbSet<WorkerGP> WorkerGP { get; set; }
         public DbSet<Department> Department { get; set; }
@@ -20,6 +21,10 @@ namespace GatePassManagementSystem.Model
         public DbSet<UserRole> UserRole { get; set; }
         public DbSet<Workers> Workers { get; set; }
         public DbSet<ApprovalChange> ApprovalChange { get; set; }
-        //public DbSet<ApprovalByPass> ApprovalByPass { get; set; }
+
+        public DbSet<NonReturnableGP> NonReturnableGP { get; set; }
+        public DbSet<NonReturnItemDsc> NonReturnItemDsc { get; set; }
+        //public DbSet<ReturnableGP> ReturnableGP { get; set; }
+        //public DbSet<ReturnItemDsc> ReturnItemDsc { get; set; }
     }
 }

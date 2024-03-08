@@ -1,5 +1,5 @@
 ﻿@page
-@model GatePassManagementSystem.Pages.PersonalGP.GatePassListGrAcknPendingModel
+@model GatePassManagementSystem.Pages.ReturnableGP.ViewPendingRGPModel
 
 
 @using Microsoft.AspNetCore.Http;
@@ -53,7 +53,7 @@
                         </p>
                         @if (Model.PersonalGPs.Count() > 0)
                         {
-                            
+
                             <div class="table-responsive">
                                 <table class="table table-hover table-bordered">
                                     <thead>
@@ -69,7 +69,6 @@
                                             <th class="text-white font-weight-bold">Management Approval</th>
                                             <th class="text-white font-weight-bold">Guard Room Ackn</th>
                                             <th class="text-white font-weight-bold text-center">Status</th>
-                                            
                                         </tr>
                                     </thead>
 
@@ -79,7 +78,7 @@
 
                                             int chAprl = Model.Db.PersonalGP.Where(gp => gp.PersonalGPId == item.PersonalGPId).Select(gp => gp.ChApprvlId).Count();
                                             string chgGm = Model.Db.Department.Where(gp => gp.Id == item.ChApprvlId).Select(gp => gp.Gm).FirstOrDefault();
-                                           
+
                                             <tr>
                                                 <td>@Html.DisplayFor(m => item.PersonalGPId)</td>
                                                 <td>@Html.DisplayFor(m => item.CreateDate)</td>
@@ -119,7 +118,7 @@
                                                 </td>
                                                 <td>@Html.DisplayFor(m => item.Description)</td>
                                                 @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
-                                                 {
+                                                {
                                                     <td>
                                                         <label>@TempData["hod"]</label> <br />
 
@@ -140,47 +139,47 @@
                                                             <label class="badge badge-warning mt-2">Not acknowledged</label>
                                                         }
                                                     </td>
-                                                 }
-                                                    <td>
-                                                        @if (item.ChApprvlId == 0)
+                                                }
+                                                <td>
+                                                    @if (item.ChApprvlId == 0)
+                                                    {
+                                                        <label>@TempData["gm"]</label> <br />
+                                                    }
+                                                    else
+                                                    {
+                                                        <label>@chgGm</label> <br />
+                                                    }
+                                                    @if (deptId == 10)
+                                                    {
+                                                        @if (item.ASmd == "A")
                                                         {
-                                                            <label>@TempData["gm"]</label> <br />
+                                                            <label class="badge badge-success mt-2">Approved</label>
+                                                        }
+                                                        else if (item.ASmd == "R")
+                                                        {
+                                                            <label class="badge badge-danger mt-2">Rejected</label>
                                                         }
                                                         else
                                                         {
-                                                            <label>@chgGm</label> <br />
+                                                            <label class="badge badge-warning mt-2">Not Approved</label>
                                                         }
-                                                        @if (deptId == 10)
+                                                    }
+                                                    else
+                                                    {
+                                                        @if (item.ASdgm == "A")
                                                         {
-                                                            @if (item.ASmd == "A")
-                                                            {
-                                                                <label class="badge badge-success mt-2">Approved</label>
-                                                            }
-                                                            else if (item.ASmd == "R")
-                                                            {
-                                                                <label class="badge badge-danger mt-2">Rejected</label>
-                                                            }
-                                                            else
-                                                            {
-                                                                <label class="badge badge-warning mt-2">Not Approved</label>
-                                                            }
+                                                            <label class="badge badge-success mt-2">Approved</label>
+                                                        }
+                                                        else if (item.ASdgm == "R")
+                                                        {
+                                                            <label class="badge badge-danger mt-2">Rejected</label>
                                                         }
                                                         else
                                                         {
-                                                            @if (item.ASdgm == "A")
-                                                            {
-                                                                <label class="badge badge-success mt-2">Approved</label>
-                                                            }
-                                                            else if (item.ASdgm == "R")
-                                                            {
-                                                                <label class="badge badge-danger mt-2">Rejected</label>
-                                                            }
-                                                            else
-                                                            {
-                                                                <label class="badge badge-warning mt-2">Not Approved</label>
-                                                            }
+                                                            <label class="badge badge-warning mt-2">Not Approved</label>
                                                         }
-                                                    </td>
+                                                    }
+                                                </td>
                                                 <td>
                                                     Guard Room <br />
                                                     @if (item.ASguard == "A")
@@ -458,8 +457,3 @@
     </div>
 
 </div>
-
-
-
-
-

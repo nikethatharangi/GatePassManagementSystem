@@ -103,7 +103,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 {
                     new ApprovalChange { deptId = 10, FullName = "Mr. Sugath(MD)" },
                     new ApprovalChange { deptId = 6, FullName = "Mr. Dharmapriya" },
-                    new ApprovalChange { deptId = 10, FullName = "Mr. Thusitha" },
+                    new ApprovalChange { deptId = 7, FullName = "Mr. Thusitha" },
                     new ApprovalChange { deptId = 8, FullName = "Mr. Ruwan" },
                     new ApprovalChange { deptId = 15, FullName = "Mr. Rohan" },
                     new ApprovalChange { deptId = 26, FullName = "Mr. Damith" },
@@ -186,12 +186,12 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 message.To.Add("dharmapriya@westernpapersl.com");
                 message.Body = "Dear Mr.Dharmapriya," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
             }
-            //else if (ChngAprl == 7) // mr. thusitha
-            //{
-            //    //To list
-            //    message.To.Add("niketha@westernpapersl.com");
-            //    message.Body = "Dear Mr.Thusitha," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
-            //}
+            else if (ChngAprl == 7) // mr. thusitha
+            {
+                //To list
+                message.To.Add("ceo@westernpapersl.com");
+                message.Body = "Dear Mr.Thusitha," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
+            }
             else if (ChngAprl == 8) //mr. ruwan
             {
                 //To list

@@ -4,14 +4,16 @@ using GatePassManagementSystem.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GatePassManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240308012627_ChangeNonReturnToDb")]
+    partial class ChangeNonReturnToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,9 +78,6 @@ namespace GatePassManagementSystem.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NonGPId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("NonReturnItemDscId1")
@@ -540,9 +539,11 @@ namespace GatePassManagementSystem.Migrations
                         .WithMany("NonReturnItemDscsl")
                         .HasForeignKey("NonReturnItemDscId1");
 
-                    b.HasOne("GatePassManagementSystem.Model.NonReturnableGP", null)
+                    b.HasOne("GatePassManagementSystem.Model.NonReturnableGP", "NonReturnableGP")
                         .WithMany("NonReturnItemDsc")
                         .HasForeignKey("NonReturnableGPId");
+
+                    b.Navigation("NonReturnableGP");
                 });
 
             modelBuilder.Entity("GatePassManagementSystem.Model.NonReturnableGP", b =>

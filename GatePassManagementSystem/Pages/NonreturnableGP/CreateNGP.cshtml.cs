@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using GatePassManagementSystem.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -20,24 +21,43 @@ namespace GatePassManagementSystem.Pages.NonreturnableGP
             _db = db;
             cm = new Common();
             _notify = notyf;
+
+           
         }
 
         [BindProperty]
-        public Model.PersonalGP PersonalGP { get; set; }
-        public Department Department { get; set; }
+        public Model.NonReturnableGP NonReturnableGP { get; set; }
+        [BindProperty]
+        public Model.NonReturnItemDsc NonReturnItemDsc { get; set; }
 
-        public IEnumerable<Model.PersonalGP> PersonalGPs { get; set; }
+        public Department Department { get; set; }
+        public IEnumerable<Model.NonReturnableGP> NonReturnableGPs { get; set; }
+        public IEnumerable<Model.NonReturnItemDsc> NonReturnItemDscs { get; set; }
+
         public List<ApprovalChange> Aprvlist { get; set; }
+        public List<NonReturnItemDsc> NonReturnItemDscsl { get; set; }
         public string DeptHead { get; set; }
         public string DeptGm { get; set; }
         public string Fullname { get; set; }
         public string departName { get; set; }
-        public string EPFno { get; set; }
+        public int deptId { get; set; }
+        public int role { get; set; }
         public string GPId { get; set; }
+
 
         public void OnGet()
         {
             Aprvlist = GetDropdownDataApprovalchange();
+
+            Fullname = HttpContext.Session.GetString("FullName");
+            deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
+            role = Convert.ToInt32(HttpContext.Session.GetString("Roleid"));
+
+            DeptHead = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Hod).FirstOrDefault();
+            DeptGm = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();
+
+            departName = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.DeptName).FirstOrDefault();
+
             GetId();
         }
 
@@ -49,7 +69,7 @@ namespace GatePassManagementSystem.Pages.NonreturnableGP
                 {
                     new ApprovalChange { deptId = 10, FullName = "Mr. Sugath(MD)" },
                     new ApprovalChange { deptId = 6, FullName = "Mr. Dharmapriya" },
-                    new ApprovalChange { deptId = 10, FullName = "Mr. Thusitha" },
+                    new ApprovalChange { deptId = 7, FullName = "Mr. Thusitha" },
                     new ApprovalChange { deptId = 8, FullName = "Mr. Ruwan" },
                     new ApprovalChange { deptId = 15, FullName = "Mr. Rohan" },
                     new ApprovalChange { deptId = 26, FullName = "Mr. Damith" },
@@ -62,7 +82,7 @@ namespace GatePassManagementSystem.Pages.NonreturnableGP
             }
             catch (Exception ex)
             {
-                cm.Logwrite("Error in GatePassListMgtPendingModel GetDropdownDataApprovalchange method :" + ex.Message);
+                cm.Logwrite("Error in CreateNGPModel GetDropdownDataApprovalchange method :" + ex.Message);
                 return new List<ApprovalChange>();
             }
         }
@@ -72,7 +92,7 @@ namespace GatePassManagementSystem.Pages.NonreturnableGP
             try
             {
                 string ddd = AppContext.BaseDirectory;
-                var result = _db.PersonalGP.OrderBy(gp => gp.PersonalGPId).Select(gp => gp.PersonalGPId).LastOrDefault();
+                var result = _db.NonReturnableGP.OrderBy(gp => gp.NonReturnableGPId).Select(gp => gp.NonReturnableGPId).LastOrDefault();
                 if (result == null)
                 {
                     GPId = "NP000001";
@@ -86,7 +106,7 @@ namespace GatePassManagementSystem.Pages.NonreturnableGP
             }
             catch (Exception ex)
             {
-                cm.Logwrite("Error in CreatePGPModel GetId method :" + ex.Message);
+                cm.Logwrite("Error in CreateNGPModel GetId method :" + ex.Message);
             }
         }
 
@@ -128,9 +148,122 @@ namespace GatePassManagementSystem.Pages.NonreturnableGP
             }
             catch (Exception ex)
             {
-                cm.Logwrite("Error in CreatePGPModel GenerateNextId method :" + ex.Message);
+                cm.Logwrite("Error in CreateNGPModel GenerateNextId method :" + ex.Message);
                 return null;
             }
+        }
+
+        public async Task<IActionResult> OnPost(List<NonReturnItemDsc> items, string chkPamunuFrom, string chkMaduFrom, string chkSinthaFrom, string chkPamunuTo, string chkMaduTo, string chkSinthaTo)
+        {
+            try
+            {
+                deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
+                role = Convert.ToInt32(HttpContext.Session.GetString("Roleid"));
+                DateTime utcNow = DateTime.UtcNow;
+                TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
+                DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
+
+                //assigns year, month, day, hour, min, seconds
+                DateTime start = new DateTime(targetLocalTime.Year, targetLocalTime.Month, targetLocalTime.Day, 8, 1, 1);
+
+                DateTime end = new DateTime(targetLocalTime.Year, targetLocalTime.Month, targetLocalTime.Day, 17, 59, 59);
+
+                //if (targetLocalTime < start || targetLocalTime > end)
+                //{
+                //    _notify.Error("You Cannot Create GatePasses", 5);
+                //    Aprvlist = GetDropdownDataApprovalchange();
+                //    GetId();
+                //    return RedirectToPage("CreateNGP");
+                //}
+                if (chkPamunuFrom == "false" && chkMaduFrom == "false" && chkSinthaFrom == "false")
+                {
+                    _notify.Error("Please Select From Location", 5);
+                    GetId();
+                    Aprvlist = GetDropdownDataApprovalchange();
+                    return RedirectToPage("CreateNGP");
+                }
+                else if (chkPamunuTo == "false" && chkMaduTo == "false" && chkSinthaTo == "false")
+                {
+                    _notify.Error("Please Select To Location", 5);
+                    GetId();
+                    Aprvlist = GetDropdownDataApprovalchange();
+                    return RedirectToPage("CreateNGP");
+                }
+                else
+                {
+
+                    if (chkPamunuFrom == "true")
+                    {
+                        NonReturnableGP.FromLocation = 1;
+                    }
+                    else if (chkMaduFrom == "true")
+                    {
+                        NonReturnableGP.FromLocation = 2;
+                    }
+                    else if (chkSinthaFrom == "true")
+                    {
+                        NonReturnableGP.FromLocation = 3;
+                    }
+                    else
+                    {
+                        NonReturnableGP.FromLocation = 0;
+                    }
+
+
+                    if (chkPamunuTo == "true")
+                    {
+                        NonReturnableGP.ToLocation = 1;
+                    }
+                    else if (chkMaduTo == "true")
+                    {
+                        NonReturnableGP.ToLocation = 2;
+                    }
+                    else if (chkSinthaTo == "true")
+                    {
+                        NonReturnableGP.ToLocation = 3;
+                    }
+                    else
+                    {
+                        NonReturnableGP.ToLocation = 0;
+                    }
+
+
+                    NonReturnableGP.DepId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
+                    NonReturnableGP.CreateDate = targetLocalTime;
+                    NonReturnableGP.CreateUser = HttpContext.Session.GetString("FullName");
+                    NonReturnableGP.UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+
+
+                    //await _db.NonReturnItemDsc.AddAsync(NonReturnItemDsc);
+                    //await _db.SaveChangesAsync();
+
+
+                    foreach (var item in items)
+                    {
+                        item.NonGPId = NonReturnableGP.NonReturnableGPId;
+                        _db.NonReturnItemDsc.Add(item);
+                        Aprvlist = GetDropdownDataApprovalchange();
+                        deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
+                        role = Convert.ToInt32(HttpContext.Session.GetString("Roleid"));
+                    }
+
+                    _db.SaveChanges();
+                     await _db.NonReturnableGP.AddAsync(NonReturnableGP);
+                    await _db.SaveChangesAsync();
+
+                    _notify.Success("Non-Returnable Gate Pass Successfully Created", 3);
+                    //return new JsonResult("Data saved successfully");
+                    Aprvlist = GetDropdownDataApprovalchange();
+                    return RedirectToPage("CreateNGP");
+
+                }
+            }
+            catch (Exception ex)
+            {
+                cm.Logwrite($"Error in CreateNGPModel OnPost method : {ex.Message}\nInner Exception: {ex.InnerException?.Message}");
+                return null;
+            }
+            
         }
     }
 }

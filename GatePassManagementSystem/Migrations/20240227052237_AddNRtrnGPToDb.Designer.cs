@@ -4,14 +4,16 @@ using GatePassManagementSystem.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GatePassManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240227052237_AddNRtrnGPToDb")]
+    partial class AddNRtrnGPToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,38 +69,6 @@ namespace GatePassManagementSystem.Migrations
                     b.ToTable("Department");
                 });
 
-            modelBuilder.Entity("GatePassManagementSystem.Model.NonReturnItemDsc", b =>
-                {
-                    b.Property<int>("NonReturnItemDscId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("NonReturnItemDscId")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NonGPId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("NonReturnItemDscId1")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NonReturnableGPId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("NonReturnItemDscId");
-
-                    b.HasIndex("NonReturnItemDscId1");
-
-                    b.HasIndex("NonReturnableGPId");
-
-                    b.ToTable("NonReturnItemDsc");
-                });
-
             modelBuilder.Entity("GatePassManagementSystem.Model.NonReturnableGP", b =>
                 {
                     b.Property<string>("NonReturnableGPId")
@@ -152,9 +122,6 @@ namespace GatePassManagementSystem.Migrations
                     b.Property<int>("DepId")
                         .HasColumnType("int");
 
-                    b.Property<string>("DrHelname")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("FromLocation")
                         .HasColumnType("int");
 
@@ -168,15 +135,6 @@ namespace GatePassManagementSystem.Migrations
 
                     b.Property<DateTime>("InTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("MachineName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MachineNo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Other")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OutTime")
                         .HasColumnType("datetime2");
@@ -198,9 +156,6 @@ namespace GatePassManagementSystem.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
-
-                    b.Property<string>("VehicleNo")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("NonReturnableGPId");
 
@@ -534,17 +489,6 @@ namespace GatePassManagementSystem.Migrations
                     b.ToTable("Workers");
                 });
 
-            modelBuilder.Entity("GatePassManagementSystem.Model.NonReturnItemDsc", b =>
-                {
-                    b.HasOne("GatePassManagementSystem.Model.NonReturnItemDsc", null)
-                        .WithMany("NonReturnItemDscsl")
-                        .HasForeignKey("NonReturnItemDscId1");
-
-                    b.HasOne("GatePassManagementSystem.Model.NonReturnableGP", null)
-                        .WithMany("NonReturnItemDsc")
-                        .HasForeignKey("NonReturnableGPId");
-                });
-
             modelBuilder.Entity("GatePassManagementSystem.Model.NonReturnableGP", b =>
                 {
                     b.HasOne("GatePassManagementSystem.Model.Department", "Department")
@@ -641,16 +585,6 @@ namespace GatePassManagementSystem.Migrations
                     b.Navigation("User");
 
                     b.Navigation("WorkerGP");
-                });
-
-            modelBuilder.Entity("GatePassManagementSystem.Model.NonReturnItemDsc", b =>
-                {
-                    b.Navigation("NonReturnItemDscsl");
-                });
-
-            modelBuilder.Entity("GatePassManagementSystem.Model.NonReturnableGP", b =>
-                {
-                    b.Navigation("NonReturnItemDsc");
                 });
 
             modelBuilder.Entity("GatePassManagementSystem.Model.User", b =>

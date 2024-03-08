@@ -38,6 +38,12 @@ namespace GatePassManagementSystem.Model
         public bool ChkSinthawatta { get; set; }
         public bool ChkMadu { get; set; }
 
+        public string MachineName { get; set; }
+        public string MachineNo { get; set; }
+        public string VehicleNo { get; set; }
+        public string DrHelname { get; set; }
+        public string Other { get; set; }
+
         public DateTime OutTime { get; set; }
         public DateTime InTime { get; set; }
         public DateTime CreateDate { get; set; }

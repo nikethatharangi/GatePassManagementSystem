@@ -133,5 +133,10 @@ namespace GatePassManagementSystem.Pages.ReturnableGP
                 return null;
             }
         }
+
+        //public async Task<IActionResult> OnPost()
+        //{
+
+        //}
     }
 }

@@ -37,5 +37,6 @@ namespace GatePassManagementSystem.Model
 
         public string FullNameAndEPFNo => $"{FullName} - {EPFNumber}";
         public ICollection<PersonalGP> PersonalGP { get; set; }
+        public ICollection<NonReturnableGP> NonReturnableGP { get; set; }
     }
 }
