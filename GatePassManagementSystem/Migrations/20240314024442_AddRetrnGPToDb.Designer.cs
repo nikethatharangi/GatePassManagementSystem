@@ -4,14 +4,16 @@ using GatePassManagementSystem.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GatePassManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240314024442_AddRetrnGPToDb")]
+    partial class AddRetrnGPToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,9 +186,6 @@ namespace GatePassManagementSystem.Migrations
                     b.Property<string>("RejctReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Satisfied")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("Satisfy")
                         .HasColumnType("bit");
 
@@ -332,51 +331,10 @@ namespace GatePassManagementSystem.Migrations
                     b.ToTable("PersonalGP");
                 });
 
-            modelBuilder.Entity("GatePassManagementSystem.Model.ReturnItemDsc", b =>
-                {
-                    b.Property<int>("ReturnItemDscId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("InTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("OutTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReGPId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ReturnableGPId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("SinIntime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("SinOuttime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ReturnItemDscId");
-
-                    b.HasIndex("ReturnableGPId");
-
-                    b.ToTable("ReturnItemDsc");
-                });
-
             modelBuilder.Entity("GatePassManagementSystem.Model.ReturnableGP", b =>
                 {
                     b.Property<string>("ReturnableGPId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ASAccnt")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ASdgm")
                         .HasColumnType("nvarchar(max)");
@@ -449,9 +407,6 @@ namespace GatePassManagementSystem.Migrations
                     b.Property<DateTime>("OutTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("QuotationNo")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("RejctReason")
                         .HasColumnType("nvarchar(max)");
 
@@ -469,9 +424,6 @@ namespace GatePassManagementSystem.Migrations
 
                     b.Property<string>("ReturnPlace")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Satisfied")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("Satisfy")
                         .HasColumnType("bit");
@@ -760,13 +712,6 @@ namespace GatePassManagementSystem.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("GatePassManagementSystem.Model.ReturnItemDsc", b =>
-                {
-                    b.HasOne("GatePassManagementSystem.Model.ReturnableGP", null)
-                        .WithMany("ReturnItemDsc")
-                        .HasForeignKey("ReturnableGPId");
-                });
-
             modelBuilder.Entity("GatePassManagementSystem.Model.ReturnableGP", b =>
                 {
                     b.HasOne("GatePassManagementSystem.Model.Department", "Department")
@@ -856,11 +801,6 @@ namespace GatePassManagementSystem.Migrations
             modelBuilder.Entity("GatePassManagementSystem.Model.NonReturnableGP", b =>
                 {
                     b.Navigation("NonReturnItemDsc");
-                });
-
-            modelBuilder.Entity("GatePassManagementSystem.Model.ReturnableGP", b =>
-                {
-                    b.Navigation("ReturnItemDsc");
                 });
 
             modelBuilder.Entity("GatePassManagementSystem.Model.User", b =>

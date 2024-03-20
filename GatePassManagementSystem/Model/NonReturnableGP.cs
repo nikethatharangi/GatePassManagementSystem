@@ -32,10 +32,12 @@ namespace GatePassManagementSystem.Model
 
         public bool ChkifDeptHeadUn { get; set; }
         public bool Satisfy { get; set; }
+        public bool Satisfied { get; set; }
         public string Barcode { get; set; }
         public string HODRemarks { get; set; }
         public int FromLocation { get; set; }
         public int ToLocation { get; set; }
+        public int ToDept { get; set; }
 
         public string MachineName { get; set; }
         public string MachineNo { get; set; }

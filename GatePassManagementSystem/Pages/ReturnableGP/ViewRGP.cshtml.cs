@@ -21,27 +21,52 @@ namespace GatePassManagementSystem.Pages.ReturnableGP
             cm = new Common();
         }
 
-        public Model.PersonalGP PersonalGPB { get; set; }
-        public IEnumerable<Model.PersonalGP> PersonalGPs { get; set; }
+        public ApplicationDbContext Db => _db;
+
+        public IEnumerable<Model.ReturnableGP> ReturnableGPs;
+        public IEnumerable<ReturnItemDsc> ReturnItemDscs;
+
+        public Model.ReturnableGP ReturnableGP;
+        public Model.NonReturnItemDsc NonReturnItemDsc;
         public List<ApprovalChange> Aprvlist { get; set; }
 
+        public int deptId { get; set; }
+        public string Fullname { get; set; }
+        public string DeptHead { get; set; }
+        public string deptName { get; set; }
+        public string DeptGm { get; set; }
         public string Userrole { get; set; }
         public int Uid { get; set; }
 
         public async Task OnGetAsync()
         {
-            Aprvlist = GetDropdownDataApprovalchange();
-            Userrole = HttpContext.Session.GetString("Roleid");
-            Uid = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+            try
+            {
+                Userrole = HttpContext.Session.GetString("Roleid");
+                Uid = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
+                Aprvlist = GetDropdownDataApprovalchange();
+                Fullname = HttpContext.Session.GetString("FullName");
 
+                deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
+                deptName = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.DeptName).FirstOrDefault();
+                DeptHead = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Hod).FirstOrDefault();
+                DeptGm = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();
 
-            DateTime utcNow = DateTime.UtcNow;
-            TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
-            DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
+                TempData["hod"] = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Hod).FirstOrDefault();
+                TempData["gm"] = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();
 
-            PersonalGPs = await _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month).ToListAsync();
+                DateTime utcNow = DateTime.UtcNow;
+                TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
+                DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
+
+                ReturnableGPs = await _db.ReturnableGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month).ToListAsync();
+
+            }
+            catch (Exception ex)
+            {
+                cm.Logwrite("Error in ViewRGPModel OnGet method :" + ex.Message);
+            }
         }
-
 
         public List<ApprovalChange> GetDropdownDataApprovalchange()
         {
@@ -64,9 +89,32 @@ namespace GatePassManagementSystem.Pages.ReturnableGP
             }
             catch (Exception ex)
             {
-                cm.Logwrite("Error in GatePassListMgtPendingModel GetDropdownDataApprovalchange method :" + ex.Message);
+                cm.Logwrite("Error in CreateRGPModel GetDropdownDataApprovalchange method :" + ex.Message);
                 return new List<ApprovalChange>();
             }
+        }
+
+        public IActionResult OnPostApproveChange(int id)
+        {
+            try
+            {
+                Model.ReturnableGP updatedpgp = _db.ReturnableGP.FirstOrDefault(c => c.Id == id);
+                if (updatedpgp != null)
+                {
+                    updatedpgp.ChApprvlId = ReturnableGP.ChApprvlId;
+                    _db.SaveChanges();
+                }
+                else
+                {
+                    cm.Logwrite("Error in ViewRGPModel OnPostApproveChange method: if()");
+                }
+            }
+            catch (Exception ex)
+            {
+                cm.Logwrite("Error in ViewRGPModel OnPostApproveChange method: " + ex.Message);
+            }
+
+            return RedirectToPage("ViewRGP");
         }
     }
 }

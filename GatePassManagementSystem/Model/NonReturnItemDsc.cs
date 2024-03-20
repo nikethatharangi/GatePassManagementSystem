@@ -14,10 +14,6 @@ namespace GatePassManagementSystem.Model
         [Column("NonReturnItemDscId")]
         public int NonReturnItemDscId { get; set; }
 
-        //public string NonReturnableGPId { get; set; }
-        //[ForeignKey("NonReturnableGPId")]
-        //public NonReturnableGP NonReturnableGP { get; set; }
-
         public string Description { get; set; }
         public int Quantity { get; set; }
         public string NonGPId { get; set; }

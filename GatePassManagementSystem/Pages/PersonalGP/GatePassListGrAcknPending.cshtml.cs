@@ -49,7 +49,14 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 DeptHead = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Hod).FirstOrDefault();
 
 
-                DeptGm = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();
+                if (deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 19 || deptId == 21 || deptId == 22)
+                {
+                    DeptGm = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Dgm).FirstOrDefault();
+                }
+                else
+                {
+                    DeptGm = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();
+                }
 
                 TempData["hod"] = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Hod).FirstOrDefault();
                 TempData["gm"] = _db.Department.Where(gp => gp.Id == deptId).Select(gp => gp.Gm).FirstOrDefault();

@@ -1,6 +1,5 @@
 ﻿@page
-@model GatePassManagementSystem.Pages.NonreturnableGP.ViewNGPModel
-
+@model GatePassManagementSystem.Pages.ReturnableGP.ViewRecievedRGPModel
 
 @using Microsoft.AspNetCore.Http;
 @using GatePassManagementSystem.Model;
@@ -60,13 +59,13 @@
 
         <div class="col-lg-12 grid-margin stretch-card">
             <div class="card">
-                <form method="post" asp-page-handler="ApproveChange">
+                <form method="post" asp-page-handler="HODSatis">
                     <div class="card-body">
                         <h4 class="card-title">Requested Non-Returnable Gate Passes</h4>
                         <p class="card-description">
                             <code>Pending Gate Pass List</code>
                         </p>
-                        @if (Model.NonReturnableGPs.Count() > 0)
+                        @if (Model.ReturnableGPs.Count() > 0)
                         {
                             <div class="table-responsive">
                                 <table class="table table-hover table-bordered">
@@ -77,27 +76,21 @@
                                             <th class="text-white font-weight-bold">To Location</th>
                                             <th class="text-white font-weight-bold">Created User</th>
                                             <th class="text-white font-weight-bold">Created Date</th>
-                                            @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
-                                            {
-                                                <th class="text-white font-weight-bold">HOD Approval</th>
-                                            }
-                                            <th class="text-white font-weight-bold">Management Approval</th>
-                                            <th class="text-white font-weight-bold">Guard Room Acknowledgement</th>
-                                            <th class="text-white font-weight-bold text-center">Status</th>
-                                            <th class="text-white font-weight-bold text-center">Reject Reason</th>
+                                            <th class="text-white font-weight-bold">Completed</th>
+                                            <th class="text-white font-weight-bold text-center">Satisfy or Not / Remarks</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var item in Model.NonReturnableGPs)
+                                        @foreach (var item in Model.ReturnableGPs)
                                         {
-                                            int Aprl = Model.Db.NonReturnableGP.Where(gp => gp.NonReturnableGPId == item.NonReturnableGPId).Select(gp => gp.ChApprvlId).FirstOrDefault();
+                                            int Aprl = Model.Db.ReturnableGP.Where(gp => gp.ReturnableGPId == item.ReturnableGPId).Select(gp => gp.ChApprvlId).FirstOrDefault();
                                             string chgGm = Model.Db.Department.Where(gp => gp.Id == item.ChApprvlId).Select(gp => gp.Gm).FirstOrDefault();
                                             string DeptGm = Model.Db.Department.Where(gp => gp.Id == item.DepId).Select(gp => gp.Gm).FirstOrDefault();
 
-                                            var allItem = Model.Db.NonReturnItemDsc.Where(u => u.NonGPId == item.NonReturnableGPId).ToList();
+                                            var allItem = Model.Db.ReturnItemDsc.Where(u => u.ReturnableGPId == item.ReturnableGPId).ToList();
 
                                             <tr>
-                                                <td>@Html.DisplayFor(m => item.NonReturnableGPId)</td>
+                                                <td>@Html.DisplayFor(m => item.ReturnableGPId)</td>
 
                                                 @if (item.FromLocation == 1)
                                                 {
@@ -133,84 +126,6 @@
                                                     @Html.DisplayFor(m => item.CreateDate)
                                                 </td>
 
-                                                @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
-                                                {
-                                                    <td>
-                                                        <label>@TempData["hod"]</label> <br />
-
-                                                        @if (item.AShod == "A" && item.ChkifDeptHeadUn == false)
-                                                        {
-                                                            <label class="badge badge-success mt-2" style="width:150px;">Acknowledged</label>
-                                                        }
-                                                        else if (item.AShod == "A" && item.ChkifDeptHeadUn == true)
-                                                        {
-                                                            <label class="badge badge-secondary mt-2" style="width:150px;">Approval ByPass</label>
-                                                        }
-                                                        else if (item.AShod == "R")
-                                                        {
-                                                            <label class="badge badge-danger mt-2" style="width:120px;">Rejected</label>
-                                                        }
-                                                        else
-                                                        {
-                                                            <label class="badge badge-warning mt-2" style="width:150px;">Not acknowledged</label>
-                                                        }
-                                                    </td>
-                                                }
-                                                <td>
-                                                    @if (item.ChApprvlId == 0)
-                                                    {
-                                                        <label>@TempData["gm"]</label> <br />
-                                                    }
-                                                    else
-                                                    {
-                                                        <label>@chgGm</label> <br />
-                                                    }
-                                                    @if (deptId == 10)
-                                                    {
-                                                        @if (item.ASmd == "A")
-                                                        {
-                                                            <label class="badge badge-success mt-2" style="width:150px;">Approved</label>
-                                                        }
-                                                        else if (item.ASmd == "R")
-                                                        {
-                                                            <label class="badge badge-danger mt-2" style="width:120px;">Rejected</label>
-                                                        }
-                                                        else
-                                                        {
-                                                            <label class="badge badge-warning mt-2" style="width:150px;">Not Approved</label>
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        @if (item.ASdgm == "A")
-                                                        {
-                                                            <label class="badge badge-success mt-2" style="width:150px;">Approved</label>
-                                                        }
-                                                        else if (item.ASdgm == "R")
-                                                        {
-                                                            <label class="badge badge-danger mt-2" style="width:120px;">Rejected</label>
-                                                        }
-                                                        else
-                                                        {
-                                                            <label class="badge badge-warning mt-2" style="width:150px;">Not Approved</label>
-                                                        }
-                                                    }
-                                                </td>
-                                                <td>
-                                                    Guard Room <br />
-                                                    @if (item.ASguard == "A")
-                                                    {
-                                                        <label class="badge badge-success mt-2" style="width:150px;">Acknowledged</label>
-                                                    }
-                                                    else if (item.ASguard == "R")
-                                                    {
-                                                        <label class="badge badge-danger mt-2" style="width:120px;">Rejected</label>
-                                                    }
-                                                    else
-                                                    {
-                                                        <label class="badge badge-warning mt-2" style="width:150px;">Not Acknowledged</label>
-                                                    }
-                                                </td>
                                                 <td class="text-right">
                                                     @if (item.AShod == "A" && item.ASdgm == "A" && item.ASguard == "A" && item.Satisfy == false)
                                                     {
@@ -229,26 +144,47 @@
                                                         <label class="badge badge-warning mt-2">Pending</label>
                                                     }
                                                     @*<label class="badge badge-danger" style="width: 75px">Pending</label>*@
-                                                    <a data-toggle="modal" data-target="#exampleModal-@item.NonReturnableGPId">
+                                                    <a data-toggle="modal" data-target="#exampleModal-@item.ReturnableGPId">
                                                         <label class="badge badge-info" style="width: 75px; cursor: pointer">View</label>
                                                     </a>
                                                 </td>
-                                                <td>@Html.DisplayFor(m => item.RejctReason)</td>
                                                 <td>
-                                                    <select style="width:180px;" asp-for="NonReturnableGP.ChApprvlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="staffDropdown">
-                                                    </select>
-                                                    <div>
-                                                        <input type="hidden" name="Id" value="@item.Id" />
-                                                        <button type="submit" class="btn btn-primary" style="margin-top:5px;">Save</button>
+                                                    <div class="col-4">
+                                                        <div class="row">
+                                                            <div class="form-check" style="margin-left: 20px; white-space: nowrap; display: inline-block;">
+                                                                Check this if not Satisfied
+                                                                @Html.CheckBox("chkNotSatis", new { @class = "form-check" })
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="form-check" style="margin-left: 20px; white-space: nowrap; display: inline-block;">
+                                                                Satisfied
+                                                                @Html.CheckBox("chkSatis", new { @class = "form-check" })
+
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 row">
+                                                            <div class="form-group">
+                                                                <label for="exampleInputEmail3">HOD Remarks</label>
+                                                                <div class="form-check">
+                                                                    @Html.Editor("txtHODRemarks", new { @class = "form-check" })
+                                                                </div>
+
+                                                            </div>
+                                                            <input type="hidden" name="Id" value="@item.Id" />
+                                                            <button type="submit" class="btn btn-primary" style="margin-top:5px;">Save</button>
+                                                        </div>
                                                     </div>
+
                                                 </td>
                                             </tr>
 
-                                            <div class="modal fade" id="exampleModal-@item.NonReturnableGPId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="exampleModal-@item.ReturnableGPId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-lg" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Personal gate pass</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Non-Returnable gate pass</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
@@ -259,7 +195,7 @@
                                                                     <div class="card stretch-card mb-3">
                                                                         <div class="card-body d-flex flex-wrap justify-content-between">
                                                                             <div>
-                                                                                <h4 class="font-weight-semibold mb-1 text-black">@Html.DisplayFor(m => item.NonReturnableGPId)</h4>
+                                                                                <h4 class="font-weight-semibold mb-1 text-black">@Html.DisplayFor(m => item.ReturnableGPId)</h4>
                                                                                 <h6 class="text-muted">@Html.DisplayFor(m => item.CreateDate)</h6>
                                                                             </div>
                                                                             @*<label class="badge badge-danger text-align:right" style="width: 250px; text-wrap: balance">Guard room acknowledgement pending</label>*@
@@ -359,20 +295,21 @@
                                                                                     </div>
                                                                                 </div>
                                                                                 @*<div class="form-group">
-                                                                                    <label for="exampleInputUsername1">Machine No. </label>
-                                                                                    @Html.EditorFor(m => item.MachineNo, new { @class = "form-control" })
+                                                                                        <label for="exampleInputUsername1">Machine No. </label>
+                                                                                        @Html.EditorFor(m => item.MachineNo, new { @class = "form-control" })
 
+                                                                                    </div>
+
+                                                                                    <div class="form-group">
+                                                                                        <label for="exampleInputUsername1">Machine Name</label>
+                                                                                        @Html.EditorFor(m => item.MachineName, new { @class = "form-control" })
+
+                                                                                    </div>*@
+                                                                                <div class="form-group">
+                                                                                    <label for="exampleInputUsername1">Remarks</label>
+                                                                                    <textarea class="form-control" id="exampleTextarea1" rows="4" readonly="readonly">@Html.DisplayFor(m => item.Remarks)</textarea>
                                                                                 </div>
 
-                                                                                <div class="form-group">
-                                                                                    <label for="exampleInputUsername1">Machine Name</label>
-                                                                                    @Html.EditorFor(m => item.MachineName, new { @class = "form-control" })
-
-                                                                                </div>*@
-                                                                                <div class="form-group">
-                                                                                    <label for="exampleInputUsername1">Other</label>
-                                                                                    <textarea class="form-control" id="exampleTextarea1" rows="4" readonly="readonly">@Html.DisplayFor(m => item.Other)</textarea>
-                                                                                </div>
                                                                             </form>
                                                                         </div>
                                                                     </div>
@@ -445,31 +382,23 @@
                                                                         <div class="card-body">
                                                                             <div class="forms-sample">
                                                                                 <div class="form-group" style="margin-bottom:0px!important;margin-left:20px;">
-
-
                                                                                     <div class="form-group">
                                                                                         <label for="exampleInputUsername1">Vehicle No.: @Html.DisplayFor(m => item.VehicleNo)</label>
-
                                                                                     </div>
 
                                                                                     <div class="form-group">
                                                                                         <label for="exampleInputUsername1">Driver/Helper Name : @Html.DisplayFor(m => item.DrHelname)</label>
-
+                                                                                    </div>
+                                                                                    <div class="form-group">
+                                                                                        <label for="exampleInputUsername1">Repair Name : @Html.DisplayFor(m => item.RepairName)</label>
                                                                                     </div>
 
                                                                                     <div class="form-group">
-                                                                                        <label for="exampleInputUsername1">Machine No. : @Html.DisplayFor(m => item.MachineNo)</label>
-
+                                                                                        <label for="exampleInputUsername1">Reparir Contact No. : @Html.DisplayFor(m => item.RepairContNo)</label>
                                                                                     </div>
-
-                                                                                    <div class="form-group">
-                                                                                        <label for="exampleInputUsername1">Machine Name : @Html.DisplayFor(m => item.MachineName)</label>
-
-                                                                                    </div>
-
 
                                                                                     <div class="row">
-                                                                                        <h4 for="exampleInputUsername1">Item Details</h4>
+                                                                                        <h5 for="exampleInputUsername1">Item Details</h5>
 
                                                                                     </div>
                                                                                     <div>
@@ -477,10 +406,10 @@
                                                                                         {
                                                                                             <div class="row">
                                                                                                 @*<div class="col-4">
-                        <div class="form-control row">
-                            <label for="exampleInputUsername1"><b>ID</b></label>
-                        </div>
-                    </div>*@
+                                                                                                        <div class="form-control row">
+                                                                                                            <label for="exampleInputUsername1"><b>ID</b></label>
+                                                                                                        </div>
+                                                                                                    </div>*@
                                                                                                 <div class="col-6">
                                                                                                     <div class="form-control row">
                                                                                                         <label for="exampleInputUsername1"><b>Item Description</b></label>
@@ -497,10 +426,10 @@
 
                                                                                                 <div class="row">
                                                                                                     @*<div class="col-4">
-                            <div class="form-control row">
-                                @Html.DisplayFor(m => itemDesc.NonReturnItemDscId, new { @class = "form-control" })
-                            </div>
-                        </div>*@
+                                                                                                            <div class="form-control row">
+                                                                                                                @Html.DisplayFor(m => itemDesc.NonReturnItemDscId, new { @class = "form-control" })
+                                                                                                            </div>
+                                                                                                        </div>*@
                                                                                                     <div class="col-6">
                                                                                                         <div class="form-control row">
                                                                                                             @Html.DisplayFor(m => itemDesc.Description, new { @class = "form-control" })
@@ -519,48 +448,53 @@
                                                                                             <p>No records to Show.</p>
                                                                                         }
                                                                                     </div>
-                                                                                    @if (item.Satisfy == true)
-                                                                                    {
-                                                                                        <div class="card">
-                                                                                            <div class="card-body">
-                                                                                                <div class="forms-sample">
-                                                                                                    <div class="form-group" style="margin-bottom:0px!important;margin-left:20px;">
-                                                                                                        <div class="row">
-                                                                                                            <h5 for="exampleInputUsername1" style="margin-top:20px;">HOD Remarks</h5>
-                                                                                                        </div>
 
-                                                                                                        <div class="form-group" style="margin-top:10px;">
-                                                                                                            @if (item.Satisfy == true)
-                                                                                                            {
-                                                                                                                <label for="exampleInputUsername1">Stisfy: Not Satisfied</label>
-                                                                                                            }
-                                                                                                            else
-                                                                                                            {
-                                                                                                                <label for="exampleInputUsername1">Stisfy: Satisfied</label>
-                                                                                                            }
-                                                                                                        </div>
 
-                                                                                                        <div class="form-group">
-                                                                                                            <label for="exampleInputUsername1">Remarks : @Html.DisplayFor(m => item.HODRemarks)</label>
-
-                                                                                                        </div>
-                                                                                                    </div>
-
-                                                                                                </div>
-
-                                                                                            </div>
-
-                                                                                        </div>
-                                                                                    }
-                                                                                    else
-                                                                                    {
-
-                                                                                    }
                                                                                 </div>
+
                                                                             </div>
+
                                                                         </div>
 
                                                                     </div>
+                                                                    @if (item.Satisfy == true)
+                                                                    {
+                                                                        <div class="card">
+                                                                            <div class="card-body">
+                                                                                <div class="forms-sample">
+                                                                                    <div class="form-group" style="margin-bottom:0px!important;margin-left:20px;">
+                                                                                        <div class="row">
+                                                                                            <h5 for="exampleInputUsername1" style="margin-top:20px;">HOD Remarks</h5>
+                                                                                        </div>
+
+                                                                                        <div class="form-group" style="margin-top:10px;">
+                                                                                            @if (item.Satisfy == true)
+                                                                                            {
+                                                                                                <label for="exampleInputUsername1">Stisfy: Not Satisfied</label>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <label for="exampleInputUsername1">Stisfy: Satisfied</label>
+                                                                                            }
+                                                                                        </div>
+
+                                                                                        <div class="form-group">
+                                                                                            <label for="exampleInputUsername1">Remarks : @Html.DisplayFor(m => item.HODRemarks)</label>
+
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                        </div>
+                                                                    }
+                                                                    else
+                                                                    {
+
+                                                                    }
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -591,3 +525,5 @@
     </div>
 
 </div>
+
+

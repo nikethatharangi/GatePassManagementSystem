@@ -352,7 +352,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                     message.To.Add("managerr&d@westernpapersl.com");
                     message.Body = "Dear Mr.Kumudu," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
                 }
-                else if (deptId == 15 || deptId == 20) // mr. Rohan
+                else if (deptId == 20) // mr. Rohan
                 {
                     //To list
                     message.To.Add("chaminda@wesrernpapersl.com");
@@ -384,12 +384,12 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 message.To.Add("ruwan@westernpapersl.com");
                 message.Body = "Dear Mr.Ruwan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
             }
-            else if (ChngAprl == 15) //mr. rohan
-            {
-                //To list
-                message.To.Add("chaminda@wesrernpapersl.com");
-                message.Body = "Dear Mr.Rohan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
-            }
+            //else if (ChngAprl == 15) //mr. rohan
+            //{
+            //    //To list
+            //    message.To.Add("chaminda@wesrernpapersl.com");
+            //    message.Body = "Dear Mr.Rohan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + PersonalGP.CreateUser + "</b>" + "<br />" + "Thank you.";
+            //}
             else if (ChngAprl == 26) //mr.damith
             {
                 //To list
@@ -574,7 +574,7 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                         PersonalGP.CreateUser = HttpContext.Session.GetString("FullName");
                         PersonalGP.UserId = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
 
-                        if (role == 5 || role == 4 || ((chkifDeptHeadUn == "true" && role == 6) || ((deptId == 10 || deptId == 8 || deptId == 9 || deptId == 15 || deptId == 20 || deptId == 19 || deptId == 22 || deptId == 12) && role == 6)))
+                        if (role == 5 || role == 4 || ((chkifDeptHeadUn == "true" && role == 6) || ((deptId == 10 || deptId == 8 || deptId == 9 || deptId == 20 || deptId == 19 || deptId == 22 || deptId == 12) && role == 6)))
                         {
                             PersonalGP.AShod = "A";
                             if (chkifDeptHeadUn == "true")

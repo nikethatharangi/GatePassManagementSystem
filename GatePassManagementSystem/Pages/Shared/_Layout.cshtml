@@ -118,8 +118,15 @@
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-page="/PersonalGP/ViewPendingGP">Pending Approval</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/ReturnableGP/ViewPendingRGP">Pending Approval - <br />Returnable</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/ViewPendingNGP">Pending Approval - <br />NonReturnable</a>
+                                </li>
                             </ul>
                         </div>
+
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#ui-basic-3" aria-expanded="false" aria-controls="ui-basic">
@@ -163,37 +170,33 @@
                                     <a class="nav-link" asp-area="" asp-page="/PersonalGP/CreateWGP">Workers Gate Pass</a>
                                 </li>
 
-                                @*<li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/ReturnableGP/CreateRGP">Returnable Gate Pass</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/CreateNGP">Non-Returnable Gate Pass</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-page="/DeliveryGP/CreateDGP">Delivery Gate Pass</a>
-                        </li>*@
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#ui-basic-2" aria-expanded="false" aria-controls="ui-basic">
-                            <i class="mdi mdi-package-variant-closed fa-lg"></i>
-                            <span class="menu-title" style="margin-left: 10px;">Request Good Gate Pass</span>
-                            <i class="menu-arrow"></i>
-                        </a>
-                        <div class="collapse" id="ui-basic-2">
-                            <ul class="nav flex-column sub-menu">
-
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-page="/ReturnableGP/CreateRGP">Returnable Gate Pass</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/CreateNGP">Non-Returnable Gate Pass</a>
-                                </li>
 
                             </ul>
                         </div>
                     </li>
+                    @if (dept == "IT")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="collapse" href="#ui-basic-2" aria-expanded="false" aria-controls="ui-basic">
+                                <i class="mdi mdi-package-variant-closed fa-lg"></i>
+                                <span class="menu-title" style="margin-left: 10px;">Request Good Gate Pass</span>
+                                <i class="menu-arrow"></i>
+                            </a>
+                            <div class="collapse" id="ui-basic-2">
+                                <ul class="nav flex-column sub-menu">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-page="/ReturnableGP/CreateRGP">Returnable Gate Pass</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/CreateNGP">Non-Returnable Gate Pass</a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </li>
+                    }
+
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#ui-basic-1" aria-expanded="false" aria-controls="ui-basic">
                             <i class="mdi mdi-forum fa-lg"></i>
@@ -207,34 +210,62 @@
                                     <li class="nav-item">
                                         <a class="nav-link" asp-area="" asp-page="/PersonalGP/ViewPendingGP">Pending Approval</a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-page="/ReturnableGP/ViewPendingRGP">Pending Approval - Returnable</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/ViewPendingNGP">Pending Approval - NonRetrunable</a>
-                                    </li>
+                                    @if (dept == "IT")
+                                    {
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-page="/ReturnableGP/ViewPendingRGP">Pending Approval - <br />Returnable</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/ViewPendingNGP">Pending Approval - <br />NonReturnable</a>
+                                        </li>
+
+                                    }
+
                                 }
                                 <li class="nav-item">
                                     <a class="nav-link" asp-area="" asp-page="/PersonalGP/ViewGP">Requested Gate Passes</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-page="/ReturnableGP/ViewRGP">Requested Gate Passes - <br />Returnable</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/ViewNGP">Requested Gate Passes - <br />NonReturnable</a>
-                                </li>
+                                @if (dept == "IT")
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-page="/ReturnableGP/ViewRGP">Requested Gate Passes - <br />Returnable</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/ViewNGP">Requested Gate Passes - <br />NonReturnable</a>
+                                    </li>
+                                }
+
                             </ul>
                         </div>
                     </li>
+
                     @if (dept == "IT")
                     {
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="collapse" href="#ui-basic-2" aria-expanded="false" aria-controls="ui-basic">
+                            <a class="nav-link" data-toggle="collapse" href="#ui-basic34" aria-expanded="false" aria-controls="ui-basic34">
+                                <i class="mdi mdi-login-variant fa-lg"></i>
+                                <span class="menu-title" style="margin-left: 10px;">Recieved Good Gate Pass</span>
+                                <i class="menu-arrow"></i>
+                            </a>
+                            <div class="collapse" id="ui-basic34">
+                                <ul class="nav flex-column sub-menu">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-page="/NonreturnableGP/ViewRecievedNGP">Recived NonReturnable <br /> Good Gate Pass</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-area="" asp-page="/ReturnableGP/ViewRecievedRGP">Recived Returnable <br /> Good Gate Pass</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="collapse" href="#ui-basic-8" aria-expanded="false" aria-controls="ui-basic">
                                 <i class="mdi mdi-content-save-all fa-lg"></i>
                                 <span class="menu-title" style="margin-left: 10px;">Create</span>
                                 <i class="menu-arrow"></i>
                             </a>
-                            <div class="collapse" id="ui-basic-2">
+                            <div class="collapse" id="ui-basic-8">
                                 <ul class="nav flex-column sub-menu">
                                     <li class="nav-item">
                                         <a class="nav-link" asp-area="" asp-page="/CreateDetails/CreateUser">Create User</a>

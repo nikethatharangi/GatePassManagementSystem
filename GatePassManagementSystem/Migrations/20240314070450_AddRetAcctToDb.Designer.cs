@@ -4,14 +4,16 @@ using GatePassManagementSystem.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GatePassManagementSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240314070450_AddRetAcctToDb")]
+    partial class AddRetAcctToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -184,9 +186,6 @@ namespace GatePassManagementSystem.Migrations
                     b.Property<string>("RejctReason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Satisfied")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("Satisfy")
                         .HasColumnType("bit");
 
@@ -342,26 +341,11 @@ namespace GatePassManagementSystem.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("InTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("OutTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("ReGPId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("ReturnableGPId")
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("SinIntime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("SinOuttime")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("ReturnItemDscId");
 
@@ -469,9 +453,6 @@ namespace GatePassManagementSystem.Migrations
 
                     b.Property<string>("ReturnPlace")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Satisfied")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("Satisfy")
                         .HasColumnType("bit");

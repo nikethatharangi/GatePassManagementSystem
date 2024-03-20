@@ -127,21 +127,21 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 else if (Uid == 90) // Mr. Rohan
                 {
                     var query1 = await _db.PersonalGP // transport, QMS dept
-                        .Where(gp => gp.ASdgm == null && ((gp.DepId == 15 || gp.DepId == 20 && gp.ChApprvlId == 0) || (gp.ChApprvlId == 15 || gp.DepId == 20 && gp.AShod == "A")) && gp.UserId != Uid && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date)
+                        .Where(gp => gp.ASdgm == null && (( gp.DepId == 20 && gp.ChApprvlId == 0) || ( gp.DepId == 20 && gp.AShod == "A")) && gp.UserId != Uid && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date)
                         .ToListAsync();
 
                     var query2 = await _db.PersonalGP  // stores dept
-                        .Where(gp => gp.ASdgm == null && (gp.DepId == 23  && gp.ChApprvlId == 0) && gp.AShod == "A" && gp.UserId != Uid && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date)
+                        .Where(gp => gp.ASdgm == null && ((gp.DepId == 15 || gp.DepId == 23)  && gp.ChApprvlId == 0) && gp.AShod == "A" && gp.UserId != Uid && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date)
                         .ToListAsync();
 
                     PersonalGPs = query1.Union(query2).ToList();
 
                     var query3 = await _db.WorkerGP // transport, QMS dept workers
-                        .Where(gp => gp.ASdgm == null && gp.ChkifDeptHeadUn == true && ((gp.DepId == 15 || gp.DepId == 20 && gp.ChAprlId == 0) || (gp.ChAprlId == 15 || gp.DepId == 20 && gp.AShod == "A")) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date)
+                        .Where(gp => gp.ASdgm == null && gp.ChkifDeptHeadUn == true && (( gp.DepId == 20 && gp.ChAprlId == 0) || (gp.ChAprlId == 15 || gp.DepId == 20 && gp.AShod == "A")) && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date)
                         .ToListAsync();
 
                     var query4 = await _db.WorkerGP  // stores dept workers
-                        .Where(gp => gp.ASdgm == null && gp.ChkifDeptHeadUn == true && (gp.DepId == 23 || gp.ChAprlId == 15 && gp.ChAprlId == 0) && gp.AShod == "A" && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date)
+                        .Where(gp => gp.ASdgm == null && gp.ChkifDeptHeadUn == true && (( gp.DepId == 23 || gp.ChAprlId == 15) && gp.ChAprlId == 0) && gp.AShod == "A" && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date)
                         .ToListAsync();
 
                     WorkerGPs = query3.Union(query4).ToList();
@@ -265,12 +265,12 @@ namespace GatePassManagementSystem.Pages.PersonalGP
                 message.To.Add("ruwan@westernpapersl.com");
                 message.Body = "Dear Mr.Ruwan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
             }
-            else if (ChngAprl == 15) //mr. rohan
-            {
-                //To list
-                message.To.Add("chaminda@wesrernpapersl.com");
-                message.Body = "Dear Mr.Rohan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
-            }
+            //else if (ChngAprl == 15) //mr. rohan
+            //{
+            //    //To list
+            //    message.To.Add("chaminda@wesrernpapersl.com");
+            //    message.Body = "Dear Mr.Rohan," + "<br />You recieved a new Gate Pass Request" + " from :" + "<b>" + Createuser + "</b>" + " Gate Pass No. :" + "<b>" + GPNumber + "</b>" + "<br />" + "Thank you.";
+            //}
             else if (ChngAprl == 26) //mr.damith
             {
                 //To list

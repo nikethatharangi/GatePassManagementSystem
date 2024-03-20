@@ -167,7 +167,7 @@
                                 </div>
                             </div>
                         </div>
-                        <h4 class="card-title">Request a Returnable Gate Pass</h4>
+                        <h4 class="card-title">Request a Non-Returnable Gate Pass</h4>
                         <div class="forms-sample col-12">
                             <div class="row">
                                 <div class="col-6">
@@ -181,6 +181,11 @@
                                             <label for="exampleSelectGender">Department</label>
                                             @*@Html.DropDownListFor(model => model.PersonalGP.DepId, new SelectList(Model.deplist, "Id", "DeptName"), new { @class = "form-control" })*@
                                             <input type="text" class="form-control" id="txtdeptname" asp-for="departName" readonly />
+                                        </div>
+                                        <div class="form-group">
+                                            <label label for="exampleInputEmail3">To Department</label>
+                                            <select asp-for="NonReturnableGP.ToDept" asp-items="@(new SelectList(Model.DeptList, "Id", "DeptName"))" class="form-control" id="workerDropdown">
+                                            </select>
                                         </div>
                                         <label for="exampleInputName1">From</label>
                                         <div class="row">
@@ -233,6 +238,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    
                                 </div>
                                 <div class="col-6">
                                     <div class="form-group">
@@ -301,13 +307,15 @@
                             <div class="row">
                                 <div class="col-4">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" value="" id="getGPId2" name="subject" hidden/>
+                                        <input type="text" class="form-control" value="" id="getGPId2" name="subject" hidden />
+                                        <label for="exampleInputPassword4">Description</label>
                                         <input type="text" class="form-control" value="" name="subject" id="txtsubject" />
                                     </div>
                                 </div>
                                 <div class="col-1"></div>
                                 <div class="col-4">
                                     <div class="form-group">
+                                        <label for="exampleInputPassword4">Quantity</label>
                                         <input type="text" class="form-control" value="" name="marks" id="txtmarks" />
                                     </div>
                                 </div>
@@ -328,7 +336,6 @@
                                                
                                             </tbody>
                                         </table>
-
                                     </div>
 
                                     <script>

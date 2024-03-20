@@ -817,7 +817,7 @@ namespace GatePassManagementSystem.Pages
                             ViewData["Pecentage"] = percentage;
                         }
                         
-                        if(deptId == 8 || deptId == 9 || deptId == 15 || deptId == 20 || deptId == 19 || deptId == 22 || deptId == 19 || deptId == 12)
+                        if(deptId == 8 || deptId == 9 || deptId == 20 || deptId == 19 || deptId == 22 || deptId == 19 || deptId == 12)
                         {
                             ViewData["DgmAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();
                             ViewData["GuardAknl"] = _db.PersonalGP.Where(gp => gp.UserId == Uid && gp.ASdgm == "A" && gp.ASguard == null && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month && gp.CreateDate.Date == targetLocalTime.Date).Count();

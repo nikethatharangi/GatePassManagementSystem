@@ -21,5 +21,6 @@ namespace GatePassManagementSystem.Model
         public ICollection<WorkerGP> WorkerGP { get; set; }
         public ICollection<User> User { get; set; }
         public ICollection<NonReturnableGP> NonReturnableGP { get; set; }
+        public ICollection<ReturnableGP> ReturnableGP { get; set; }
     }
 }

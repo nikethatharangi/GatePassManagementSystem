@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using GatePassManagementSystem.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,25 +11,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GatePassManagementSystem.Pages.NonreturnableGP
 {
-    public class ViewNGPModel : PageModel
+    public class ViewRecievedNGPModel : PageModel
     {
         public readonly ApplicationDbContext _db;
+        private readonly INotyfService _notify;
         public readonly Common cm;
 
-        public ViewNGPModel(ApplicationDbContext db)
+        public ViewRecievedNGPModel(ApplicationDbContext db, INotyfService notyf)
         {
             _db = db;
             cm = new Common();
+            _notify = notyf;
         }
 
         public ApplicationDbContext Db => _db;
-
+        [BindProperty]
+        public Model.NonReturnableGP NonReturnableGPB { get; set; }
         public IEnumerable<Model.NonReturnableGP> NonReturnableGPs;
-        public IEnumerable<NonReturnItemDsc> NonReturnItemDscs; 
+        public IEnumerable<NonReturnItemDsc> NonReturnItemDscs;
 
         public Model.NonReturnableGP NonReturnableGP;
-        public Model.NonReturnItemDsc NonReturnItemDsc; 
-        public List<ApprovalChange> Aprvlist { get; set; }
+        public Model.NonReturnItemDsc NonReturnItemDsc;
 
         public int deptId { get; set; }
         public string Fullname { get; set; }
@@ -44,7 +47,7 @@ namespace GatePassManagementSystem.Pages.NonreturnableGP
             {
                 Userrole = HttpContext.Session.GetString("Roleid");
                 Uid = Convert.ToInt32(HttpContext.Session.GetString("UserId"));
-                Aprvlist = GetDropdownDataApprovalchange();
+     
                 Fullname = HttpContext.Session.GetString("FullName");
 
                 deptId = Convert.ToInt32(HttpContext.Session.GetString("DepartId"));
@@ -59,62 +62,58 @@ namespace GatePassManagementSystem.Pages.NonreturnableGP
                 TimeZoneInfo targetTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Sri Lanka Standard Time");
                 DateTime targetLocalTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, targetTimeZone);
 
-                NonReturnableGPs = await _db.NonReturnableGP.Where(gp => gp.UserId == Uid && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.Month).ToListAsync();
-                
+                NonReturnableGPs = await _db.NonReturnableGP.Where(gp => gp.ToDept == deptId && gp.CreateDate.Year == targetLocalTime.Year && gp.CreateDate.Month == targetLocalTime.AddMonths(3).Month && (gp.Satisfied == true || gp.Satisfy == true)).ToListAsync();
+
             }
             catch (Exception ex)
             {
-                cm.Logwrite("Error in ViewNGPModel OnGet method :" + ex.Message);
+                cm.Logwrite("Error in ViewRecievedNGPModel OnGet method :" + ex.Message);
             }
         }
 
-        public List<ApprovalChange> GetDropdownDataApprovalchange()
-        {
-            try
-            {
-                var dropdownDataAprCh = new List<ApprovalChange>
-                {
-                    new ApprovalChange { deptId = 10, FullName = "Mr. Sugath(MD)" },
-                    new ApprovalChange { deptId = 6, FullName = "Mr. Dharmapriya" },
-                    new ApprovalChange { deptId = 7, FullName = "Mr. Thusitha" },
-                    new ApprovalChange { deptId = 8, FullName = "Mr. Ruwan" },
-                    new ApprovalChange { deptId = 15, FullName = "Mr. Rohan" },
-                    new ApprovalChange { deptId = 26, FullName = "Mr. Damith" },
 
-                };
-
-                dropdownDataAprCh.Insert(0, new ApprovalChange { deptId = 0, FullName = "Select" });
-
-                return dropdownDataAprCh;
-            }
-            catch (Exception ex)
-            {
-                cm.Logwrite("Error in CreateNGPModel GetDropdownDataApprovalchange method :" + ex.Message);
-                return new List<ApprovalChange>();
-            }
-        }
-
-        public IActionResult OnPostApproveChange(int id)
+        public IActionResult OnPostHODSatis(int id,string chkNotSatis, string txtHODRemarks, string chkSatis)
         {
             try
             {
                 Model.NonReturnableGP updatedpgp = _db.NonReturnableGP.FirstOrDefault(c => c.Id == id);
                 if (updatedpgp != null)
                 {
-                    updatedpgp.ChApprvlId = NonReturnableGP.ChApprvlId;
+                    if(chkNotSatis == "true")
+                    {
+                        updatedpgp.Satisfy = true;
+                    }
+                    else
+                    {
+                        updatedpgp.Satisfy = false;
+                    }
+
+                    if(chkSatis == "true")
+                    {
+                        updatedpgp.Satisfied = true;
+                    }
+                    else
+                    {
+                        updatedpgp.Satisfied = false;
+                    }
+
+
+                    updatedpgp.HODRemarks = txtHODRemarks;
                     _db.SaveChanges();
+                    _notify.Success("Updated!!", 3);
+                    return RedirectToPage("ViewRecievedNGP");
                 }
                 else
                 {
-                    cm.Logwrite("Error in ViewNGPModel OnPostApproveChange method: if()");
+                    cm.Logwrite("Error in OnPostApproveChange method: if()");
                 }
             }
             catch (Exception ex)
             {
-                cm.Logwrite("Error in ViewNGPModel OnPostApproveChange method: " + ex.Message);
+                cm.Logwrite("Error in OnPostApproveChange method in ViewRecievedNGPModel: " + ex.Message);
             }
 
-            return RedirectToPage("ViewNGP");
+            return RedirectToPage("ViewRecievedNGP");
         }
     }
 }

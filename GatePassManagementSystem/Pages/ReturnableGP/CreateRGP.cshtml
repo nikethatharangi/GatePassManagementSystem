@@ -84,14 +84,14 @@
     <div class="row">
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
-                <form method="post">
+                <form method="post" id="yourFormId">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-3 col-sm-6">
                                 <div class="form-group">
                                     <label>Gate Pass No.</label>
-                                    <input type="text" asp-for="PersonalGP.PersonalGPId" id="getGPId" class="form-control" readonly />
-                                    <input type="hidden" asp-for="GPId" name="GPId" value="RG002" id="GPId" class="form-control" />
+                                    <input type="text" asp-for="ReturnableGP.ReturnableGPId" id="getGPId" class="form-control" readonly />
+                                    <input type="hidden" asp-for="GPId" name="GPId"  id="GPId" class="form-control" />
                                 </div>
                             </div>
                             <div class="col-lg-3 col-sm-3"></div>
@@ -176,26 +176,31 @@
                                             @*@Html.DropDownListFor(model => model.PersonalGP.DepId, new SelectList(Model.deplist, "Id", "DeptName"), new { @class = "form-control" })*@
                                             <input type="text" class="form-control" id="txtdeptname" asp-for="departName" readonly />
                                         </div>
+                                        <div class="form-group">
+                                            <label label for="exampleInputEmail3">To Department</label>
+                                            <select asp-for="ReturnableGP.ToDept" asp-items="@(new SelectList(Model.DeptList, "Id", "DeptName"))" class="form-control" id="workerDropdown">
+                                            </select>
+                                        </div>
                                         <label for="exampleInputName1">From</label>
                                         <div class="row">
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Pamunugama
+                                                        @Html.CheckBox("chkPamunuFrom", new { @class = "form-check-input" }) Pamunugama
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Madupitiya
+                                                        @Html.CheckBox("chkMaduFrom", new { @class = "form-check-input" }) Madupitiya
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Sinthawatta
+                                                        @Html.CheckBox("chkSinthaFrom", new { @class = "form-check-input" }) Sinthawatta
                                                     </label>
                                                 </div>
                                             </div>
@@ -207,28 +212,28 @@
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Pamunugama
+                                                        @Html.CheckBox("chkPamunuTo", new { @class = "form-check-input" }) Pamunugama
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Madupitiya
+                                                        @Html.CheckBox("chkMaduTo", new { @class = "form-check-input" }) Madupitiya
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Sinthawatta
+                                                        @Html.CheckBox("chkSinthaTo", new { @class = "form-check-input" }) Sinthawatta
                                                     </label>
                                                 </div>
                                             </div>
                                             <div class="col-sm-4">
                                                 <div class="form-check">
                                                     <label class="form-check-label">
-                                                        <input type="checkbox" class="form-check-input" /> Other
+                                                        @Html.CheckBox("chkOtherTo", new { @class = "form-check-input" }) Other Location
                                                     </label>
                                                 </div>
                                             </div>
@@ -236,13 +241,13 @@
                                     </div>
 
                                     @*<div class="form-group">
-                                            <label for="exampleInputEmail3">Other Location Name</label>
-                                            <div class="form-check">
-                                                <label class="form-check-label">
-                                                    <input type="checkbox" class="form-check-input" /> Pamunugama
-                                                </label>
-                                            </div>
-                                        </div>*@
+                    <label for="exampleInputEmail3">Other Location Name</label>
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <input type="checkbox" class="form-check-input" /> Pamunugama
+                        </label>
+                    </div>
+                </div>*@
 
                                 </div>
                                 <div class="col-6">
@@ -265,7 +270,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label label for="exampleInputEmail3">Change management approval if not available</label>
-                                        <select asp-for="PersonalGP.ChApprvlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="workerDropdown">
+                                        <select asp-for="ReturnableGP.ChApprvlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="workerDropdown">
                                         </select>
                                     </div>
 
@@ -275,24 +280,24 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="exampleInputEmail3">Other Location Name</label>
-                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                        <input type="text" asp-for="ReturnableGP.OtherLocation" class="form-control" id="exampleInputVehicle" />
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail3">Vehicle No.</label>
-                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                        <input type="text" asp-for="ReturnableGP.VehicleNo" class="form-control" id="exampleInputVehicle" />
                                     </div>
 
                                     <div class="form-group">
                                         <label for="exampleInputPassword4">Driver's/Helper's Name</label>
-                                        <input type="text" class="form-control" id="exampleInputRepairer" />
+                                        <input type="text" asp-for="ReturnableGP.DrHelname" class="form-control" id="exampleInputRepairer" />
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail3">Quotation No.</label>
-                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                        <input type="text" asp-for="ReturnableGP.QuotationNo" class="form-control" id="exampleInputVehicle" />
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleTextarea1">Remarks</label>
-                                        <textarea class="form-control"
+                                        <textarea class="form-control" asp-for="ReturnableGP.Remarks"
                                                   id="exampleTextarea1"
                                                   rows="4"></textarea>
                                     </div>
@@ -300,72 +305,134 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="exampleInputEmail3">Repair Name</label>
-                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                        <input type="text" asp-for="ReturnableGP.RepairName" class="form-control" id="exampleInputVehicle" />
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail3">Repair Contact No.</label>
-                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                        <input type="text" asp-for="ReturnableGP.RepairContNo" class="form-control" id="exampleInputVehicle" />
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail3">Return Date</label>
-                                        <input type="date" class="form-control" id="exampleInputVehicle" />
+                                        <input type="date" asp-for="ReturnableGP.ReturnDate" class="form-control" id="exampleInputVehicle" />
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail3">Return Place</label>
-                                        <input type="text" class="form-control" id="exampleInputVehicle" />
+                                        <input type="text" asp-for="ReturnableGP.ReturnPlace" class="form-control" id="exampleInputVehicle" />
                                     </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="exampleInputEmail3"><b>Item Details</b></label>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" value="" id="getGPId2" name="subject" hidden />
+                                        <label for="exampleInputPassword4">Description</label>
+                                        <input type="text" class="form-control" value="" name="subject" id="txtsubject" />
+                                    </div>
+                                </div>
+                                <div class="col-1"></div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword4">Quantity</label>
+                                        <input type="text" class="form-control" value="" name="marks" id="txtmarks" />
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="addRowChild"><input type="button" value="Add" name="marks" id="btnAddRecords" class="btn btn-success mr-2" /></div>
                                 </div>
                             </div>
                             <div class="row" style="height: 230px; overflow-y: scroll;">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id="my-table">
+                                    <table class="table table-bordered" style="width: 850px; margin-left: 17px;" id="tableStudentRecords">
                                         <thead>
                                             <tr class="bg-dark">
                                                 <th class="text-white font-weight-bold">Description</th>
                                                 <th class="text-white font-weight-bold">Quantity</th>
                                             </tr>
                                         </thead>
-
                                         <tbody>
-
-                                            <tr id="default-row">
-                                                <td contenteditable="true"></td>
-                                                <td contenteditable="true"></td>
-                                                <td style="border:none;">
-                                                    <div style="margin-left: 5px;">
-                                                        <input class="bg-danger del" type="button" value="-" />
-                                                    </div>
-                                                </td>
-                                            </tr>
-
                                         </tbody>
                                     </table>
-                                    <div id="addRow" class="bg-success add" style="margin-left: 17px;">
-                                        <div id="addRowChild"><h3>+</h3></div>
-                                    </div>
                                 </div>
 
                                 <script>
-                                    $('#addColumnChild').click(function () {
-                                        $('#my-table tr').each(function () {
-                                            $(this).append(`<td></td>`);
-                                        });
-                                    });
+                                    //$('#addColumnChild').click(function () {
+                                    //    $('#my-table tr').each(function () {
+                                    //        $(this).append(`<td></td>`);
+                                    //    });
+                                    //});
 
-                                    $('#addRowChild').click(function () {
-                                        $('#my-table tbody').append(`<tr>${$('#default-row').html()}</tr>`);
-                                    });
+                                    //$('#addRowChild').click(function () {
+                                    //    $('#my-table tbody').append(`<tr>${$('#default-row').html()}</tr>`);
+                                    //});
 
                                     $('#my-table').on('click', 'input[type="button"]', function () {
                                         $(this).closest('tr').remove();
                                     })
+
                                     $('p input[type="button"]').click(function () {
                                         $('#my-table').append('<tr><td><input type="text" class="fname" /></td><td><input type="button" value="Delete" /></td></tr>')
                                     });
 
                                 </script>
+
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        $("#btnAddRecords").click(function () {
+                                            AddStudentRecords();
+                                        });
+
+                                        $("#btnSaveData").click(function () {
+                                            SaveStudentRecords();
+                                        });
+
+                                    });
+
+                                    function AddStudentRecords() {
+                                        var StudentRecords = "<tr><td>" + $("#txtsubject").val() + "</td><td>" + $("#txtmarks").val() + "</td><td style='border: none;'><button class='btn btn-danger  remove-row remove-button'>Remove</button></td></tr>";
+                                        $("#tableStudentRecords tr:first-child").after(StudentRecords);
+                                        $("#txtsubject").val("");
+                                        $("#txtmarks").val("");
+                                    }
+                                    //btnAddRecords.value = "-";
+                                    //deleteButton.className = "bg-danger del";
+
+                                    $(document).on('click', '.remove-row', function () {
+
+                                        $(this).closest('tr').remove();
+                                    });
+
+                                    function SaveStudentRecords() {
+                                        var ReturnItemDscsl = [];
+                                        $("#tableStudentRecords").find("tr:gt(0)").each(function () {
+                                            var desc = $(this).find("td:eq(0)").text();
+                                            var qua = $(this).find("td:eq(1)").text();
+
+                                            var ReturnItemDsc = {
+
+                                                Description: desc,
+                                                Quantity: qua
+                                            };
+
+                                            ReturnItemDscsl.push(ReturnItemDsc);
+                                        });
+
+                                        for (var i = 0; i < ReturnItemDscsl.length; i++) {
+                                            var item = ReturnItemDscsl[i];
+
+                                            $("#yourFormId").append('<input type="hidden" name="items[' + i + '].Description" value="' + item.Description + '" />');
+                                            $("#yourFormId").append('<input type="hidden" name="items[' + i + '].Quantity" value="' + item.Quantity + '" />');
+                                        }
+
+                                        $("#yourFormId").submit();
+                                    }
+
+                                </script>
+
                             </div>
-                            <button type="submit" class="btn btn-primary mr-2" style="margin-top:20px;">Submit </button>
+                            <button type="submit" class="btn btn-primary mr-2"  id="btnSaveData" name="SaveData" style="margin-top:20px;">Submit </button>
                             <button class="btn btn-light" style="margin-top:20px;">Cancel</button>
                         </div>
                     </div>

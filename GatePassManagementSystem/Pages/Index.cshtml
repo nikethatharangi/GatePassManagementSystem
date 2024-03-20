@@ -4647,7 +4647,7 @@
                         <div class="card-body">
                             <img class="img-fluid card-top-img w-100" src="../assets/images/dashboard/img_5.jpg" alt="" />
                             <div class="d-flex flex-wrap justify-content-around color-card-outer">
-                                @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
+                                @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 15 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
                                 {
                                     <div class="col-12 p-0 mb-4">
                                         <a asp-page="/PersonalGP/GatePassListHodPending" style="text-decoration: none">
@@ -4674,7 +4674,7 @@
                                         </a>
                                     </div>
                                 }
-                                else if (deptId == 9 || deptId == 8 || deptId == 12 || deptId == 19 || deptId == 22 || deptId == 15 || deptId == 20)
+                                else if (deptId == 9 || deptId == 8 || deptId == 12 || deptId == 19 || deptId == 22 || deptId == 20)
                                 {
                                     <div class="col-12 p-0 mb-4">
                                         <a asp-page="/PersonalGP/GatePassListMgtPending" style="text-decoration: none">
@@ -4758,7 +4758,7 @@
                                 </div>
                             </a>
 
-                            @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
+                            @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 15 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
                             {
 
                                 <div class="d-flex border-bottom mb-4 pb-2">
@@ -4787,7 +4787,7 @@
                                     </div>
                                 </div>
                             }
-                            else if (deptId == 7 || deptId == 8 || deptId == 15 || deptId == 20 || deptId == 10 || deptId == 19 || deptId == 22 || deptId == 12)
+                            else if (deptId == 7 || deptId == 8 || deptId == 20 || deptId == 10 || deptId == 19 || deptId == 22 || deptId == 12)
                             {
                                 <div class="d-flex border-bottom mb-4 pb-2">
                                     <div class="hexagon">
@@ -4907,6 +4907,96 @@
                 <div class="col-xl-4 stretch-card grid-margin">
                 </div>
             </div>
+
+
+            @*<hr />
+            <div class="page-header flex-wrap">
+
+                <div class="header-right d-flex flex-wrap mt-2 mt-sm-0">
+                    <div class="d-flex align-items-center">
+                        <a href="#">
+                            <h4 class="m-0 pr-3">Good Gate Pass  </h4>
+                        </a>
+                        <a class="pl-3 mr-4" href="#"></a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 stretch-card grid-margin">
+                    <div class="card">
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card border-0">
+                                    <div class="card-body">
+                                        <h4 class="card-title">Monthly Good gate pass distribution</h4>
+                                        <div class="card-title">Returnable Gate Pass</div>
+                                        <div class="d-flex flex-wrap">
+                                            <div class="doughnut-wrapper w-50">
+                                                <canvas id="doughnutChart3" width="100" height="100"></canvas>
+                                            </div>
+                                            <div id="doughnut-chart-legend3" class="pl-lg-3 rounded-legend align-self-center flex-grow legend-vertical legend-bottom-left"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-0">
+                                    <div class="card-body">
+                                        <h4 class="card-title" style="margin-top:45px;">   </h4>
+                                        <div class="card-title">Non-Returnable Gate Pass</div>
+                                        <div class="d-flex flex-wrap">
+                                            <div class="doughnut-wrapper w-50">
+                                                <canvas id="doughnutChart2" width="100" height="100"></canvas>
+                                            </div>
+                                            <div id="doughnut-chart-legend2" class="pl-lg-3 rounded-legend align-self-center flex-grow legend-vertical legend-bottom-left"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card color-card-wrapper">
+                                    <div class="card-body">
+                                        <img class="img-fluid card-top-img w-100" src="../assets/images/dashboard/img_5.jpg" alt="" />
+                                        <div class="d-flex flex-wrap justify-content-around color-card-outer">
+                                            <div class="col-6 p-0 mb-4">
+                                                <div class="color-card primary m-auto">
+                                                    <i class="mdi mdi-clock-outline"></i>
+                                                    <p class="font-weight-semibold mb-0">Delivered</p>
+                                                    <span class="small">15 Packages</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 p-0 mb-4">
+                                                <div class="color-card bg-success m-auto">
+                                                    <i class="mdi mdi-tshirt-crew"></i>
+                                                    <p class="font-weight-semibold mb-0">Ordered</p>
+                                                    <span class="small">72 Items</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 p-0">
+                                                <div class="color-card bg-info m-auto">
+                                                    <i class="mdi mdi-trophy-outline"></i>
+                                                    <p class="font-weight-semibold mb-0">Arrived</p>
+                                                    <span class="small">34 Upgraded</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 p-0">
+                                                <div class="color-card bg-danger m-auto">
+                                                    <i class="mdi mdi-presentation"></i>
+                                                    <p class="font-weight-semibold mb-0">Reported</p>
+                                                    <span class="small">72 Support</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>*@
+
         }
         else if (roleId == 5 || Uid != 4 || roleId == 4 || Uid != 175)
         {

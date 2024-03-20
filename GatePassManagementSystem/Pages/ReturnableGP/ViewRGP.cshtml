@@ -25,7 +25,7 @@
         <div class="header-right d-flex flex-wrap mt-2 mt-sm-0">
             <div class="d-flex align-items-center">
                 <a href="#">
-                    <p class="m-0 pr-3">Returnable Gate Pass Requests</p>
+                    <p class="m-0 pr-3">Non-Returnable Gate Pass Requests</p>
                 </a>
                 <a class="pl-3 mr-4" href="#"></a>
             </div>
@@ -61,209 +61,515 @@
             <div class="card">
                 <form method="post" asp-page-handler="ApproveChange">
                     <div class="card-body">
-                        <h4 class="card-title">Requested Returnable Gate Passes</h4>
+                        <h4 class="card-title">Requested Non-Returnable Gate Passes</h4>
                         <p class="card-description">
                             <code>Pending Gate Pass List</code>
                         </p>
-                        @if (Model.PersonalGPs.Count() > 0)
+                        @if (Model.ReturnableGPs.Count() > 0)
                         {
                             <div class="table-responsive">
                                 <table class="table table-hover table-bordered">
                                     <thead>
                                         <tr class="bg-dark">
-                                            <th class="text-white font-weight-bold">
-                                                <label asp-for="PersonalGPs.FirstOrDefault().PersonalGPId"></label>
-                                            </th>
-                                            <th class="text-white font-weight-bold">
-                                                <label>Reason</label>
-                                            </th>
-                                            <th class="text-white font-weight-bold">
-                                                <label asp-for="PersonalGPs.FirstOrDefault().Description"></label>
-                                            </th>
-                                            <th class="text-white font-weight-bold">
-                                                <label asp-for="PersonalGPs.FirstOrDefault().CreateUser"></label>
-                                            </th>
-                                            <th class="text-white font-weight-bold">
-                                                <label asp-for="PersonalGPs.FirstOrDefault().CreateDate"></label>
-                                            </th>
-                                            <th class="text-white font-weight-bold">
-                                                <label>Status</label>
-                                            </th>
-                                            <th class="text-white font-weight-bold text-center">Change management approval</th>
-                                            <th class="text-white font-weight-bold">
-                                                <label>Reject Reason</label>
-                                            </th>
+                                            <th class="text-white font-weight-bold">Gate Pass No.</th>
+                                            <th class="text-white font-weight-bold">From Location</th>
+                                            <th class="text-white font-weight-bold">To Location</th>
+                                            <th class="text-white font-weight-bold">Created User</th>
+                                            <th class="text-white font-weight-bold">Created Date</th>
+                                            @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
+                                            {
+                                                <th class="text-white font-weight-bold">HOD Approval</th>
+                                            }
+                                            <th class="text-white font-weight-bold">Management Approval</th>
+                                            <th class="text-white font-weight-bold">Guard Room Acknowledgement</th>
+                                            <th class="text-white font-weight-bold text-center">Status</th>
+                                            <th class="text-white font-weight-bold text-center">Reject Reason</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var item in Model.PersonalGPs)
+                                        @foreach (var item in Model.ReturnableGPs)
                                         {
-                                            <tr>
-                                                <td>@Html.DisplayFor(m => item.PersonalGPId)</td>
-                                                <td>
+                                            int Aprl = Model.Db.ReturnableGP.Where(gp => gp.ReturnableGPId == item.ReturnableGPId).Select(gp => gp.ChApprvlId).FirstOrDefault();
+                                            string chgGm = Model.Db.Department.Where(gp => gp.Id == item.ChApprvlId).Select(gp => gp.Gm).FirstOrDefault();
+                                            string DeptGm = Model.Db.Department.Where(gp => gp.Id == item.DepId).Select(gp => gp.Gm).FirstOrDefault();
 
-                                                    @if (item.ChkHalfd == true)
-                                                    {
-                                                        <p>Half Day</p>
-                                                    }
-                                                    else if (item.ChkLunch == true)
-                                                    {
-                                                        <p>Lunch</p>
-                                                    }
-                                                    else if (item.ChkMadu == true)
-                                                    {
-                                                        <p>Madupitiya</p>
-                                                    }
-                                                    else if (item.ChkOther == true)
-                                                    {
-                                                        <p>Other</p>
-                                                    }
-                                                    else if (item.ChkShrt == true)
-                                                    {
-                                                        <p>Short Leave</p>
-                                                    }
-                                                    else if (item.ChkSinthawatta == true)
-                                                    {
-                                                        <p>Sinthawatta</p>
-                                                    }
-                                                    else if (item.ChkCusVisit == true)
-                                                    {
-                                                        <p>Customer Visit</p>
-                                                    }
-                                                    else if (item.ChkOfficialwork == true)
-                                                    {
-                                                        <p>Official Work</p>
-                                                    }
-                                                    else if (item.ChkPamunugama == true)
-                                                    {
-                                                        <p>Pamunugama</p>
-                                                    }
+                                            var allItem = Model.Db.ReturnItemDsc.Where(u => u.ReturnableGPId == item.ReturnableGPId).ToList();
 
-                                                </td>
-                                                <td>@Html.DisplayFor(m => item.Description)</td>
-                                                <td>
-                                                    @Html.DisplayFor(m => item.CreateUser)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(m => item.CreateDate)
-                                                </td>
+                                        <tr>
+                                            <td>@Html.DisplayFor(m => item.ReturnableGPId)</td>
 
-                                                @if (Model.Userrole == "4")
-                                                {
-                                                    if (item.ASgm == "A")
+                                            @if (item.FromLocation == 1)
+                                            {
+                                                <td>Pamunugama</td>
+                                            }
+                                            else if (item.FromLocation == 2)
+                                            {
+                                                <td>Madupititya</td>
+                                            }
+                                            else if (item.FromLocation == 3)
+                                            {
+                                                <td>Sinthawatta</td>
+                                            }
+
+
+                                            @if (item.ToLocation == 1)
+                                            {
+                                                <td>Pamunugama</td>
+                                            }
+                                            else if (item.ToLocation == 2)
+                                            {
+                                                <td>Madupititya</td>
+                                            }
+                                            else if (item.ToLocation == 3)
+                                            {
+                                                <td>Sinthawatta</td>
+                                            }
+                                            else if (item.ToLocation == 4)
+                                            {
+                                                <td>@Html.DisplayFor(m => item.OtherLocation)</td>
+                                            }
+
+                                            <td>
+                                                @Html.DisplayFor(m => item.CreateUser)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(m => item.CreateDate)
+                                            </td>
+
+                                            @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7 || deptId == 11 || deptId == 13 || deptId == 14 || deptId == 16 || deptId == 17 || deptId == 18 || deptId == 21 || deptId == 23 || deptId == 24 || deptId == 25 || deptId == 26 || deptId == 27 || deptId == 28)
+                                            {
+                                                <td>
+                                                    <label>@TempData["hod"]</label> <br />
+
+                                                    @if (item.AShod == "A" && item.ChkifDeptHeadUn == false)
                                                     {
-                                                        <td>
-                                                            <label class="badge badge-success">Approved</label>
-                                                        </td>
+                                                        <label class="badge badge-success mt-2" style="width:150px;">Acknowledged</label>
                                                     }
-                                                    else if (item.ASgm == "R")
+                                                    else if (item.AShod == "A" && item.ChkifDeptHeadUn == true)
                                                     {
-                                                        <td>
-                                                            <label class="badge badge-danger">Rejected</label>
-                                                        </td>
+                                                        <label class="badge badge-secondary mt-2" style="width:150px;">Approval ByPass</label>
+                                                    }
+                                                    else if (item.AShod == "R")
+                                                    {
+                                                        <label class="badge badge-danger mt-2" style="width:120px;">Rejected</label>
                                                     }
                                                     else
                                                     {
-                                                        <td>
-                                                            <label class="badge badge-warning">Pending</label>
-                                                        </td>
+                                                        <label class="badge badge-warning mt-2" style="width:150px;">Not acknowledged</label>
                                                     }
-                                                }
-                                                else if (Model.Userrole == "5")
+                                                </td>
+                                            }
+                                            <td>
+                                                @if (item.ChApprvlId == 0)
                                                 {
-                                                    if (item.ASdgm == "A")
-                                                    {
-                                                        <td>
-                                                            <label class="badge badge-success">Approved</label>
-                                                        </td>
-                                                    }
-                                                    else if (item.ASgm == "R" || item.ASdgm == "R")
-                                                    {
-                                                        <td>
-                                                            <label class="badge badge-danger">Rejected</label>
-                                                        </td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td>
-                                                            <label class="badge badge-warning">Pending</label>
-                                                        </td>
-                                                    }
+                                                    <label>@TempData["gm"]</label> <br />
                                                 }
-                                                else if (Model.Userrole == "6" && (deptId == 8 || deptId == 9 || deptId == 15 || deptId == 20 || deptId == 12 || deptId == 22 || deptId == 19))
+                                                else
                                                 {
-                                                    if (item.ASdgm == "A")
-                                                    {
-                                                        <td>
-                                                            <label class="badge badge-success">Approved</label>
-                                                        </td>
-                                                    }
-                                                    else if (item.ASdgm == "R")
-                                                    {
-                                                        <td>
-                                                            <label class="badge badge-danger">Rejected</label>
-                                                        </td>
-                                                    }
-                                                    else
-                                                    {
-                                                        <td>
-                                                            <label class="badge badge-warning">Pending</label>
-                                                        </td>
-                                                    }
+                                                    <label>@chgGm</label> <br />
                                                 }
-                                                else if (Model.Userrole == "6" && deptId == 10)
+                                                @if (deptId == 10)
                                                 {
-                                                    if (item.ASmd == "A" || (item.ChApprvlId != 0 && item.ASdgm != null))
+                                                    @if (item.ASmd == "A")
                                                     {
-                                                        <td>
-                                                            <label class="badge badge-success">Approved</label>
-                                                        </td>
+                                                        <label class="badge badge-success mt-2" style="width:150px;">Approved</label>
                                                     }
                                                     else if (item.ASmd == "R")
                                                     {
-                                                        <td>
-                                                            <label class="badge badge-danger">Rejected</label>
-                                                        </td>
+                                                        <label class="badge badge-danger mt-2" style="width:120px;">Rejected</label>
                                                     }
                                                     else
                                                     {
-                                                        <td>
-                                                            <label class="badge badge-warning">Pending</label>
-                                                        </td>
+                                                        <label class="badge badge-warning mt-2" style="width:150px;">Not Approved</label>
                                                     }
                                                 }
-                                                else if (Model.Userrole == "6")
+                                                else
                                                 {
-
-                                                    if (item.AShod == "A" && item.ASdgm == "A")
+                                                    @if (item.ASdgm == "A")
                                                     {
-                                                        <td>
-                                                            <label class="badge badge-success">Approved</label>
-                                                        </td>
+                                                        <label class="badge badge-success mt-2" style="width:150px;">Approved</label>
                                                     }
-                                                    else if (item.AShod == "R" || item.ASdgm == "R")
+                                                    else if (item.ASdgm == "R")
                                                     {
-                                                        <td>
-                                                            <label class="badge badge-danger">Rejected</label>
-                                                        </td>
+                                                        <label class="badge badge-danger mt-2" style="width:120px;">Rejected</label>
                                                     }
                                                     else
                                                     {
-                                                        <td>
-                                                            <label class="badge badge-warning">Pending</label>
-                                                        </td>
+                                                        <label class="badge badge-warning mt-2" style="width:150px;">Not Approved</label>
                                                     }
                                                 }
-                                                <td>
-                                                    <select asp-for="PersonalGPB.ChApprvlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="staffDropdown">
-                                                    </select>
-                                                    <div>
-                                                        <input type="hidden" name="Id" value="@item.Id" />
-                                                        <button type="submit" class="btn btn-primary" style="margin-top:5px;">Save</button>
+                                            </td>
+                                            <td>
+                                                Guard Room <br />
+                                                @if (item.ASguard == "A")
+                                                {
+                                                    <label class="badge badge-success mt-2" style="width:150px;">Acknowledged</label>
+                                                }
+                                                else if (item.ASguard == "R")
+                                                {
+                                                    <label class="badge badge-danger mt-2" style="width:120px;">Rejected</label>
+                                                }
+                                                else
+                                                {
+                                                    <label class="badge badge-warning mt-2" style="width:150px;">Not Acknowledged</label>
+                                                }
+                                            </td>
+                                            <td class="text-right">
+                                                @if (item.AShod == "A" && item.ASdgm == "A" && item.ASguard == "A" && item.Satisfy == false)
+                                                {
+                                                    <label class="badge badge-success mt-2">Completed</label>
+                                                }
+                                                else if (item.AShod == "R" || item.ASdgm == "R")
+                                                {
+                                                    <label class="badge badge-danger mt-2">Rejected</label>
+                                                }
+                                                else if (item.AShod == "A" && item.ASdgm == "A" && item.ASguard == "A" && item.Satisfy == true)
+                                                {
+                                                    <label class="badge badge-dark mt-2">Returning</label>
+                                                }
+                                                else
+                                                {
+                                                    <label class="badge badge-warning mt-2">Pending</label>
+                                                }
+                                                @*<label class="badge badge-danger" style="width: 75px">Pending</label>*@
+                                                <a data-toggle="modal" data-target="#exampleModal-@item.ReturnableGPId">
+                                                    <label class="badge badge-info" style="width: 75px; cursor: pointer">View</label>
+                                                </a>
+                                            </td>
+                                            <td>@Html.DisplayFor(m => item.RejctReason)</td>
+                                            <td>
+                                                <select style="width:180px;" asp-for="ReturnableGP.ChApprvlId" asp-items="@(new SelectList(Model.Aprvlist, "deptId", "FullName"))" class="form-control" id="staffDropdown">
+                                                </select>
+                                                <div>
+                                                    <input type="hidden" name="Id" value="@item.Id" />
+                                                    <button type="submit" class="btn btn-primary" style="margin-top:5px;">Save</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                            <div class="modal fade" id="exampleModal-@item.ReturnableGPId" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Personal gate pass</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <div class="card stretch-card mb-3">
+                                                                        <div class="card-body d-flex flex-wrap justify-content-between">
+                                                                            <div>
+                                                                                <h4 class="font-weight-semibold mb-1 text-black">@Html.DisplayFor(m => item.ReturnableGPId)</h4>
+                                                                                <h6 class="text-muted">@Html.DisplayFor(m => item.CreateDate)</h6>
+                                                                            </div>
+                                                                            @*<label class="badge badge-danger text-align:right" style="width: 250px; text-wrap: balance">Guard room acknowledgement pending</label>*@
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <form class="forms-sample">
+                                                                                <div class="form-group">
+                                                                                    <label for="exampleInputUsername1">Requested User</label>
+                                                                                    <input type="text" class="form-control" asp-for="Fullname" readonly="readonly">
+                                                                                </div>
+
+                                                                                <div class="form-group">
+                                                                                    <label for="exampleInputUsername1">Department</label>
+                                                                                    <input type="text" class="form-control" asp-for="deptName" readonly="readonly">
+                                                                                </div>
+
+                                                                                <div class="form-group">
+                                                                                    <label for="exampleInputUsername1">From Location</label>
+                                                                                    <div class="form-group row">
+                                                                                        @{ bool isFromPamChecked = item.FromLocation == 1;
+                                                                                            bool isFromMaduChecked = item.FromLocation == 2;
+                                                                                            bool isFromSinChecked = item.FromLocation == 3;
+                                                                                        }
+
+                                                                                        <div class="col-sm-3">
+                                                                                            <div class="form-check">
+                                                                                                <label class="form-check-label">
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios7" id="membershipRadios7" @(isFromPamChecked ? "checked" : "") disabled>
+                                                                                                    Pamunugama<i class="input-helper"></i>
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-sm-3">
+                                                                                            <div class="form-check">
+                                                                                                <label class="form-check-label">
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios8" id="membershipRadios8" @(isFromMaduChecked ? "checked" : "") disabled>
+                                                                                                    Madupitiya<i class="input-helper"></i>
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-sm-3">
+                                                                                            <div class="form-check">
+                                                                                                <label class="form-check-label">
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios9" id="membershipRadios9" @(isFromSinChecked ? "checked" : "") disabled>
+                                                                                                    Sinthawatta <i class="input-helper"></i>
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group row">
+
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group">
+                                                                                    <label for="exampleInputUsername1">To Location</label>
+                                                                                    <div class="form-group row">
+                                                                                        @{ bool isToPamChecked = item.ToLocation == 1;
+                                                                                            bool isToMaduChecked = item.ToLocation == 2;
+                                                                                            bool isToSinChecked = item.ToLocation == 3;
+                                                                                        }
+
+                                                                                        <div class="col-sm-3">
+                                                                                            <div class="form-check">
+                                                                                                <label class="form-check-label">
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios7" id="membershipRadios7" @(isToPamChecked ? "checked" : "") disabled>
+                                                                                                    Pamunugama<i class="input-helper"></i>
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-sm-3">
+                                                                                            <div class="form-check">
+                                                                                                <label class="form-check-label">
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios8" id="membershipRadios8" @(isToMaduChecked ? "checked" : "") disabled>
+                                                                                                    Madupitiya<i class="input-helper"></i>
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                        <div class="col-sm-3">
+                                                                                            <div class="form-check">
+                                                                                                <label class="form-check-label">
+                                                                                                    <input type="radio" class="form-check-input" name="membershipRadios9" id="membershipRadios9" @(isToSinChecked ? "checked" : "") disabled>
+                                                                                                    Sinthawatta <i class="input-helper"></i>
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="form-group row">
+
+                                                                                    </div>
+                                                                                </div>
+                                                                                @*<div class="form-group">
+                                                                                        <label for="exampleInputUsername1">Machine No. </label>
+                                                                                        @Html.EditorFor(m => item.MachineNo, new { @class = "form-control" })
+
+                                                                                    </div>
+
+                                                                                    <div class="form-group">
+                                                                                        <label for="exampleInputUsername1">Machine Name</label>
+                                                                                        @Html.EditorFor(m => item.MachineName, new { @class = "form-control" })
+
+                                                                                    </div>*@
+                                                                                <div class="form-group">
+                                                                                    <label for="exampleInputUsername1">Other</label>
+                                                                                    <textarea class="form-control" id="exampleTextarea1" rows="4" readonly="readonly">@Html.DisplayFor(m => item.Remarks)</textarea>
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-6">
+
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <form class="forms-sample">
+                                                                                @if (deptId == 1 || deptId == 2 || deptId == 3 || deptId == 4 || deptId == 5 || deptId == 6 || deptId == 7)
+                                                                                {
+                                                                                    <div class="form-group" style="margin-bottom:0px!important">
+                                                                                        <label for="exampleInputUsername1">HOD acknowledgement</label>
+                                                                                        <input type="text" class="form-control" asp-for="DeptHead" readonly="readonly">
+                                                                                    </div>
+                                                                                    <div class="form-check">
+                                                                                        @if (item.AShod == "A")
+                                                                                        {
+                                                                                            <label class="badge badge-success">Acknowledged</label>
+                                                                                        }
+                                                                                        else if (item.AShod == "R")
+                                                                                        {
+                                                                                            <label class="badge badge-danger">Rejected</label>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <label class="badge badge-warning">Not acknowledged</label>
+                                                                                        }
+                                                                                    </div>
+                                                                                }
+
+                                                                                <div class="form-group" style="margin-bottom:0px!important; margin-top:20px!important">
+                                                                                    <label for="exampleInputUsername1">Management Approval</label>
+                                                                                    @if (item.ChApprvlId == 0)
+                                                                                    {
+                                                                                        @if (deptId == 7)
+                                                                                        {
+                                                                                            <input type="text" class="form-control" value="Mr. Thusitha" id="txtApproval" readonly />
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <input type="text" class="form-control" asp-for="@DeptGm" id="txtApproval" readonly />
+                                                                                        }
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <input type="text" class="form-control" asp-for="@chgGm" id="txtApproval" readonly />
+                                                                                    }
+
+                                                                                </div>
+                                                                                <div class="form-check">
+                                                                                    @if (item.ASdgm == "A")
+                                                                                    {
+                                                                                        <label class="badge badge-success mt-2">Approved</label>
+                                                                                    }
+                                                                                    else if (item.ASdgm == "R")
+                                                                                    {
+                                                                                        <label class="badge badge-danger mt-2">Rejected</label>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        <label class="badge badge-warning mt-2">Not Approved</label>
+                                                                                    }
+                                                                                </div>
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="card">
+                                                                        <div class="card-body">
+                                                                            <div class="forms-sample">
+                                                                                <div class="form-group" style="margin-bottom:0px!important;margin-left:20px;">
+
+                                                                                    <div class="form-group">
+                                                                                        <label for="exampleInputUsername1">Vehicle No.: @Html.DisplayFor(m => item.VehicleNo)</label>
+                                                                                    </div>
+
+                                                                                    <div class="form-group">
+                                                                                        <label for="exampleInputUsername1">Driver/Helper Name : @Html.DisplayFor(m => item.DrHelname)</label>
+                                                                                    </div>
+
+                                                                                    <div class="form-group">
+                                                                                        <label for="exampleInputUsername1">Repair Name : @Html.DisplayFor(m => item.RepairName)</label>
+                                                                                    </div>
+
+                                                                                    <div class="form-group">
+                                                                                        <label for="exampleInputUsername1">Repair Contact No. : @Html.DisplayFor(m => item.RepairContNo)</label>
+                                                                                    </div>
+
+                                                                                    <div class="row">
+                                                                                        <h4 for="exampleInputUsername1">Item Details</h4>
+
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        @if (allItem.Count() > 0)
+                                                                                        {
+                                                                                            <div class="row">
+                                                                                                @*<div class="col-4">
+                                                                                                        <div class="form-control row">
+                                                                                                            <label for="exampleInputUsername1"><b>ID</b></label>
+                                                                                                        </div>
+                                                                                                    </div>*@
+                                                                                                <div class="col-6">
+                                                                                                    <div class="form-control row">
+                                                                                                        <label for="exampleInputUsername1"><b>Item Description</b></label>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-6">
+                                                                                                    <div class="form-control row">
+                                                                                                        <label for="exampleInputUsername1"><b>Quantity</b></label>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            @foreach (var itemDesc in allItem)
+                                                                                            {
+
+                                                                                                <div class="row">
+                                                                                                    @*<div class="col-4">
+                                                                                                            <div class="form-control row">
+                                                                                                                @Html.DisplayFor(m => itemDesc.NonReturnItemDscId, new { @class = "form-control" })
+                                                                                                            </div>
+                                                                                                        </div>*@
+                                                                                                    <div class="col-6">
+                                                                                                        <div class="form-control row">
+                                                                                                            @Html.DisplayFor(m => itemDesc.Description, new { @class = "form-control" })
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <div class="col-6">
+                                                                                                        <div class="form-control row">
+                                                                                                            @Html.DisplayFor(m => itemDesc.Quantity, new { @class = "form-control" })
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            }
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <p>No records to Show.</p>
+                                                                                        }
+                                                                                    </div>
+                                                                                    @if (item.Satisfy == true)
+                                                                                    {
+                                                                                        <div class="card">
+                                                                                            <div class="card-body">
+                                                                                                <div class="forms-sample">
+                                                                                                    <div class="form-group" style="margin-bottom:0px!important;margin-left:20px;">
+                                                                                                        <div class="row">
+                                                                                                            <h5 for="exampleInputUsername1" style="margin-top:20px;">HOD Remarks</h5>
+                                                                                                        </div>
+
+                                                                                                        <div class="form-group" style="margin-top:10px;">
+                                                                                                            @if (item.Satisfy == true)
+                                                                                                            {
+                                                                                                                <label for="exampleInputUsername1">Stisfy: Not Satisfied</label>
+                                                                                                            }
+                                                                                                            else
+                                                                                                            {
+                                                                                                                <label for="exampleInputUsername1">Stisfy: Satisfied</label>
+                                                                                                            }
+                                                                                                        </div>
+
+                                                                                                        <div class="form-group">
+                                                                                                            <label for="exampleInputUsername1">Remarks : @Html.DisplayFor(m => item.HODRemarks)</label>
+
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                </div>
+
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+
+                                                                                    }
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+                                                        </div>
                                                     </div>
-                                                </td>
-                                                <td>@Html.DisplayFor(m => item.RejctReason)</td>
-                                            </tr>
+
+                                                </div>
+                                            </div>
+
                                         }
 
                                     </tbody>

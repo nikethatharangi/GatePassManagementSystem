@@ -24,7 +24,7 @@ namespace GatePassManagementSystem.Model
 
         public DbSet<NonReturnableGP> NonReturnableGP { get; set; }
         public DbSet<NonReturnItemDsc> NonReturnItemDsc { get; set; }
-        //public DbSet<ReturnableGP> ReturnableGP { get; set; }
-        //public DbSet<ReturnItemDsc> ReturnItemDsc { get; set; }
+        public DbSet<ReturnableGP> ReturnableGP { get; set; }
+        public DbSet<ReturnItemDsc> ReturnItemDsc { get; set; }
     }
 }

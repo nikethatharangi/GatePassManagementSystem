@@ -15,8 +15,6 @@ namespace GatePassManagementSystem.Model
         [Key]
         [Required]
         public string ReturnableGPId { get; set; }
-        public string Description { get; set; }
-        public string Reason { get; set; }
 
         [ForeignKey("Department")]
         public int DepId { get; set; }
@@ -26,37 +24,47 @@ namespace GatePassManagementSystem.Model
         public string ASdgm { get; set; }
         public string ASgm { get; set; }
         public string ASmd { get; set; }
-        public string ASacc { get; set; }
         public string ASguard { get; set; }
+        public string ASAccnt { get; set; }
 
         [ForeignKey("User")]
         public int UserId { get; set; }
         public User User { get; set; }
 
         public bool ChkifDeptHeadUn { get; set; }
+        public bool Satisfy { get; set; }
+        public bool Satisfied { get; set; }
         public string Barcode { get; set; }
-        public bool ChkSinthawatta { get; set; }
-        public bool ChkMadu { get; set; }
+        public string HODRemarks { get; set; }
+        public int FromLocation { get; set; }
+        public int ToLocation { get; set; }
+        public int OtherLocation { get; set; }
+        public int ToDept { get; set; }
 
-        public string MachineName { get; set; }
-        public string MachineNo { get; set; }
+        public string RepairName { get; set; }
+        public string RepairContNo { get; set; }
         public string VehicleNo { get; set; }
         public string DrHelname { get; set; }
-        public string Other { get; set; }
+        public string Remarks { get; set; }
+        public string ReturnPlace { get; set; }
+        public string QuotationNo { get; set; }
 
+        public DateTime ReturnDate { get; set; }
+        public DateTime AcknoledgedTime { get; set; }
         public DateTime OutTime { get; set; }
         public DateTime InTime { get; set; }
-        public DateTime CreateDate { get; set; }
         public DateTime AShodtime { get; set; }
         public DateTime ASdgmtime { get; set; }
         public DateTime ASgmtime { get; set; }
         public DateTime ASmdtime { get; set; }
-        public DateTime ASacctime { get; set; }
         public DateTime SinIntime { get; set; }
         public DateTime SinOuttime { get; set; }
-        public string RejctReason { get; set; }
+        public DateTime CreateDate { get; set; }
         public string CreateUser { get; set; }
+        public string RejctReason { get; set; }
 
         public int ChApprvlId { get; set; }
+
+        public ICollection<ReturnItemDsc> ReturnItemDsc { get; set; }
     }
 }
